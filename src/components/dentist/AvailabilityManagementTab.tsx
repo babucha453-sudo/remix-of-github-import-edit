@@ -220,9 +220,9 @@ export default function AvailabilityManagementTab() {
   if (clinicLoading || rulesLoading) {
     return (
       <div className="space-y-6">
-        <Skeleton className="h-20 bg-slate-700/30" />
+        <Skeleton className="h-20 bg-gray-100/30" />
         <div className="grid gap-3">
-          {[...Array(7)].map((_, i) => <Skeleton key={i} className="h-20 bg-slate-700/30" />)}
+          {[...Array(7)].map((_, i) => <Skeleton key={i} className="h-20 bg-gray-100/30" />)}
         </div>
       </div>
     );
@@ -230,9 +230,9 @@ export default function AvailabilityManagementTab() {
 
   if (!clinic) {
     return (
-      <Card className="#REPLACED# border-slate-700/50">
+      <Card className="bg-white border-gray-200">
         <CardContent className="py-12 text-center">
-          <p className="text-white/60">No clinic linked to your account</p>
+          <p className="text-gray-500">No clinic linked to your account</p>
         </CardContent>
       </Card>
     );
@@ -243,20 +243,20 @@ export default function AvailabilityManagementTab() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row justify-between gap-4 p-5 rounded-2xl bg-gradient-to-r from-slate-800/90 to-slate-900/90 border border-slate-700/50 shadow-lg">
+      <div className="flex flex-col sm:flex-row justify-between gap-4 p-5 rounded-2xl bg-gradient-to-r from-emerald-50 to-teal-50 border border-emerald-200 shadow-md">
         <div>
-          <h1 className="text-2xl font-bold text-white">Availability</h1>
-          <p className="text-white/60 mt-1">Manage your weekly schedule and blocked days</p>
+          <h1 className="text-2xl font-bold text-gray-900">Availability</h1>
+          <p className="text-gray-600 mt-1">Manage your weekly schedule and blocked days</p>
         </div>
         <div className="flex gap-3">
           <Dialog open={showBlockDialog} onOpenChange={setShowBlockDialog}>
             <DialogTrigger asChild>
-              <Button variant="outline" className="gap-2 border-coral/50 text-coral hover:bg-coral/10 hover:text-coral">
+              <Button variant="outline" className="gap-2 border-emerald-300 text-emerald-700 hover:bg-emerald-50">
                 <CalendarOff className="h-4 w-4" />
                 Block Days
               </Button>
             </DialogTrigger>
-            <DialogContent className="sm:max-w-md bg-slate-900 border-slate-700">
+            <DialogContent className="sm:max-w-md bg-white border-gray-200">
               <DialogHeader>
                 <DialogTitle className="text-gray-900">Block Days</DialogTitle>
                 <DialogDescription className="text-gray-600">Select days to mark as unavailable</DialogDescription>
@@ -292,7 +292,7 @@ export default function AvailabilityManagementTab() {
                 <Button
                   onClick={() => addBlockMutation.mutate()}
                   disabled={selectedDates.length === 0 || addBlockMutation.isPending}
-                  className="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold"
+                  className="bg-emerald-600 hover:bg-emerald-700 text-gray-900 font-semibold"
                 >
                   Block {selectedDates.length} day(s)
                 </Button>
@@ -327,8 +327,8 @@ export default function AvailabilityManagementTab() {
                   }}
                   className={
                     globalSlotDuration === d.value
-                      ? 'bg-primary text-white font-semibold'
-                      : 'border-slate-600 text-white hover:bg-slate-700/50'
+                      ? 'bg-emerald-600 text-gray-900 font-semibold'
+                      : 'border-gray-300 text-gray-700 hover:bg-gray-50'
                   }
                 >
                   {d.label}
@@ -340,23 +340,23 @@ export default function AvailabilityManagementTab() {
       </Card>
 
       {/* Weekly Schedule */}
-      <Card className="#REPLACED# border-slate-700/50 overflow-hidden shadow-lg">
-        <div className="h-1 bg-gradient-to-r from-primary via-teal to-primary" />
-        <CardHeader className="border-b border-slate-700/50">
-          <CardTitle className="flex items-center gap-2 text-white">
-            <Clock className="h-5 w-5 text-primary" />
+      <Card className="bg-white border-gray-200 overflow-hidden shadow-lg">
+        <div className="h-1 bg-gradient-to-r from-emerald-500 via-teal-500 to-emerald-500" />
+        <CardHeader className="border-b border-gray-100">
+          <CardTitle className="flex items-center gap-2 text-gray-900">
+            <Clock className="h-5 w-5 text-emerald-600" />
             Weekly Schedule
           </CardTitle>
-          <CardDescription className="text-white/60">Your regular working hours</CardDescription>
+          <CardDescription className="text-gray-500">Your regular working hours</CardDescription>
         </CardHeader>
         <CardContent className="p-0">
           {(!availabilityRules || availabilityRules.length === 0) ? (
             <div className="text-center py-12">
-              <div className="h-16 w-16 rounded-2xl bg-slate-700/50 flex items-center justify-center mx-auto mb-4">
-                <CalendarDays className="h-8 w-8 text-white/40" />
+              <div className="h-16 w-16 rounded-2xl bg-emerald-50 flex items-center justify-center mx-auto mb-4">
+                <CalendarDays className="h-8 w-8 text-emerald-400" />
               </div>
-              <p className="text-white/60 mb-4">No schedule configured</p>
-              <Button onClick={initializeDefaultRules} className="gap-2 bg-primary hover:bg-primary/90 text-white font-semibold">
+              <p className="text-gray-500 mb-4">No schedule configured</p>
+              <Button onClick={initializeDefaultRules} className="gap-2 bg-emerald-600 hover:bg-emerald-700 text-gray-900 font-semibold">
                 <Sparkles className="h-4 w-4" />
                 Create Default Schedule
               </Button>
@@ -399,7 +399,7 @@ export default function AvailabilityManagementTab() {
                           }
                         }}
                       />
-                      <span className={`font-semibold ${isActive ? 'text-white' : 'text-white/40'}`}>
+                      <span className={`font-semibold ${isActive ? 'text-gray-900' : 'text-gray-400'}`}>
                         {day.label}
                       </span>
                     </div>
@@ -413,32 +413,32 @@ export default function AvailabilityManagementTab() {
                             value={rule.start_time}
                             onValueChange={(val) => saveRuleMutation.mutate({ ...rule, start_time: val })}
                           >
-                            <SelectTrigger className="w-28 h-9 rounded-lg bg-slate-800 border-slate-600 text-white font-medium">
+                            <SelectTrigger className="w-28 h-9 rounded-lg bg-white border-gray-300 text-gray-900 font-medium">
                               <SelectValue>
                                 {formatTimeDisplay(rule.start_time)}
                               </SelectValue>
                             </SelectTrigger>
-                            <SelectContent className="bg-slate-800 border-slate-700">
+                            <SelectContent className="bg-white border-slate-700">
                               {TIME_OPTIONS.map((t) => (
-                                <SelectItem key={t.value} value={t.value} className="text-white hover:bg-slate-700">
+                                <SelectItem key={t.value} value={t.value} className="text-gray-900 hover:bg-gray-100">
                                   {t.label}
                                 </SelectItem>
                               ))}
                             </SelectContent>
                           </Select>
-                          <span className="text-white/40 font-medium">to</span>
+                          <span className="text-gray-400 font-medium">to</span>
                           <Select
                             value={rule.end_time}
                             onValueChange={(val) => saveRuleMutation.mutate({ ...rule, end_time: val })}
                           >
-                            <SelectTrigger className="w-28 h-9 rounded-lg bg-slate-800 border-slate-600 text-white font-medium">
+                            <SelectTrigger className="w-28 h-9 rounded-lg bg-white border-gray-300 text-gray-900 font-medium">
                               <SelectValue>
                                 {formatTimeDisplay(rule.end_time)}
                               </SelectValue>
                             </SelectTrigger>
-                            <SelectContent className="bg-slate-800 border-slate-700">
+                            <SelectContent className="bg-white border-slate-700">
                               {TIME_OPTIONS.map((t) => (
-                                <SelectItem key={t.value} value={t.value} className="text-white hover:bg-slate-700">
+                                <SelectItem key={t.value} value={t.value} className="text-gray-900 hover:bg-gray-100">
                                   {t.label}
                                 </SelectItem>
                               ))}
@@ -449,39 +449,39 @@ export default function AvailabilityManagementTab() {
 
                         {/* Break Time */}
                         <div className="flex items-center gap-2 bg-slate-900/50 rounded-xl p-2 border border-slate-700/50">
-                          <span className="text-sm text-white/60 font-medium">Break:</span>
+                          <span className="text-sm text-gray-500 font-medium">Break:</span>
                           <Select
                             value={rule.break_start || ''}
                             onValueChange={(val) => saveRuleMutation.mutate({ ...rule, break_start: val || null })}
                           >
-                            <SelectTrigger className="w-24 h-9 rounded-lg bg-slate-800 border-slate-600 text-white font-medium">
+                            <SelectTrigger className="w-24 h-9 rounded-lg bg-white border-gray-300 text-gray-900 font-medium">
                               <SelectValue placeholder="Start">
                                 {rule.break_start ? formatTimeDisplay(rule.break_start) : 'None'}
                               </SelectValue>
                             </SelectTrigger>
-                            <SelectContent className="bg-slate-800 border-slate-700">
-                              <SelectItem value="" className="text-white hover:bg-slate-700">None</SelectItem>
+                            <SelectContent className="bg-white border-slate-700">
+                              <SelectItem value="" className="text-gray-900 hover:bg-gray-100">None</SelectItem>
                               {TIME_OPTIONS.map((t) => (
-                                <SelectItem key={t.value} value={t.value} className="text-white hover:bg-slate-700">
+                                <SelectItem key={t.value} value={t.value} className="text-gray-900 hover:bg-gray-100">
                                   {t.label}
                                 </SelectItem>
                               ))}
                             </SelectContent>
                           </Select>
-                          <span className="text-white/40 font-medium">to</span>
+                          <span className="text-gray-400 font-medium">to</span>
                           <Select
                             value={rule.break_end || ''}
                             onValueChange={(val) => saveRuleMutation.mutate({ ...rule, break_end: val || null })}
                           >
-                            <SelectTrigger className="w-24 h-9 rounded-lg bg-slate-800 border-slate-600 text-white font-medium">
+                            <SelectTrigger className="w-24 h-9 rounded-lg bg-white border-gray-300 text-gray-900 font-medium">
                               <SelectValue placeholder="End">
                                 {rule.break_end ? formatTimeDisplay(rule.break_end) : 'None'}
                               </SelectValue>
                             </SelectTrigger>
-                            <SelectContent className="bg-slate-800 border-slate-700">
-                              <SelectItem value="" className="text-white hover:bg-slate-700">None</SelectItem>
+                            <SelectContent className="bg-white border-slate-700">
+                              <SelectItem value="" className="text-gray-900 hover:bg-gray-100">None</SelectItem>
                               {TIME_OPTIONS.map((t) => (
-                                <SelectItem key={t.value} value={t.value} className="text-white hover:bg-slate-700">
+                                <SelectItem key={t.value} value={t.value} className="text-gray-900 hover:bg-gray-100">
                                   {t.label}
                                 </SelectItem>
                               ))}
@@ -491,17 +491,17 @@ export default function AvailabilityManagementTab() {
 
                         {/* Slot Duration */}
                         <div className="flex items-center gap-2 bg-slate-900/50 rounded-xl p-2 border border-slate-700/50">
-                          <span className="text-sm text-white/60 font-medium">Slot:</span>
+                          <span className="text-sm text-gray-500 font-medium">Slot:</span>
                           <Select
                             value={String(rule.slot_duration_minutes)}
                             onValueChange={(val) => saveRuleMutation.mutate({ ...rule, slot_duration_minutes: Number(val) })}
                           >
-                            <SelectTrigger className="w-24 h-9 rounded-lg bg-slate-800 border-slate-600 text-white font-medium">
+                            <SelectTrigger className="w-24 h-9 rounded-lg bg-white border-gray-300 text-gray-900 font-medium">
                               <SelectValue>{rule.slot_duration_minutes} min</SelectValue>
                             </SelectTrigger>
-                            <SelectContent className="bg-slate-800 border-slate-700">
+                            <SelectContent className="bg-white border-slate-700">
                               {SLOT_DURATIONS.map((d) => (
-                                <SelectItem key={d.value} value={String(d.value)} className="text-white hover:bg-slate-700">
+                                <SelectItem key={d.value} value={String(d.value)} className="text-gray-900 hover:bg-gray-100">
                                   {d.label}
                                 </SelectItem>
                               ))}
@@ -511,26 +511,26 @@ export default function AvailabilityManagementTab() {
 
                         {/* Buffer Minutes */}
                         <div className="flex items-center gap-2 bg-slate-900/50 rounded-xl p-2 border border-slate-700/50">
-                          <span className="text-sm text-white/60 font-medium">Buffer:</span>
+                          <span className="text-sm text-gray-500 font-medium">Buffer:</span>
                           <Select
                             value={String(rule.buffer_minutes)}
                             onValueChange={(val) => saveRuleMutation.mutate({ ...rule, buffer_minutes: Number(val) })}
                           >
-                            <SelectTrigger className="w-24 h-9 rounded-lg bg-slate-800 border-slate-600 text-white font-medium">
+                            <SelectTrigger className="w-24 h-9 rounded-lg bg-white border-gray-300 text-gray-900 font-medium">
                               <SelectValue>{rule.buffer_minutes} min</SelectValue>
                             </SelectTrigger>
-                            <SelectContent className="bg-slate-800 border-slate-700">
-                              <SelectItem value="0" className="text-white hover:bg-slate-700">0 min</SelectItem>
-                              <SelectItem value="5" className="text-white hover:bg-slate-700">5 min</SelectItem>
-                              <SelectItem value="10" className="text-white hover:bg-slate-700">10 min</SelectItem>
-                              <SelectItem value="15" className="text-white hover:bg-slate-700">15 min</SelectItem>
+                            <SelectContent className="bg-white border-slate-700">
+                              <SelectItem value="0" className="text-gray-900 hover:bg-gray-100">0 min</SelectItem>
+                              <SelectItem value="5" className="text-gray-900 hover:bg-gray-100">5 min</SelectItem>
+                              <SelectItem value="10" className="text-gray-900 hover:bg-gray-100">10 min</SelectItem>
+                              <SelectItem value="15" className="text-gray-900 hover:bg-gray-100">15 min</SelectItem>
                             </SelectContent>
                           </Select>
                         </div>
                       </div>
                     ) : (
                       <div className="flex-1">
-                        <Badge className="bg-slate-700/50 text-white/50 border-0 font-medium">
+                        <Badge className="bg-gray-100/50 text-gray-500 border-0 font-medium">
                           {isWeekend ? 'Weekend - Closed' : 'Closed'}
                         </Badge>
                       </div>
@@ -548,11 +548,11 @@ export default function AvailabilityManagementTab() {
         <Card className="#REPLACED# border-slate-700/50 shadow-lg">
           <div className="h-1 bg-gradient-to-r from-coral via-orange-500 to-coral" />
           <CardHeader>
-            <CardTitle className="flex items-center gap-2 text-white">
+            <CardTitle className="flex items-center gap-2 text-gray-900">
               <CalendarOff className="h-5 w-5 text-coral" />
               Blocked Days
             </CardTitle>
-            <CardDescription className="text-white/60">Upcoming unavailable days</CardDescription>
+            <CardDescription className="text-gray-500">Upcoming unavailable days</CardDescription>
           </CardHeader>
           <CardContent>
             <div className="grid gap-3">
@@ -566,11 +566,11 @@ export default function AvailabilityManagementTab() {
                       <CalendarOff className="h-5 w-5 text-coral" />
                     </div>
                     <div>
-                      <p className="font-semibold text-white">
+                      <p className="font-semibold text-gray-900">
                         {format(new Date(block.start_datetime), 'EEEE, MMMM d, yyyy')}
                       </p>
                       {block.reason && (
-                        <p className="text-sm text-white/60">{block.reason}</p>
+                        <p className="text-sm text-gray-500">{block.reason}</p>
                       )}
                     </div>
                   </div>

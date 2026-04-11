@@ -149,7 +149,8 @@ export default function ProfileEditorTab() {
   const { data: clinic, isLoading } = useQuery({
     queryKey: ['dentist-clinic-profile', user?.id],
     queryFn: async () => {
-      const { data, error } = await supabase
+      // First try to find clinic by claimed_by
+      let query = supabase
         .from('clinics')
         .select(`
           id, name, slug, description, address, phone, email, website,
@@ -160,6 +161,36 @@ export default function ProfileEditorTab() {
         .eq('claimed_by', user?.id)
         .limit(1)
         .single();
+
+      let { data, error } = await query;
+
+      // If not found, check clinic_members table
+      if ((!data || error) && user?.id) {
+        const { data: memberData } = await supabase
+          .from('clinic_members')
+          .select('clinic_id')
+          .eq('user_id', user.id)
+          .eq('role', 'owner')
+          .limit(1)
+          .single();
+
+        if (memberData?.clinic_id) {
+          query = supabase
+            .from('clinics')
+            .select(`
+              id, name, slug, description, address, phone, email, website,
+              cover_image_url, verification_status, google_place_id,
+              city:cities(id, name),
+              area:areas(id, name)
+            `)
+            .eq('id', memberData.clinic_id)
+            .limit(1)
+            .single();
+          const result = await query;
+          data = result.data;
+          error = result.error;
+        }
+      }
 
       if (error && error.code !== 'PGRST116') throw error;
       if (data) {

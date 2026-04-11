@@ -217,8 +217,8 @@ export default function ServicesTab() {
   if (clinicLoading) {
     return (
       <div className="space-y-6">
-        <Skeleton className="h-20 bg-slate-700/50" />
-        <Skeleton className="h-64 bg-slate-700/50" />
+        <Skeleton className="h-20 bg-gray-100/50" />
+        <Skeleton className="h-64 bg-gray-100/50" />
       </div>
     );
   }
@@ -230,14 +230,14 @@ export default function ServicesTab() {
   return (
     <div className="space-y-6">
       {/* Compact Header */}
-      <div className="flex items-center justify-between p-4 rounded-xl bg-slate-800/90 border border-slate-700/50">
+      <div className="flex items-center justify-between p-4 rounded-xl bg-white/90 border border-slate-700/50">
         <div className="flex items-center gap-3">
           <div className="h-10 w-10 rounded-lg bg-gradient-to-br from-primary to-teal flex items-center justify-center">
-            <Stethoscope className="h-5 w-5 text-white" />
+            <Stethoscope className="h-5 w-5 text-gray-900" />
           </div>
           <div>
-            <h2 className="text-lg font-bold text-white">Services & Treatments</h2>
-            <p className="text-sm text-white/60">{clinicTreatments?.length || 0} services listed</p>
+            <h2 className="text-lg font-bold text-gray-900">Services & Treatments</h2>
+            <p className="text-sm text-gray-900/60">{clinicTreatments?.length || 0} services listed</p>
           </div>
         </div>
         <Dialog open={isAddingService} onOpenChange={setIsAddingService}>
@@ -249,7 +249,7 @@ export default function ServicesTab() {
           </DialogTrigger>
           <DialogContent className="sm:max-w-md bg-slate-900 border-slate-700/50">
             <DialogHeader>
-              <DialogTitle className="flex items-center gap-2 text-white">
+              <DialogTitle className="flex items-center gap-2 text-gray-900">
                 <Sparkles className="h-5 w-5 text-primary" />
                 Add Service
               </DialogTitle>
@@ -257,12 +257,12 @@ export default function ServicesTab() {
             <div className="space-y-4 py-4">
               {/* Search */}
               <div className="relative">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-white/40" />
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-900/40" />
                 <Input
                   placeholder="Search treatments..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="pl-9 bg-slate-800 border-slate-600/50 text-white"
+                  className="pl-9 bg-white border-gray-300/50 text-gray-900"
                 />
               </div>
 
@@ -278,11 +278,11 @@ export default function ServicesTab() {
                         "p-3 border rounded-lg text-left transition-all",
                         selectedTreatment === t.id
                           ? "border-primary bg-primary/10"
-                          : "border-slate-600/50 hover:border-slate-500"
+                          : "border-gray-300/50 hover:border-slate-500"
                       )}
                     >
                       <div className="flex items-center justify-between">
-                        <p className="font-medium text-sm text-white truncate">{t.name}</p>
+                        <p className="font-medium text-sm text-gray-900 truncate">{t.name}</p>
                         {selectedTreatment === t.id && (
                           <Check className="h-4 w-4 text-primary shrink-0" />
                         )}
@@ -291,7 +291,7 @@ export default function ServicesTab() {
                   ))}
                 </div>
                 {filteredAvailable?.length === 0 && (
-                  <p className="text-white/50 text-sm text-center py-4">
+                  <p className="text-gray-900/50 text-sm text-center py-4">
                     {searchTerm ? 'No matches found' : 'All treatments added'}
                   </p>
                 )}
@@ -300,28 +300,28 @@ export default function ServicesTab() {
               {/* Pricing */}
               <div className="grid grid-cols-2 gap-3 pt-2 border-t border-slate-700/50">
                 <div className="space-y-1">
-                  <Label className="text-xs text-white/60">Price From (USD)</Label>
+                  <Label className="text-xs text-gray-900/60">Price From (USD)</Label>
                   <div className="relative">
-                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-white/40">$</span>
+                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-900/40">$</span>
                     <Input
                       type="number"
                       value={priceFrom}
                       onChange={(e) => setPriceFrom(e.target.value)}
                       placeholder="0"
-                      className="pl-7 bg-slate-800 border-slate-600/50 text-white"
+                      className="pl-7 bg-white border-gray-300/50 text-gray-900"
                     />
                   </div>
                 </div>
                 <div className="space-y-1">
-                  <Label className="text-xs text-white/60">Price To (USD)</Label>
+                  <Label className="text-xs text-gray-900/60">Price To (USD)</Label>
                   <div className="relative">
-                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-white/40">$</span>
+                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-900/40">$</span>
                     <Input
                       type="number"
                       value={priceTo}
                       onChange={(e) => setPriceTo(e.target.value)}
                       placeholder="0"
-                      className="pl-7 bg-slate-800 border-slate-600/50 text-white"
+                      className="pl-7 bg-white border-gray-300/50 text-gray-900"
                     />
                   </div>
                 </div>
@@ -349,7 +349,7 @@ export default function ServicesTab() {
       {treatmentsLoading ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
           {[...Array(6)].map((_, i) => (
-            <Skeleton key={i} className="h-24 bg-slate-700/50 rounded-xl" />
+            <Skeleton key={i} className="h-24 bg-gray-100/50 rounded-xl" />
           ))}
         </div>
       ) : clinicTreatments && clinicTreatments.length > 0 ? (
@@ -357,13 +357,13 @@ export default function ServicesTab() {
           {clinicTreatments.map((ct) => (
             <div
               key={ct.id}
-              className="flex items-center gap-3 p-4 bg-slate-800/90 rounded-xl border border-slate-700/50 hover:border-slate-600/50 transition-all group"
+              className="flex items-center gap-3 p-4 bg-white/90 rounded-xl border border-slate-700/50 hover:border-gray-300/50 transition-all group"
             >
               <div className="h-10 w-10 rounded-lg bg-primary/20 flex items-center justify-center shrink-0">
                 <Stethoscope className="h-5 w-5 text-primary" />
               </div>
               <div className="flex-1 min-w-0">
-                <p className="font-semibold text-white text-sm truncate">{ct.treatment.name}</p>
+                <p className="font-semibold text-gray-900 text-sm truncate">{ct.treatment.name}</p>
                 {editingId === ct.id ? (
                   <div className="flex items-center gap-2 mt-1">
                     <Input
@@ -371,15 +371,15 @@ export default function ServicesTab() {
                       value={editPriceFrom}
                       onChange={(e) => setEditPriceFrom(e.target.value)}
                       placeholder="Min"
-                      className="h-7 w-16 text-xs bg-slate-700 border-slate-600/50 text-white"
+                      className="h-7 w-16 text-xs bg-gray-100 border-gray-300/50 text-gray-900"
                     />
-                    <span className="text-white/40">-</span>
+                    <span className="text-gray-900/40">-</span>
                     <Input
                       type="number"
                       value={editPriceTo}
                       onChange={(e) => setEditPriceTo(e.target.value)}
                       placeholder="Max"
-                      className="h-7 w-16 text-xs bg-slate-700 border-slate-600/50 text-white"
+                      className="h-7 w-16 text-xs bg-gray-100 border-gray-300/50 text-gray-900"
                     />
                     <Button
                       size="icon"
@@ -402,7 +402,7 @@ export default function ServicesTab() {
                         {ct.price_to && `$${ct.price_to}`}
                       </Badge>
                     ) : (
-                      <Badge className="bg-slate-700/50 text-white/50 border-0 text-xs mt-1 hover:bg-slate-600/50">
+                      <Badge className="bg-gray-100/50 text-gray-900/50 border-0 text-xs mt-1 hover:bg-slate-600/50">
                         + Add pricing
                       </Badge>
                     )}
@@ -413,7 +413,7 @@ export default function ServicesTab() {
                 size="icon"
                 variant="ghost"
                 onClick={() => removeTreatment.mutate(ct.id)}
-                className="h-8 w-8 text-white/40 hover:text-coral hover:bg-coral/10 opacity-0 group-hover:opacity-100 transition-opacity"
+                className="h-8 w-8 text-gray-900/40 hover:text-coral hover:bg-coral/10 opacity-0 group-hover:opacity-100 transition-opacity"
               >
                 <Trash2 className="h-4 w-4" />
               </Button>
@@ -421,11 +421,11 @@ export default function ServicesTab() {
           ))}
         </div>
       ) : (
-        <Card className="bg-slate-800/90 border border-slate-700/50">
+        <Card className="bg-white/90 border border-slate-700/50">
           <CardContent className="py-12 text-center">
-            <Stethoscope className="h-12 w-12 mx-auto text-white/20 mb-4" />
-            <p className="text-white/60 mb-2">No services added yet</p>
-            <p className="text-sm text-white/40 mb-4">Add treatments to show patients what you offer</p>
+            <Stethoscope className="h-12 w-12 mx-auto text-gray-900/20 mb-4" />
+            <p className="text-gray-900/60 mb-2">No services added yet</p>
+            <p className="text-sm text-gray-900/40 mb-4">Add treatments to show patients what you offer</p>
             <Button onClick={() => setIsAddingService(true)} size="sm" className="bg-primary hover:bg-primary/90">
               <Plus className="h-4 w-4 mr-2" />
               Add Your First Service
