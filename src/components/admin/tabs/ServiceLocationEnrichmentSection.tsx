@@ -239,7 +239,7 @@ export default function ServiceLocationEnrichmentSection() {
       // Generate combinations
       const combinations: ServiceLocationItem[] = [];
       for (const city of cities || []) {
-        const state = city.state as { id: string; name: string; slug: string; abbreviation: string };
+        const state = city.state as unknown as { id: string; name: string; slug: string; abbreviation: string };
         for (const treatment of treatmentsData || []) {
           combinations.push({
             id: `${city.id}-${treatment.id}`,

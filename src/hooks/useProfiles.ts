@@ -69,7 +69,7 @@ export function useProfiles(filters: ProfileFilters = {}) {
         const { data: clinicTreatments } = await treatmentQuery;
         
         const treatmentClinicIds = new Set<string>((clinicTreatments || [])
-          .filter(ct => ct.clinic?.is_active)
+          .filter((ct: any) => ct.clinic?.is_active)
           .map(ct => String(ct.clinic_id)));
 
         // Only apply treatment filter if we actually found matching clinics

@@ -186,7 +186,7 @@ export default function ProfileEditorTab() {
           }
         }
       }
-      return data as ClinicData | null;
+      return data as unknown as ClinicData | null;
     },
     enabled: !!user?.id,
   });

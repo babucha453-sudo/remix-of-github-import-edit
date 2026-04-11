@@ -105,7 +105,7 @@ export function DentistFinderSearch({
           id: city.id,
           type: 'location',
           name: city.name,
-          subtitle: city.state ? `${city.state.abbreviation}` : undefined,
+          subtitle: city.state ? `${(city.state as any)?.abbreviation}` : undefined,
           slug: city.slug,
           stateSlug: (city.state as any)?.slug
         });

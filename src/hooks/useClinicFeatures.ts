@@ -61,7 +61,7 @@ export function useClinicSubscription(clinicId?: string) {
         .maybeSingle();
       
       if (error) throw error;
-      return data as ClinicPlan | null;
+      return data as unknown as ClinicPlan | null;
     },
     enabled: !!clinicId && !!user,
   });

@@ -213,7 +213,7 @@ export function SmartCitySearch({
           id: newCity.id,
           name: newCity.name,
           slug: newCity.slug,
-          state: newCity.state,
+          state: newCity.state as any,
         },
         true
       );
