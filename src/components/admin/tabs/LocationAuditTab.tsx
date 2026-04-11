@@ -195,8 +195,10 @@ export default function LocationAuditTab() {
 
       for (const clinic of clinics || []) {
         const clinicServiceAreas = serviceAreasMap.get(clinic.id) || [];
-        const currentCityName = clinic.cities?.name;
-        const currentStateName = clinic.cities?.states?.name;
+        const cityData = clinic.cities?.[0] as any;
+        const currentCityName = cityData?.name;
+        const stateData = cityData?.states?.[0] as any;
+        const currentStateName = stateData?.name;
 
         // Create simple city names array for matching
         const cityNames = stateCities.map(c => ({ name: c.name }));

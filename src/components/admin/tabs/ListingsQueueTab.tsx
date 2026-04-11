@@ -114,7 +114,7 @@ export default function ListingsQueueTab() {
       
       // Filter by state if selected
       if (selectedState !== 'all' && data) {
-        const state = states?.find(s => s.slug === selectedState);
+        const state = states?.find((s: any) => s.slug === selectedState);
         if (state) {
           data = data.filter((l: any) => l.city?.state_id === state.id);
         }

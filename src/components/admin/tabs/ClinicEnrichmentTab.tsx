@@ -154,7 +154,7 @@ export default function ClinicEnrichmentTab() {
       const { data, error } = await query;
       
       if (error) throw error;
-      return (data || []) as ClinicForEnrichment[];
+      return (data || []) as unknown as ClinicForEnrichment[];
     },
   });
 
@@ -178,7 +178,7 @@ export default function ClinicEnrichmentTab() {
       const { data, error } = await query.limit(500);
       
       if (error) throw error;
-      return (data || []) as ClinicForEnrichment[];
+      return (data || []) as unknown as ClinicForEnrichment[];
     },
   });
 

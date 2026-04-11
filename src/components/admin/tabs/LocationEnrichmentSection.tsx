@@ -198,7 +198,7 @@ export default function LocationEnrichmentSection() {
 
       // Check which cities have SEO content (either optimized OR word_count >= NO_CONTENT_THRESHOLD)
       const slugs = data?.map(c => {
-        const state = c.state as { slug: string } | null;
+        const state = c.state as unknown as { slug: string } | null;
         return `/${state?.slug}/${c.slug}`;
       }) || [];
       
@@ -221,7 +221,7 @@ export default function LocationEnrichmentSection() {
       }
 
       return (data || []).map(c => {
-        const state = c.state as { name: string; slug: string; abbreviation: string } | null;
+        const state = c.state as unknown as { name: string; slug: string; abbreviation: string } | null;
         const fullSlug = `/${state?.slug}/${c.slug}`;
         return {
           id: c.id,

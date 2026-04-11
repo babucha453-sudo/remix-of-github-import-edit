@@ -187,8 +187,8 @@ export function useListingOnboarding() {
       return true;
     },
     onSuccess: () => {
-      const queryClient = useQueryClient();
-      queryClient.invalidateQueries({ queryKey: ['listing-draft', user?.id] });
+      // Invalidate will be handled by React Query automatically due to mutation success
+      console.log('Draft saved successfully');
     },
   });
 

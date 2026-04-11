@@ -165,8 +165,8 @@ export default function DentistDashboardTab() {
           city_id: c.city_id || undefined,
           gmb_connected: c.gmb_connected || false,
           google_place_id: c.google_place_id || undefined,
-          city: c.city as { name: string } | undefined,
-          area: c.area as { name: string } | undefined,
+          city: c.city as unknown as { name: string } | undefined,
+          area: c.area as unknown as { name: string } | undefined,
         };
       }
       return null;

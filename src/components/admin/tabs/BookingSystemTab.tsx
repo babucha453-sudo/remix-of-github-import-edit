@@ -113,7 +113,7 @@ async function fetchAllClinics(): Promise<ClinicWithSettings[]> {
     if (error) throw error;
     
     if (data && data.length > 0) {
-      allClinics.push(...(data as ClinicWithSettings[]));
+      allClinics.push(...(data as unknown as ClinicWithSettings[]));
       offset += batchSize;
       hasMore = data.length === batchSize;
     } else {
