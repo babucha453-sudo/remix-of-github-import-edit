@@ -230,7 +230,7 @@ export default function AvailabilityManagementTab() {
 
   if (!clinic) {
     return (
-      <Card className="bg-slate-800/90 border-slate-700/50">
+      <Card className="#REPLACED# border-slate-700/50">
         <CardContent className="py-12 text-center">
           <p className="text-white/60">No clinic linked to your account</p>
         </CardContent>
@@ -258,8 +258,8 @@ export default function AvailabilityManagementTab() {
             </DialogTrigger>
             <DialogContent className="sm:max-w-md bg-slate-900 border-slate-700">
               <DialogHeader>
-                <DialogTitle className="text-white">Block Days</DialogTitle>
-                <DialogDescription className="text-white/60">Select days to mark as unavailable</DialogDescription>
+                <DialogTitle className="text-gray-900">Block Days</DialogTitle>
+                <DialogDescription className="text-gray-600">Select days to mark as unavailable</DialogDescription>
               </DialogHeader>
               <div className="space-y-4 py-4">
                 <Calendar
@@ -270,29 +270,29 @@ export default function AvailabilityManagementTab() {
                     const blockDate = new Date(b.start_datetime).toDateString();
                     return new Date(blockDate).toDateString() === date.toDateString();
                   })}
-                  className="rounded-xl border border-slate-700 mx-auto bg-slate-800"
+                  className="rounded-xl border border-gray-200 mx-auto bg-white"
                 />
                 {rulesError && (
-                  <p className="text-red-400 text-sm text-center">Failed to load availability rules</p>
+                  <p className="text-red-600 text-sm text-center">Failed to load availability rules</p>
                 )}
                 <div className="space-y-2">
-                  <Label className="text-white">Reason (optional)</Label>
+                  <Label className="text-gray-700">Reason (optional)</Label>
                   <Input
                     placeholder="e.g., Vacation, Holiday"
                     value={blockReason}
                     onChange={(e) => setBlockReason(e.target.value)}
-                    className="bg-slate-800 border-slate-600 text-white"
+                    className="bg-white border-gray-300 text-gray-900"
                   />
                 </div>
               </div>
               <DialogFooter>
-                <Button variant="outline" onClick={() => setShowBlockDialog(false)} className="border-slate-600 text-white">
+                <Button variant="outline" onClick={() => setShowBlockDialog(false)} className="border-gray-300 text-gray-700">
                   Cancel
                 </Button>
                 <Button
                   onClick={() => addBlockMutation.mutate()}
                   disabled={selectedDates.length === 0 || addBlockMutation.isPending}
-                  className="bg-coral hover:bg-coral/90 text-white font-semibold"
+                  className="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold"
                 >
                   Block {selectedDates.length} day(s)
                 </Button>
@@ -303,16 +303,16 @@ export default function AvailabilityManagementTab() {
       </div>
 
       {/* Slot Duration Control */}
-      <Card className="bg-gradient-to-br from-primary/10 to-teal/10 border-primary/30 shadow-lg">
+      <Card className="bg-gradient-to-br from-emerald-50 to-teal-50 border-emerald-200 shadow-lg">
         <CardContent className="p-5">
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
             <div className="flex items-center gap-3">
-              <div className="h-12 w-12 rounded-xl bg-primary/20 flex items-center justify-center">
-                <Timer className="h-6 w-6 text-primary" />
+              <div className="h-12 w-12 rounded-xl bg-emerald-100 flex items-center justify-center">
+                <Timer className="h-6 w-6 text-emerald-600" />
               </div>
               <div>
-                <h3 className="font-bold text-white">Appointment Slot Duration</h3>
-                <p className="text-sm text-white/60">Choose how long each appointment slot should be</p>
+                <h3 className="font-bold text-gray-900">Appointment Slot Duration</h3>
+                <p className="text-sm text-gray-600">Choose how long each appointment slot should be</p>
               </div>
             </div>
             <div className="flex gap-2">
@@ -340,7 +340,7 @@ export default function AvailabilityManagementTab() {
       </Card>
 
       {/* Weekly Schedule */}
-      <Card className="bg-slate-800/90 border-slate-700/50 overflow-hidden shadow-lg">
+      <Card className="#REPLACED# border-slate-700/50 overflow-hidden shadow-lg">
         <div className="h-1 bg-gradient-to-r from-primary via-teal to-primary" />
         <CardHeader className="border-b border-slate-700/50">
           <CardTitle className="flex items-center gap-2 text-white">
@@ -545,7 +545,7 @@ export default function AvailabilityManagementTab() {
 
       {/* Blocked Days */}
       {blockedTimes && blockedTimes.length > 0 && (
-        <Card className="bg-slate-800/90 border-slate-700/50 shadow-lg">
+        <Card className="#REPLACED# border-slate-700/50 shadow-lg">
           <div className="h-1 bg-gradient-to-r from-coral via-orange-500 to-coral" />
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-white">
