@@ -286,7 +286,8 @@ export function useTopDentistsPerLocation(limit: number = 8) {
         if (!photoUrl) continue;
         
         // Use city_id as the location key to get one per city
-        const locationKey = c.city?.id || c.id;
+        const cityData = c.city as any;
+        const locationKey = cityData?.[0]?.id || c.id;
         
         // Skip if we already have a profile from this location
         if (seenLocations.has(locationKey)) continue;
@@ -301,15 +302,15 @@ export function useTopDentistsPerLocation(limit: number = 8) {
           slug: c.slug,
           type: 'clinic',
           specialty: 'Dental Clinic',
-          location: c.area?.name || c.city?.name || 'United States',
+          location: (c.area as any)?.[0]?.name || (c.city as any)?.[0]?.name || 'United States',
           rating: Number(c.rating) || 0,
           reviewCount: c.review_count || 0,
           image: photoUrl,
           isVerified,
           clinicName: c.name,
           clinicId: c.id,
-          areaId: c.area?.id,
-          cityId: c.city?.id,
+          areaId: (c.area as any)?.[0]?.id,
+          cityId: (c.city as any)?.[0]?.id,
         });
         
         if (profiles.length >= limit) break;

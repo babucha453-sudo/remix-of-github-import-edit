@@ -109,7 +109,7 @@ export default function SearchPage() {
           .limit(100);
         
         console.log("Initial clinics loaded:", clinicsData?.length);
-        setAllClinics(clinicsData || []);
+        setAllClinics((clinicsData || []) as any);
         
         // Fetch all cities (small dataset - ~500)
         const { data: citiesData } = await supabase
@@ -233,7 +233,7 @@ export default function SearchPage() {
         .range(offset, offset + 99);
       
       if (moreClinics && moreClinics.length > 0) {
-        setAllClinics(prev => [...prev, ...moreClinics]);
+        setAllClinics(prev => [...prev, ...(moreClinics as any)]);
       } else {
         setHasMoreToLoad(false);
       }

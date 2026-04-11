@@ -40,18 +40,20 @@ export async function generateCityInternalLinks(
     const links: InternalLink[] = [];
 
     // 1. Link to parent state
+    const stateData = city.state as any;
     links.push({
-      text: `More dentists in ${city.state.name}`,
-      href: `/state/${city.state.slug}/`,
+      text: `More dentists in ${stateData?.[0]?.name || stateData?.name}`,
+      href: `/state/${stateData?.[0]?.slug || stateData?.slug}/`,
       type: "parent",
     });
 
     // 2. Find nearby cities (if coordinates available)
     if (city.latitude && city.longitude) {
+      const stateId = (stateData?.[0]?.id || stateData?.id) as string;
       const { data: nearbyCities } = await supabase
         .from("cities")
         .select("id, name, slug")
-        .eq("state_id", city.state.id)
+        .eq("state_id", stateId)
         .eq("is_active", true)
         .eq("page_exists", true)
         .neq("id", city.id)
@@ -61,7 +63,7 @@ export async function generateCityInternalLinks(
         for (const nearby of nearbyCities) {
           links.push({
             text: `Dentists in ${nearby.name}`,
-            href: `/state/${city.state.slug}/${nearby.slug}/`,
+            href: `/state/${stateData?.[0]?.slug || stateData?.slug}/${nearby.slug}/`,
             type: "sibling",
           });
         }
