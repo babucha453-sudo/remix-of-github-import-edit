@@ -163,6 +163,9 @@ const StructuredDataTab = lazyRetry(() => import('@/components/admin/tabs/Struct
 const ToolsManagementTab = lazyRetry(() => import('@/components/admin/tabs/ToolsManagementTab'));
 const AvailabilityManagementTab = lazyRetry(() => import('@/components/dentist/AvailabilityManagementTab'));
 const AppointmentTypesTab = lazyRetry(() => import('@/components/dentist/AppointmentTypesTab'));
+const AnalyticsTab = lazyRetry(() => import('@/components/dentist/AnalyticsTab'));
+const MarketingTab = lazyRetry(() => import('@/components/dentist/MarketingTab'));
+const SEOTab = lazyRetry(() => import('@/components/dentist/SEOTab'));
 const MigrationControlTab = lazyRetry(() => import('@/components/admin/tabs/MigrationControlTab').then(m => ({ default: m.MigrationControlTab })));
 const DataRecoveryTab = lazyRetry(() => import('@/components/admin/tabs/DataRecoveryTab'));
 const AdminRevertTab = lazyRetry(() => import('@/components/admin/tabs/AdminRevertTab'));
@@ -564,6 +567,9 @@ export default function AdminDashboard() {
       case 'my-services': return <ServicesTab />;
       case 'my-insurance': return <InsuranceManagementTab />;
       case 'my-reputation': return <DentistReputationHub />;
+      case 'my-analytics': return <AnalyticsTab />;
+      case 'my-marketing': return <MarketingTab />;
+      case 'my-seo': return <SEOTab />;
       case 'my-templates': return <TemplatesTab />;
       case 'my-settings': return <DentistSettingsTab />;
       case 'my-support': return <SupportTicketsTab />;

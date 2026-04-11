@@ -33,6 +33,9 @@ import {
   X,
   UserCog,
   ClipboardList,
+  BarChart3,
+  Megaphone,
+  Search,
 } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import {
@@ -74,8 +77,11 @@ const NAV_SECTIONS = [
     ],
   },
   {
-    title: 'Reputation',
+    title: 'Growth',
     items: [
+      { id: 'my-analytics', label: 'Analytics', icon: BarChart3, badge: null },
+      { id: 'my-marketing', label: 'Marketing', icon: Megaphone, badge: null },
+      { id: 'my-seo', label: 'SEO', icon: Search, badge: null },
       { id: 'my-reputation', label: 'Reputation Suite', icon: Star, badge: 'pro' },
     ],
   },
