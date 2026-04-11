@@ -26,6 +26,7 @@ interface CityData {
   name: string;
   slug: string;
   abbreviation?: string;
+  state_id?: string;
 }
 
 interface ZipCodeData {
@@ -51,7 +52,7 @@ function useTargetCities() {
       try {
         const { data, error } = await supabase
           .from('cities')
-          .select('id, name, slug')
+          .select('id, name, slug, state_id')
           .eq('is_active', true)
           .order('dentist_count', { ascending: false })
           .limit(200);
@@ -212,27 +213,47 @@ const HomeV2 = () => {
     }
     
     setZipError("");
-    const params = new URLSearchParams();
     
-    // Check if it's a zip code or city
+    // Try to find matching city with state info for SEO URL
+    const city = targetCities?.find(c => 
+      c.name.toLowerCase() === locationInput.toLowerCase() ||
+      c.slug.toLowerCase() === locationInput.toLowerCase().replace(/ /g, '-')
+    );
+    
+    // If we found a city, try to get its state for SEO URL
+    if (city) {
+      // Build SEO URL: /state/city/ or /state/city/service/
+      let seoUrl = '';
+      
+      // Get state from states data (we need to fetch state info for the city)
+      const cityState = states?.find(s => s.id === city.state_id);
+      
+      if (searchTreatment && cityState) {
+        // Format: /california/los-angeles/teeth-cleaning/
+        const treatmentSlug = searchTreatment.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/-+/g, '-');
+        seoUrl = `/${cityState.slug}/${city.slug}/${treatmentSlug}/`;
+      } else if (cityState) {
+        // Format: /california/los-angeles/
+        seoUrl = `/${cityState.slug}/${city.slug}/`;
+      }
+      
+      if (seoUrl) {
+        navigate(seoUrl);
+        return;
+      }
+    }
+    
+    // Fallback to /search page if no SEO URL could be built
+    const params = new URLSearchParams();
     const zipMatch = locationInput.match(/^(\d{5})/);
     if (zipMatch) {
       params.set('zip', zipMatch[1]);
     } else if (locationInput) {
-      // Treat as city name - find matching city
-      const city = targetCities?.find(c => 
-        c.name.toLowerCase() === locationInput.toLowerCase() ||
-        c.slug.toLowerCase() === locationInput.toLowerCase().replace(/ /g, '-')
-      );
-      if (city) {
-        params.set('city', city.slug);
-      }
+      params.set('city', locationInput.toLowerCase().replace(/ /g, '-'));
     }
-    
     if (searchTreatment) {
       params.set('treatment', searchTreatment);
     }
-    
     navigate(`/search?${params.toString()}`);
   };
 
