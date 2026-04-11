@@ -1,0 +1,174 @@
+{
+  "buildCommand": "npm run build",
+  "framework": "nextjs",
+  "regions": [
+    "iad1"
+  ],
+  "redirects": [
+    {
+      "source": "/",
+      "has": [
+        {
+          "type": "query",
+          "key": "p"
+        }
+      ],
+      "destination": "/blog",
+      "permanent": true
+    }
+  ],
+  "headers": [
+    {
+      "source": "/claim-profile/(.*)",
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow"
+        }
+      ]
+    },
+    {
+      "source": "/list-your-practice/(.*)",
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow"
+        }
+      ]
+    },
+    {
+      "source": "/auth/(.*)",
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow"
+        }
+      ]
+    },
+    {
+      "source": "/dashboard/(.*)",
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow"
+        }
+      ]
+    },
+    {
+      "source": "/admin/(.*)",
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow"
+        }
+      ]
+    },
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "X-Frame-Options",
+          "value": "DENY"
+        },
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "Referrer-Policy",
+          "value": "strict-origin-when-cross-origin"
+        },
+        {
+          "key": "X-Robots-Tag",
+          "value": "index, follow"
+        }
+      ]
+    }
+  ],
+  "rewrites": [
+    {
+      "source": "/api/stripe-webhook",
+      "destination": "https://fnewyocguujowqxyiqsy.supabase.co/functions/v1/stripe-webhook"
+    },
+    {
+      "source": "/api/whatsapp-webhook",
+      "destination": "https://fnewyocguujowqxyiqsy.supabase.co/functions/v1/whatsapp-webhook"
+    },
+    {
+      "source": "/sitemap.xml",
+      "destination": "https://fnewyocguujowqxyiqsy.supabase.co/functions/v1/sitemap"
+    },
+    {
+      "source": "/sitemap-static.xml",
+      "destination": "https://fnewyocguujowqxyiqsy.supabase.co/functions/v1/sitemap?type=static"
+    },
+    {
+      "source": "/sitemap-states.xml",
+      "destination": "https://fnewyocguujowqxyiqsy.supabase.co/functions/v1/sitemap?type=states"
+    },
+    {
+      "source": "/sitemap-cities.xml",
+      "destination": "https://fnewyocguujowqxyiqsy.supabase.co/functions/v1/sitemap?type=cities"
+    },
+    {
+      "source": "/sitemap-cities-:chunk.xml",
+      "destination": "https://fnewyocguujowqxyiqsy.supabase.co/functions/v1/sitemap?type=cities&chunk=:chunk"
+    },
+    {
+      "source": "/sitemap-locations.xml",
+      "destination": "https://fnewyocguujowqxyiqsy.supabase.co/functions/v1/sitemap?type=locations"
+    },
+    {
+      "source": "/sitemap-services.xml",
+      "destination": "https://fnewyocguujowqxyiqsy.supabase.co/functions/v1/sitemap?type=services"
+    },
+    {
+      "source": "/sitemap-service-locations.xml",
+      "destination": "https://fnewyocguujowqxyiqsy.supabase.co/functions/v1/sitemap?type=service-locations"
+    },
+    {
+      "source": "/sitemap-service-locations-:chunk.xml",
+      "destination": "https://fnewyocguujowqxyiqsy.supabase.co/functions/v1/sitemap?type=service-locations&chunk=:chunk"
+    },
+    {
+      "source": "/sitemap-profiles.xml",
+      "destination": "https://fnewyocguujowqxyiqsy.supabase.co/functions/v1/sitemap?type=profiles"
+    },
+    {
+      "source": "/sitemap-profiles-:chunk.xml",
+      "destination": "https://fnewyocguujowqxyiqsy.supabase.co/functions/v1/sitemap?type=profiles&chunk=:chunk"
+    },
+    {
+      "source": "/sitemap-clinics.xml",
+      "destination": "https://fnewyocguujowqxyiqsy.supabase.co/functions/v1/sitemap?type=clinics"
+    },
+    {
+      "source": "/sitemap-clinics-:chunk.xml",
+      "destination": "https://fnewyocguujowqxyiqsy.supabase.co/functions/v1/sitemap?type=clinics&chunk=:chunk"
+    },
+    {
+      "source": "/sitemap-dentists.xml",
+      "destination": "https://fnewyocguujowqxyiqsy.supabase.co/functions/v1/sitemap?type=dentists"
+    },
+    {
+      "source": "/sitemap-posts.xml",
+      "destination": "https://fnewyocguujowqxyiqsy.supabase.co/functions/v1/sitemap?type=posts"
+    },
+    {
+      "source": "/robots.txt",
+      "destination": "/robots.txt"
+    },
+    {
+      "source": "/llms.txt",
+      "destination": "/llms.txt"
+    },
+    {
+      "source": "/llms-full.txt",
+      "destination": "/llms-full.txt"
+    },
+    {
+      "source": "/_prerender",
+      "destination": "https://fnewyocguujowqxyiqsy.supabase.co/functions/v1/serve-static"
+    }
+  ]
+}

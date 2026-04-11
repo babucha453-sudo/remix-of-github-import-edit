@@ -1,0 +1,281 @@
+project_id = "fnewyocguujowqxyiqsy"
+
+# ============================================================================
+# EDGE FUNCTIONS CONFIGURATION
+# ============================================================================
+# All functions use verify_jwt = false because:
+# 1. Webhooks (stripe, whatsapp) use signature verification, not JWT
+# 2. Public endpoints (sitemap, track-visitor) are intentionally public
+# 3. Authenticated functions implement custom auth (Bearer token + role checks)
+# 4. Service functions use service_role_key internally
+# ============================================================================
+
+# --------------------------------------------------------------------------
+# Migration/Admin Tools (Service role - internal use)
+# --------------------------------------------------------------------------
+[functions.migrate-to-external]
+verify_jwt = false  # Service role: internal migration tool
+
+[functions.export-schema]
+verify_jwt = false  # Service role: internal schema export
+
+# --------------------------------------------------------------------------
+# AI/Automation Functions (Various auth patterns)
+# --------------------------------------------------------------------------
+[functions.ai-categorize]
+verify_jwt = false  # Service role: internal AI processing
+
+[functions.generate-ai-reply]
+verify_jwt = false  # Service role: AI review responses
+
+[functions.ai-assistant]
+verify_jwt = false  # Public: chatbot interface with rate limiting
+
+[functions.analyze-review-sentiment]
+verify_jwt = false  # Service role: sentiment analysis
+
+[functions.batch-enrich-clinics]
+verify_jwt = false  # Custom auth: bearer token + admin role
+
+[functions.run-automation]
+verify_jwt = false  # Service role: scheduled automation
+
+# --------------------------------------------------------------------------
+# Google My Business Integration (Auth token validated internally)
+# --------------------------------------------------------------------------
+[functions.gmb-import]
+verify_jwt = false  # Custom auth: bearer token validated
+
+[functions.gmb-store-token]
+verify_jwt = false  # Custom auth: bearer token validated
+
+[functions.gmb-fetch-businesses]
+verify_jwt = false  # Custom auth: bearer token validated
+
+[functions.gmb-link-complete]
+verify_jwt = false  # Custom auth: bearer token validated
+
+[functions.gmb-listing-bootstrap]
+verify_jwt = false  # Custom auth: bearer token validated
+
+[functions.gmb-create-listing]
+verify_jwt = false  # Custom auth: bearer token validated
+
+[functions.gmb-booking-link]
+verify_jwt = false  # Custom auth: bearer token validated
+
+# --------------------------------------------------------------------------
+# User Management (Custom auth: bearer token + super_admin role)
+# --------------------------------------------------------------------------
+[functions.dentist-onboarding-bootstrap]
+verify_jwt = false  # Custom auth: JWT validated via getClaims
+
+[functions.admin-create-user]
+verify_jwt = false  # Custom auth: bearer token + super_admin role
+
+[functions.admin-list-users]
+verify_jwt = false  # Custom auth: bearer token + super_admin role
+
+[functions.admin-manage-user]
+verify_jwt = false  # Custom auth: bearer token + super_admin role
+
+# --------------------------------------------------------------------------
+# Payment/Verification (Custom auth or webhook signatures)
+# --------------------------------------------------------------------------
+[functions.create-verification-payment]
+verify_jwt = false  # Custom auth: bearer token validated
+
+[functions.create-checkout-session]
+verify_jwt = false  # Custom auth: bearer token validated
+
+[functions.stripe-webhook]
+verify_jwt = false  # Webhook: Stripe signature verification
+
+# --------------------------------------------------------------------------
+# Claim/OTP Functions (Custom auth)
+# --------------------------------------------------------------------------
+[functions.send-claim-otp]
+verify_jwt = false  # Custom auth: bearer token validated
+
+[functions.verify-claim-otp]
+verify_jwt = false  # Custom auth: bearer token + OTP validation
+
+# --------------------------------------------------------------------------
+# Email/SMS/Communication (Various auth patterns)
+# --------------------------------------------------------------------------
+[functions.send-listing-confirmation]
+verify_jwt = false  # Service role: email sending
+
+[functions.send-outreach]
+verify_jwt = false  # Service role: outreach automation
+
+[functions.send-sms]
+verify_jwt = false  # Custom auth: bearer token + clinic authorization
+
+[functions.send-whatsapp]
+verify_jwt = false  # Service role: WhatsApp messaging
+
+[functions.send-form-request]
+verify_jwt = false  # Custom auth: bearer token validated
+
+[functions.send-appointment-notification]
+verify_jwt = false  # Service role: notification system
+
+[functions.notify-dentist-submission]
+verify_jwt = false  # Service role: form notifications
+
+[functions.send-booking-email]
+verify_jwt = false  # Service role: booking confirmations
+
+# --------------------------------------------------------------------------
+# SEO Functions (Service role - internal use)
+# --------------------------------------------------------------------------
+[functions.seo-audit]
+verify_jwt = false  # Service role: SEO analysis
+
+[functions.seo-bot]
+verify_jwt = false  # Service role: SEO automation
+
+[functions.seo-expert]
+verify_jwt = false  # Service role: AI SEO assistance
+
+[functions.seo-content-optimizer]
+verify_jwt = false  # Service role: content optimization
+
+[functions.fix-thin-content]
+verify_jwt = false  # Service role: content improvement
+
+# --------------------------------------------------------------------------
+# Public Endpoints (Intentionally public)
+# --------------------------------------------------------------------------
+[functions.sitemap]
+verify_jwt = false  # Public: SEO sitemap generation
+
+[functions.serve-static]
+verify_jwt = false  # Public: static page serving
+
+[functions.generate-static-pages]
+verify_jwt = false  # Service role: page generation
+
+[functions.patient-form]
+verify_jwt = false  # Token-based: unique form access token
+
+[functions.test-api]
+verify_jwt = false  # Public: health check endpoint
+
+# --------------------------------------------------------------------------
+# Analytics Tracking (Public with rate limiting)
+# --------------------------------------------------------------------------
+[functions.track-profile-view]
+verify_jwt = false  # Public: analytics with rate limiting + validation
+
+[functions.track-visitor]
+verify_jwt = false  # Public: visitor analytics with rate limiting + validation
+
+# --------------------------------------------------------------------------
+# Webhook Endpoints (Signature verification)
+# --------------------------------------------------------------------------
+[functions.whatsapp-webhook]
+verify_jwt = false  # Webhook: HMAC-SHA256 signature verification
+
+[functions.n8n-blog-insert]
+verify_jwt = false  # Webhook: n8n integration
+
+[functions.trigger-n8n-webhook]
+verify_jwt = false  # Service role: trigger n8n workflows
+
+# --------------------------------------------------------------------------
+# Listing/Lead Management (Various auth patterns)
+# --------------------------------------------------------------------------
+[functions.approve-listing]
+verify_jwt = false  # Custom auth: admin role check
+
+# --------------------------------------------------------------------------
+# External Integrations (Service role)
+# --------------------------------------------------------------------------
+[functions.firecrawl-scrape]
+verify_jwt = false  # Service role: web scraping
+
+[functions.firecrawl-map]
+verify_jwt = false  # Service role: site mapping
+
+[functions.email-enrichment]
+verify_jwt = false  # Service role: email lookup
+
+# --------------------------------------------------------------------------
+# Geo/Location Functions (Service role)
+# --------------------------------------------------------------------------
+[functions.audit-city-visibility]
+verify_jwt = false  # Service role: city visibility management
+
+# --------------------------------------------------------------------------
+# Meta Optimizer (Service role - AI meta tag generation)
+# --------------------------------------------------------------------------
+[functions.optimize-meta]
+verify_jwt = false  # Service role: AI meta optimization via Lovable AI Gateway
+
+# --------------------------------------------------------------------------
+# SEO Bulk Processor (Service role - bulk SEO operations)
+# --------------------------------------------------------------------------
+[functions.seo-bulk-processor]
+verify_jwt = false  # Service role: bulk SEO content regeneration
+
+# --------------------------------------------------------------------------
+# Content Generation Studio (Custom auth - admin content generation)
+# --------------------------------------------------------------------------
+[functions.content-generation-studio]
+verify_jwt = false  # Custom auth: bearer token + admin role check
+
+# --------------------------------------------------------------------------
+# State SEO Setup (Service role - bulk page creation)
+# --------------------------------------------------------------------------
+[functions.setup-state-seo-pages]
+verify_jwt = false  # Service role: bulk SEO page creation for states
+
+# --------------------------------------------------------------------------
+# FAQ Generation Studio (Custom auth - admin FAQ generation)
+# --------------------------------------------------------------------------
+[functions.faq-generation-studio]
+verify_jwt = false  # Custom auth: bearer token + admin role check
+
+# --------------------------------------------------------------------------
+# Content Audit Bot (Service role - AI content analysis)
+# --------------------------------------------------------------------------
+[functions.content-audit-bot]
+verify_jwt = false  # Service role: AI-powered content auditing with duplication detection
+
+# --------------------------------------------------------------------------
+# Phase 2 Content Generator (Custom auth - Sprint-based long-form templates)
+# --------------------------------------------------------------------------
+[functions.phase2-content-generator]
+verify_jwt = false  # Custom auth: bearer token + admin role check
+
+# --------------------------------------------------------------------------
+# Phase 3 Content Generator (Custom auth - Advanced content scaling)
+# --------------------------------------------------------------------------
+[functions.phase3-content-generator]
+verify_jwt = false  # Custom auth: bearer token + admin role check
+
+# --------------------------------------------------------------------------
+# Phase 3 Outreach (Custom auth - Dentist partnership email campaigns)
+# --------------------------------------------------------------------------
+[functions.phase3-outreach]
+verify_jwt = false  # Custom auth: bearer token + admin role check
+
+# --------------------------------------------------------------------------
+# Phase 4 Content Audit (Service role - Content performance analysis)
+# --------------------------------------------------------------------------
+[functions.phase4-content-audit]
+verify_jwt = false  # Service role: AI-powered content auditing and enhancement
+
+# --------------------------------------------------------------------------
+# Data Recovery (Service role - clinic restoration from audit logs)
+# --------------------------------------------------------------------------
+[functions.recover-clinics]
+verify_jwt = false  # Service role: data recovery tool
+
+# --------------------------------------------------------------------------
+# GZ CSV Import (Service role - bulk import from storage)
+# --------------------------------------------------------------------------
+[functions.import-gz-csv]
+verify_jwt = false  # Service role: bulk CSV import from storage

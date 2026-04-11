@@ -1,0 +1,162 @@
+# AppointPanda Robots.txt
+# Last updated: 2026-02-18
+# SEO Audit Fixes Applied
+# 
+# IMPORTANT: All indexable pages must be allowed.
+# Only private/utility pages are blocked.
+
+# ============================================
+# GOOGLEBOT
+# ============================================
+User-agent: Googlebot
+Allow: /
+Disallow: /admin
+Disallow: /dashboard
+Disallow: /auth
+Disallow: /auth/callback
+Disallow: /onboarding
+Disallow: /gmb-select
+Disallow: /claim-profile
+Disallow: /list-your-practice
+Disallow: /list-your-practice/success
+Disallow: /book/
+Disallow: /appointment/
+Disallow: /review/
+Disallow: /rq/
+Disallow: /form/
+Disallow: /search
+Disallow: /find-dentist
+Disallow: /ae/
+Disallow: /*?p=*
+Disallow: /*?utm_*
+Disallow: /*?ref=*
+Disallow: /*?source=*
+Disallow: /*?fbclid=*
+Disallow: /*?gclid=*
+
+# ============================================
+# BINGBOT
+# ============================================
+User-agent: Bingbot
+Allow: /
+Disallow: /admin
+Disallow: /dashboard
+Disallow: /auth
+Disallow: /auth/callback
+Disallow: /onboarding
+Disallow: /gmb-select
+Disallow: /claim-profile
+Disallow: /list-your-practice
+Disallow: /list-your-practice/success
+Disallow: /book/
+Disallow: /appointment/
+Disallow: /review/
+Disallow: /rq/
+Disallow: /form/
+Disallow: /search
+Disallow: /find-dentist
+Disallow: /ae/
+Disallow: /*?p=*
+Disallow: /*?utm_*
+Disallow: /*?ref=*
+
+# ============================================
+# SOCIAL MEDIA CRAWLERS
+# ============================================
+User-agent: Twitterbot
+Allow: /
+
+User-agent: facebookexternalhit
+Allow: /
+
+# ============================================
+# AI CRAWLERS - Allowed with restrictions
+# ============================================
+User-agent: GPTBot
+Allow: /
+Disallow: /admin
+Disallow: /dashboard
+Disallow: /auth
+Disallow: /claim-profile
+
+User-agent: ChatGPT-User
+Allow: /
+Disallow: /admin
+Disallow: /dashboard
+Disallow: /auth
+Disallow: /claim-profile
+
+User-agent: Claude-Web
+Allow: /
+Disallow: /admin
+Disallow: /dashboard
+Disallow: /auth
+Disallow: /claim-profile
+
+User-agent: Anthropic-AI
+Allow: /
+Disallow: /admin
+Disallow: /dashboard
+Disallow: /auth
+Disallow: /claim-profile
+
+User-agent: Google-Extended
+Allow: /
+Disallow: /admin
+Disallow: /dashboard
+Disallow: /auth
+Disallow: /claim-profile
+
+User-agent: PerplexityBot
+Allow: /
+Disallow: /admin
+Disallow: /dashboard
+Disallow: /auth
+Disallow: /claim-profile
+
+User-agent: Cohere-ai
+Allow: /
+Disallow: /admin
+Disallow: /dashboard
+Disallow: /auth
+Disallow: /claim-profile
+
+# ============================================
+# ALL OTHER BOTS
+# ============================================
+User-agent: *
+Allow: /
+Disallow: /admin
+Disallow: /dashboard
+Disallow: /auth
+Disallow: /auth/callback
+Disallow: /onboarding
+Disallow: /gmb-select
+Disallow: /claim-profile
+Disallow: /list-your-practice
+Disallow: /list-your-practice/success
+Disallow: /book/
+Disallow: /appointment/
+Disallow: /review/
+Disallow: /rq/
+Disallow: /form/
+Disallow: /search
+Disallow: /find-dentist
+Disallow: /ae/
+Disallow: /*?p=*
+Disallow: /*?utm_*
+Disallow: /*?ref=*
+Disallow: /*?source=*
+Disallow: /*?fbclid=*
+Disallow: /*?gclid=*
+
+# ============================================
+# SITEMAP
+# ============================================
+Sitemap: https://www.appointpanda.com/sitemap.xml
+
+# ============================================
+# LLMs.txt FOR AI ASSISTANTS
+# ============================================
+# See: https://www.appointpanda.com/llms.txt
+# Full version: https://www.appointpanda.com/llms-full.txt

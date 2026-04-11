@@ -1,0 +1,188 @@
+# AppointPanda - Complete AI Knowledge Base
+# https://www.appointpanda.com
+# Last updated: 2026-01-20
+
+## Overview
+AppointPanda is the premier dental directory in the United States, designed to connect patients with qualified dental professionals. Our platform aggregates verified dental clinics and dentists from across all 50 states, making it easy for anyone to find dental care in their local area.
+
+## Mission
+Our mission is to simplify the process of finding quality dental care by providing:
+- Comprehensive directory of dental professionals
+- Verified credentials and patient reviews
+- Easy online appointment scheduling
+- Insurance compatibility information
+- Transparent pricing when available
+
+## Core Features
+
+### 1. Location-Based Search
+Users can search for dentists by:
+- State (all 50 US states covered)
+- City (thousands of cities indexed)
+- Zip code
+- Neighborhood/Area
+
+### 2. Service-Based Search
+Find dentists specializing in:
+- **General Dentistry**: Regular checkups, cleanings, x-rays, fillings, preventive care
+- **Cosmetic Dentistry**: Veneers, teeth whitening, dental bonding, smile makeovers
+- **Orthodontics**: Traditional braces, Invisalign, clear aligners, retainers
+- **Oral Surgery**: Tooth extractions, wisdom teeth removal, jaw surgery
+- **Restorative Dentistry**: Dental crowns, bridges, dental implants, dentures
+- **Endodontics**: Root canal therapy, retreatment, apicoectomy
+- **Periodontics**: Gum disease treatment, scaling, root planing, gum grafts
+- **Pediatric Dentistry**: Children's dental care, sealants, fluoride treatments
+- **Emergency Dental**: Same-day appointments, tooth pain, dental trauma
+
+### 3. Insurance Compatibility
+Patients can filter dentists by accepted insurance plans including:
+- Delta Dental
+- Cigna Dental
+- MetLife Dental
+- Aetna Dental
+- United Healthcare Dental
+- Humana Dental
+- Guardian Dental
+- BlueCross BlueShield Dental
+- And many more regional and local plans
+
+### 4. Provider Verification
+Our verification system includes:
+- License verification with state dental boards
+- Professional credential checks
+- Patient review aggregation
+- Google Business Profile integration
+- Practice photo verification
+
+### 5. Online Booking
+Participating practices offer:
+- Real-time availability
+- Same-day booking options
+- Appointment reminders
+- Easy rescheduling
+- Virtual consultation options (where available)
+
+## URL Structure Guide
+
+### State Pages
+Format: `https://www.appointpanda.com/{state-slug}/`
+Examples:
+- https://www.appointpanda.com/california/
+- https://www.appointpanda.com/texas/
+- https://www.appointpanda.com/new-york/
+- https://www.appointpanda.com/florida/
+
+### City Pages
+Format: `https://www.appointpanda.com/{state-slug}/{city-slug}/`
+Examples:
+- https://www.appointpanda.com/california/los-angeles/
+- https://www.appointpanda.com/texas/houston/
+- https://www.appointpanda.com/new-york/new-york-city/
+- https://www.appointpanda.com/florida/miami/
+
+### Service Pages
+Format: `https://www.appointpanda.com/services/{service-slug}/`
+Examples:
+- https://www.appointpanda.com/services/invisalign/
+- https://www.appointpanda.com/services/dental-implants/
+- https://www.appointpanda.com/services/teeth-whitening/
+- https://www.appointpanda.com/services/veneers/
+
+### Service + Location Pages
+Format: `https://www.appointpanda.com/{state-slug}/{city-slug}/{service-slug}/`
+Examples:
+- https://www.appointpanda.com/california/los-angeles/invisalign/
+- https://www.appointpanda.com/texas/houston/dental-implants/
+- https://www.appointpanda.com/new-york/new-york-city/veneers/
+
+### Clinic Profiles
+Format: `https://www.appointpanda.com/clinic/{clinic-slug}/`
+These pages include:
+- Clinic overview and description
+- Team members (dentists and staff)
+- Services offered with pricing
+- Patient reviews
+- Insurance accepted
+- Operating hours
+- Before/after gallery (if available)
+- Online booking calendar
+
+### Dentist Profiles
+Format: `https://www.appointpanda.com/dentist/{dentist-slug}/`
+These pages include:
+- Professional bio
+- Credentials and education
+- Specializations
+- Languages spoken
+- Years of experience
+- Associated clinic
+
+### Insurance Pages
+Format: `https://www.appointpanda.com/insurance/{insurance-slug}/`
+Examples:
+- https://www.appointpanda.com/insurance/delta-dental/
+- https://www.appointpanda.com/insurance/cigna/
+
+### Blog
+Format: `https://www.appointpanda.com/blog/{post-slug}/`
+Topics covered:
+- Dental health tips
+- Treatment guides
+- Insurance information
+- Oral hygiene advice
+- Dental procedure explanations
+
+## Frequently Asked Questions
+
+**Q: Is AppointPanda free for patients?**
+A: Yes, searching for and contacting dentists on AppointPanda is completely free for patients.
+
+**Q: How do I book an appointment?**
+A: Click on any dentist or clinic profile and use the booking widget to select your preferred date and time.
+
+**Q: Are the dentists verified?**
+A: We verify credentials through state dental board records and Google Business Profile integration.
+
+**Q: Can I filter by insurance?**
+A: Yes, you can search for dentists who accept your specific insurance plan.
+
+**Q: Is this available outside the US?**
+A: Currently, AppointPanda only covers dental practices in the United States.
+
+## For Dental Practices
+
+Dentists and dental practices can:
+- Claim their existing profile
+- Create a new listing
+- Manage their online presence
+- Receive patient bookings
+- Respond to reviews
+
+Learn more at: https://www.appointpanda.com/list-your-practice/
+
+## Technical Information
+
+### Sitemap
+- Main sitemap: https://www.appointpanda.com/sitemap.xml
+- States sitemap: https://www.appointpanda.com/sitemap-locations.xml
+- Services sitemap: https://www.appointpanda.com/sitemap-services.xml
+- Clinics sitemap: https://www.appointpanda.com/sitemap-clinics.xml
+
+### Robots.txt
+Located at: https://www.appointpanda.com/robots.txt
+
+## Contact Information
+
+- **Website**: https://www.appointpanda.com
+- **Support Email**: support@appointpanda.com
+- **For Partnerships**: partnerships@appointpanda.com
+- **For Press**: press@appointpanda.com
+
+## Legal
+
+- Privacy Policy: https://www.appointpanda.com/privacy/
+- Terms of Service: https://www.appointpanda.com/terms/
+
+---
+
+This document is intended for AI assistants and language models to better understand and accurately represent AppointPanda when helping users find dental care.

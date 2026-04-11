@@ -1,0 +1,14 @@
+{
+  "imports": {
+    "https://esm.sh/@supabase/supabase-js@2": "npm:@supabase/supabase-js@2",
+    "https://esm.sh/@supabase/supabase-js@2.49.1": "npm:@supabase/supabase-js@2",
+    "https://esm.sh/@supabase/supabase-js@2.57.2": "npm:@supabase/supabase-js@2",
+    "https://esm.sh/stripe@18.5.0": "npm:stripe@18",
+    "https://esm.sh/stripe@14.21.0?target=deno": "npm:stripe@14",
+    "https://deno.land/x/zod@v3.22.4/mod.ts": "npm:zod@3",
+    
+    "https://deno.land/std@0.168.0/http/server.ts": "jsr:@std/http@0/server",
+    "https://deno.land/std@0.190.0/http/server.ts": "jsr:@std/http@0/server",
+    "https://deno.land/std@0.168.0/crypto/mod.ts": "jsr:@std/crypto@0"
+  }
+}
