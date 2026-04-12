@@ -32,8 +32,13 @@ export default function Auth() {
   const [signupName, setSignupName] = useState('');
 
   useEffect(() => {
+    console.log('[Auth] useEffect:', { isLoading, hasUser: !!user, roles, hasRedirected });
+    
     // Wait for auth to finish loading AND ensure user exists
-    if (isLoading || !user || hasRedirected) return;
+    if (isLoading || !user || hasRedirected) {
+      console.log('[Auth] Skipping redirect:', { isLoading, hasUser: !!user, hasRedirected });
+      return;
+    }
 
     // Check if there's an active GMB flow - don't redirect if so
     const isGmbFlow = localStorage.getItem('gmb_listing_flow') === 'true' ||
@@ -52,18 +57,24 @@ export default function Auth() {
     const isSuperAdmin = roles.includes('super_admin') || roles.includes('district_manager');
     const isAdmin = isSuperAdmin || roles.some(r => ['seo_team', 'content_team', 'marketing_team', 'support_team'].includes(r));
     const isDentist = roles.includes('dentist');
+    
+    console.log('[Auth] Roles check:', { isSuperAdmin, isAdmin, isDentist, roles });
 
     // SuperAdmins go directly to /admin - no delays, no onboarding
     if (isSuperAdmin || isAdmin) {
+      console.log('[Auth] Redirecting to /admin');
       navigate('/admin', { replace: true });
     } else if (isDentist) {
+      console.log('[Auth] Redirecting to /dashboard');
       // Dentists go to their dashboard
       navigate('/dashboard?tab=my-dashboard', { replace: true });
     } else if (roles.length === 0) {
+      console.log('[Auth] No roles, redirecting to /onboarding');
       // User has no roles - might still be loading, or is a new user
       // Send to onboarding
       navigate('/onboarding?new=true', { replace: true });
     } else {
+      console.log('[Auth] Unknown role, redirecting to /onboarding');
       // Has some other role, default to onboarding
       navigate('/onboarding?new=true', { replace: true });
     }
