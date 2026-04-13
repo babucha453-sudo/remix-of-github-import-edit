@@ -1364,3 +1364,22 @@
   backface-visibility: hidden;
   perspective: 1000px;
 }
+
+/* Marquee animation for dentist cards */
+@keyframes scroll-left {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-marquee {
+  animation: scroll-left 30s linear infinite;
+}
+
+.animate-marquee:hover,
+.animate-marquee-paused {
+  animation-play-state: paused;
+}

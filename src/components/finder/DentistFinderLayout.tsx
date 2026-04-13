@@ -12,7 +12,9 @@ import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 
 import { DentistFinderSearch } from "./DentistFinderSearch";
+import { HeroSearchBar } from "./HeroSearchBar";
 import { DentistFinderFilters, useFinderFilters, FinderFilters } from "./DentistFinderFilters";
+import { FilterPanel, FilterState } from "./FilterPanel";
 import { DentistFinderCard, DentistFinderProfile } from "./DentistFinderCard";
 import { DentistFinderMap, DentistMapMarker } from "./DentistFinderMap";
 
@@ -185,12 +187,27 @@ export function DentistFinderLayout({
           </div>
           
           {/* Search Bar */}
-          <div className="max-w-4xl mx-auto">
-            <DentistFinderSearch
+          <div className="max-w-5xl mx-auto">
+            <HeroSearchBar
               initialService={searchService}
               initialLocation={searchLocation || initialLocation}
-              onSearch={handleSearch}
+              onSearch={(service, location, state, city) => handleSearch(service, location)}
             />
+          </div>
+          
+          {/* Quick Filters Strip */}
+          <div className="max-w-4xl mx-auto mt-6">
+            <div className="flex flex-wrap justify-center gap-2">
+              {['Teeth Cleaning', 'Teeth Whitening', 'Dental Implants', 'Braces'].map((service) => (
+                <button
+                  key={service}
+                  onClick={() => handleSearch(service, '')}
+                  className="px-4 py-2 rounded-full bg-white/10 hover:bg-white/20 text-white text-sm font-medium transition-colors border border-white/20 hover:border-white/40"
+                >
+                  {service}
+                </button>
+              ))}
+            </div>
           </div>
 
           {/* Active Filters Summary */}
@@ -403,29 +420,56 @@ export function DentistFinderLayout({
                 </div>
               )}
 
-              {/* Load More */}
-              {hasMore && (
-                <div className="mt-6 text-center">
+              {/* Pagination */}
+              {profiles && profiles.length > 0 && (
+                <div className="mt-8 flex justify-center items-center gap-2">
                   <Button
-                    onClick={loadMore}
-                    disabled={isLoadingMore}
                     variant="outline"
-                    className="rounded-xl border-slate-200 hover:border-emerald-500 hover:text-emerald-600"
+                    size="sm"
+                    disabled={displayCount <= 20}
+                    onClick={() => setDisplayCount(20)}
+                    className="rounded-lg"
                   >
-                    {isLoadingMore ? (
-                      <>
-                        <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                        Loading...
-                      </>
-                    ) : (
-                      <>
-                        Show More ({profiles!.length - displayCount} more)
-                        <ChevronRight className="h-4 w-4 ml-2" />
-                      </>
-                    )}
+                    1
                   </Button>
+                  {profiles.length > 20 && (
+                    <Button
+                      variant={displayCount > 20 ? "default" : "outline"}
+                      size="sm"
+                      disabled={displayCount > profiles.length}
+                      onClick={() => setDisplayCount(40)}
+                      className={displayCount > 20 ? "bg-emerald-600" : "rounded-lg"}
+                    >
+                      2
+                    </Button>
+                  )}
+                  {profiles.length > 40 && (
+                    <Button
+                      variant={displayCount > 40 ? "default" : "outline"}
+                      size="sm"
+                      onClick={() => setDisplayCount(60)}
+                      className={displayCount > 40 ? "bg-emerald-600" : "rounded-lg"}
+                    >
+                      3
+                    </Button>
+                  )}
+                  {hasMore && (
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={loadMore}
+                      disabled={isLoadingMore}
+                      className="rounded-lg"
+                    >
+                      <ChevronRight className="h-4 w-4" />
+                    </Button>
+                  )}
                 </div>
               )}
+              
+              <p className="text-center text-sm text-slate-500 mt-4">
+                Showing {displayedProfiles.length} of {profiles?.length || 0} dentists
+              </p>
             </div>
 
             {/* Map (split view) */}
