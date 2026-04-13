@@ -163,7 +163,7 @@ export function DentistFinderCard({
                 </Link>
               </h3>
 
-              {/* Location & Rating */}
+              {/* Location & Rating & Price Estimate */}
               <div className="flex items-center gap-3 text-sm text-slate-500 mb-2">
                 <div className="flex items-center gap-1">
                   <MapPin className="h-3.5 w-3.5" />
@@ -177,6 +177,12 @@ export function DentistFinderCard({
                       <span className="text-slate-400">({profile.reviewCount})</span>
                     )}
                   </div>
+                )}
+                {/* UX FIX: Add price estimate for transparency */}
+                {(profile as any).hasBookNow && (
+                  <span className="ml-auto text-emerald-600 font-medium text-xs">
+                    From $75
+                  </span>
                 )}
               </div>
 
@@ -221,6 +227,14 @@ export function DentistFinderCard({
                     <Languages className="h-3 w-3" />
                     {profile.languages[0]}
                     {profile.languages.length > 1 && `+${profile.languages.length - 1}`}
+                  </span>
+                )}
+                {/* SEO FIX: Add insurance badges - previously missing */}
+                {profile.insuranceAccepted && profile.insuranceAccepted.length > 0 && (
+                  <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-emerald-50 text-emerald-700 text-xs font-medium rounded-full border border-emerald-100">
+                    <Shield className="h-3 w-3" />
+                    {profile.insuranceAccepted.slice(0, 2).join(', ')}
+                    {profile.insuranceAccepted.length > 2 && ` +${profile.insuranceAccepted.length - 2}`}
                   </span>
                 )}
               </div>

@@ -566,6 +566,39 @@ const CityPage = ({ initialState, initialCity }: CityPageProps) => {
                   </a>
                 ))}
               </div>
+              
+              {/* TRANSFORMATION: Price Decision Content - SEO Gold */}
+              <div className="mt-8 pt-6 border-t border-slate-200">
+                <h3 className="text-lg font-bold text-slate-800 mb-3">
+                  💰 Understanding Dental Costs in {cityName}
+                </h3>
+                <div className="grid md:grid-cols-3 gap-4 text-sm">
+                  <div className="bg-slate-50 p-4 rounded-xl">
+                    <p className="font-semibold text-slate-700 mb-1">Budget-Friendly</p>
+                    <p className="text-slate-500">Cleanings: $75-150<br/>Checkups: $50-125</p>
+                    <a href={`/${stateSlug}/${citySlug}?budget=under-200`} className="text-emerald-600 text-xs mt-2 block hover:underline">
+                      Find affordable options →
+                    </a>
+                  </div>
+                  <div className="bg-slate-50 p-4 rounded-xl">
+                    <p className="font-semibold text-slate-700 mb-1">Mid-Range</p>
+                    <p className="text-slate-500">Fillings: $150-300<br/>Crowns: $800-1500</p>
+                    <a href={`/${stateSlug}/${citySlug}?budget=200-500`} className="text-emerald-600 text-xs mt-2 block hover:underline">
+                      Browse mid-range →
+                    </a>
+                  </div>
+                  <div className="bg-slate-50 p-4 rounded-xl">
+                    <p className="font-semibold text-slate-700 mb-1">Premium</p>
+                    <p className="text-slate-500">Implants: $3000-6000<br/>Veneers: $1500-3000</p>
+                    <a href={`/${stateSlug}/${citySlug}?budget=over-1000`} className="text-emerald-600 text-xs mt-2 block hover:underline">
+                      View specialists →
+                    </a>
+                  </div>
+                </div>
+                <p className="text-xs text-slate-400 mt-3">
+                  💡 Prices are estimates. Use our dental cost calculator for personalized quotes.
+                </p>
+              </div>
             </div>
           </div>
         </div>

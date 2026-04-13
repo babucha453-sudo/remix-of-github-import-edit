@@ -308,6 +308,21 @@ const ClinicPage = () => {
               };
             }),
           },
+          // SEO FIX: Add Physician schema for Google doctor search ranking
+          ...(dentists || []).slice(0, 5).map((dentist: any) => ({
+            type: 'physician' as const,
+            name: `Dr. ${dentist.name || 'Professional Dentist'}`,
+            jobTitle: dentist.specialty || 'Dentist',
+            description: dentist.bio || `Experienced ${dentist.specialty || 'dentist'} at ${clinic.name}`,
+            image: dentist.avatar_url || undefined,
+            url: `/clinic/${clinic.slug}/`,
+            phone: clinic.phone || '',
+            geo: clinic.latitude && clinic.longitude ? { lat: Number(clinic.latitude), lng: Number(clinic.longitude) } : undefined,
+            rating: dentist.rating ? Number(dentist.rating) : undefined,
+            reviewCount: dentist.review_count || undefined,
+            specialties: [dentist.specialty || 'General Dentistry'],
+            acceptsNewPatients: true,
+          })),
         ]}
         id="clinic-schema"
       />

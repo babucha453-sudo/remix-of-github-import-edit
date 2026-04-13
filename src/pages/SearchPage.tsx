@@ -279,6 +279,28 @@ export default function SearchPage() {
         description="Search and book appointments with top-rated dentists in your area. Compare reviews, check insurance, and book instantly."
         canonical="/search"
       />
+      
+      {/* SEO: Static content for search page - visible in HTML for Google */}
+      <div className="sr-only" aria-hidden="true">
+        <h2>Search for Dentists</h2>
+        <p>Find top-rated dentists in your area. Search by city, state, or ZIP code. Filter by service type including general dentistry, cosmetic dentistry, orthodontics, dental implants, teeth cleaning, and more. Read patient reviews and book your appointment online.</p>
+        <h3>Popular Locations</h3>
+        <ul>
+          <li>Los Angeles, California dentists</li>
+          <li>New York City dentists</li>
+          <li>Houston, Texas dentists</li>
+          <li>Miami, Florida dentists</li>
+        </ul>
+        <h3>Popular Services</h3>
+        <ul>
+          <li>Teeth cleaning and checkups</li>
+          <li>Dental implants</li>
+          <li>Teeth whitening</li>
+          <li>Invisalign and braces</li>
+          <li>Root canal treatment</li>
+          <li>Dental crowns</li>
+        </ul>
+      </div>
       <Navbar />
       
       {/* Hero Search Section - Emerald Theme */}

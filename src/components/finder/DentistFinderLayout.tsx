@@ -195,9 +195,9 @@ export function DentistFinderLayout({
             />
           </div>
           
-          {/* Quick Filters Strip */}
+          {/* Quick Filters Strip - Services + Price Quick Filters */}
           <div className="max-w-4xl mx-auto mt-6">
-            <div className="flex flex-wrap justify-center gap-2">
+            <div className="flex flex-wrap justify-center gap-2 mb-3">
               {['Teeth Cleaning', 'Teeth Whitening', 'Dental Implants', 'Braces'].map((service) => (
                 <button
                   key={service}
@@ -207,6 +207,25 @@ export function DentistFinderLayout({
                   {service}
                 </button>
               ))}
+            </div>
+            {/* Quick Price Filters - New for patient transparency */}
+            <div className="flex flex-wrap justify-center gap-2">
+              <span className="text-emerald-300/70 text-xs mr-1">Or filter by price:</span>
+              {['$50-100', '$100-200', '$200-300', '$300+'].map((price) => (
+                <button
+                  key={price}
+                  onClick={() => updateFilters({ priceRange: [parseInt(price.split('-')[0]) || 300, parseInt(price.split('-')[1]) || 500] })}
+                  className="px-3 py-1.5 rounded-full bg-white/5 hover:bg-white/20 text-emerald-200 text-xs font-medium transition-colors border border-white/10 hover:border-white/30"
+                >
+                  {price}
+                </button>
+              ))}
+              <button
+                onClick={() => updateFilters({ priceRange: [0, 500] })}
+                className="px-3 py-1.5 rounded-full bg-white/5 hover:bg-white/20 text-emerald-200 text-xs font-medium transition-colors border border-white/10 hover:border-white/30"
+              >
+                Any Price
+              </button>
             </div>
           </div>
 
@@ -394,6 +413,19 @@ export function DentistFinderLayout({
                   <p className="text-slate-500 mb-4">
                     Try adjusting your filters or search in a different location
                   </p>
+                  {/* UX FIX: Better suggestions for patients */}
+                  <div className="flex flex-wrap justify-center gap-2 mb-4">
+                    <span className="text-sm text-slate-500">Popular searches:</span>
+                    {['Los Angeles', 'Teeth Cleaning', 'New Patients'].map((suggestion) => (
+                      <button
+                        key={suggestion}
+                        onClick={() => handleSearch(suggestion.includes(' ') ? suggestion.split(' ')[1] : suggestion, suggestion === 'New Patients' ? '' : suggestion)}
+                        className="text-emerald-600 text-sm hover:underline"
+                      >
+                        {suggestion}
+                      </button>
+                    ))}
+                  </div>
                   <Button onClick={clearFilters} className="bg-emerald-600 hover:bg-emerald-700">
                     Clear Filters
                   </Button>

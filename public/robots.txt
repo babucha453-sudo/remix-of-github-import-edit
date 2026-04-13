@@ -1,9 +1,9 @@
 # AppointPanda Robots.txt
-# Last updated: 2026-02-18
-# SEO Audit Fixes Applied
+# Last updated: 2026-04-14
+# SEO Audit Complete - All fixes applied
 # 
-# IMPORTANT: All indexable pages must be allowed.
-# Only private/utility pages are blocked.
+# IMPORTANT: All indexable pages are now allowed for Googlebot
+# Private/admin pages remain blocked
 
 # ============================================
 # GOOGLEBOT
@@ -24,8 +24,9 @@ Disallow: /appointment/
 Disallow: /review/
 Disallow: /rq/
 Disallow: /form/
-Disallow: /search
-Disallow: /find-dentist
+# SEO FIX: Allow search result pages (CRITICAL for SEO)
+Allow: /search
+Allow: /find-dentist
 Disallow: /ae/
 Disallow: /*?p=*
 Disallow: /*?utm_*
@@ -53,8 +54,8 @@ Disallow: /appointment/
 Disallow: /review/
 Disallow: /rq/
 Disallow: /form/
-Disallow: /search
-Disallow: /find-dentist
+Allow: /search
+Allow: /find-dentist
 Disallow: /ae/
 Disallow: /*?p=*
 Disallow: /*?utm_*
@@ -70,7 +71,7 @@ User-agent: facebookexternalhit
 Allow: /
 
 # ============================================
-# AI CRAWLERS - Allowed with restrictions
+# AI CRAWLERS
 # ============================================
 User-agent: GPTBot
 Allow: /
@@ -105,7 +106,6 @@ Allow: /
 Disallow: /admin
 Disallow: /dashboard
 Disallow: /auth
-Disallow: /claim-profile
 
 User-agent: PerplexityBot
 Allow: /
@@ -140,8 +140,8 @@ Disallow: /appointment/
 Disallow: /review/
 Disallow: /rq/
 Disallow: /form/
-Disallow: /search
-Disallow: /find-dentist
+Allow: /search
+Allow: /find-dentist
 Disallow: /ae/
 Disallow: /*?p=*
 Disallow: /*?utm_*

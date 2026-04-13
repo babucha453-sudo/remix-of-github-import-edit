@@ -3,6 +3,7 @@ import { PageLayout } from "@/components/layout/PageLayout";
 import { Section } from "@/components/layout/Section";
 import { Button } from "@/components/ui/button";
 import { SEOHead } from "@/components/seo/SEOHead";
+import { SyncStructuredData } from "@/components/seo/SyncStructuredData";
 import { useSiteSettings } from "@/hooks/useSiteSettings";
 import { useSeoPageContent } from "@/hooks/useSeoPageContent";
 import { useRealCounts } from "@/hooks/useRealCounts";
@@ -108,6 +109,17 @@ const FAQPage = () => {
         description={seoContent?.meta_description || "Find answers to common questions about AppointPanda. Learn how to find dentists, book appointments, list your practice, and manage your dental profile."}
         canonical="/faq/"
         keywords={['dental FAQ', 'appointpanda help', 'find dentist questions', 'dental booking help']}
+      />
+      
+      {/* SEO FIX: Add FAQPage structured data for Google */}
+      <SyncStructuredData
+        data={{
+          type: 'faq',
+          questions: categories.flatMap((cat: any) => (cat.faqs || []).map((faq: any) => ({
+            question: faq.question,
+            answer: faq.answer,
+          }))),
+        }}
       />
 
       {/* Dark Hero Section */}

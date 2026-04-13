@@ -56,6 +56,21 @@ export interface DentistSchemaData {
   reviewCount?: number;
 }
 
+export interface PhysicianSchemaData {
+  type: 'physician';
+  name: string;
+  jobTitle?: string;
+  description?: string;
+  image?: string;
+  url: string;
+  phone?: string;
+  geo?: { lat: number; lng: number };
+  rating?: number;
+  reviewCount?: number;
+  specialties?: string[];
+  acceptsNewPatients?: boolean;
+}
+
 export interface ArticleSchemaData {
   type: 'article';
   headline: string;
@@ -70,6 +85,13 @@ export interface ArticleSchemaData {
 export interface FAQSchemaData {
   type: 'faq';
   questions: { question: string; answer: string }[];
+}
+
+export interface HowToSchemaData {
+  type: 'howTo';
+  name: string;
+  description?: string;
+  steps: { name: string; text: string }[];
 }
 
 export interface BreadcrumbSchemaData {
@@ -116,8 +138,10 @@ export type SyncSchemaData =
   | OrganizationSchemaData
   | LocalBusinessSchemaData
   | DentistSchemaData
+  | PhysicianSchemaData
   | ArticleSchemaData
   | FAQSchemaData
+  | HowToSchemaData
   | BreadcrumbSchemaData
   | ServiceSchemaData
   | ItemListSchemaData
@@ -207,6 +231,39 @@ const generateLocalBusinessSchema = (data: LocalBusinessSchemaData) => ({
   }),
 });
 
+const generatePhysicianSchema = (data: PhysicianSchemaData) => ({
+  '@context': 'https://schema.org',
+  '@type': 'Physician',
+  name: data.name,
+  jobTitle: data.jobTitle || 'Dentist',
+  description: data.description,
+  image: data.image,
+  url: `${BASE_URL}${withTrailingSlash(data.url)}`,
+  ...(data.phone && { telephone: data.phone }),
+  ...(data.geo && {
+    geo: {
+      '@type': 'GeoCoordinates',
+      latitude: data.geo.lat,
+      longitude: data.geo.lng,
+    },
+  }),
+  ...(data.rating && {
+    aggregateRating: {
+      '@type': 'AggregateRating',
+      ratingValue: data.rating,
+      bestRating: 5,
+      worstRating: 1,
+      ...(data.reviewCount && { ratingCount: data.reviewCount }),
+    },
+  }),
+  ...(data.specialties?.length && {
+    medicalSpecialty: data.specialties.map((s) => ({ '@type': 'MedicalSpecialty', name: s })),
+  }),
+  ...(data.acceptsNewPatients !== undefined && {
+    acceptsNewPatients: data.acceptsNewPatients,
+  }),
+});
+
 const generateDentistSchema = (data: DentistSchemaData) => ({
   '@context': 'https://schema.org',
   '@type': 'Person',
@@ -289,6 +346,19 @@ const generateFAQSchema = (data: FAQSchemaData) => ({
   })),
 });
 
+const generateHowToSchema = (data: HowToSchemaData) => ({
+  '@context': 'https://schema.org',
+  '@type': 'HowTo',
+  name: data.name,
+  description: data.description || `Learn how to ${data.name.toLowerCase()} with AppointPanda`,
+  step: data.steps.map((step, index) => ({
+    '@type': 'HowToStep',
+    position: index + 1,
+    name: step.name,
+    text: step.text,
+  })),
+});
+
 const generateBreadcrumbSchema = (data: BreadcrumbSchemaData) => ({
   '@context': 'https://schema.org',
   '@type': 'BreadcrumbList',
@@ -357,10 +427,14 @@ function generateSchema(data: SyncSchemaData, organizationSettings?: any): objec
       return generateLocalBusinessSchema(data);
     case 'dentist':
       return generateDentistSchema(data);
+    case 'physician':
+      return generatePhysicianSchema(data);
     case 'article':
       return generateArticleSchema(data);
     case 'faq':
       return generateFAQSchema(data);
+    case 'howTo':
+      return generateHowToSchema(data);
     case 'breadcrumb':
       return generateBreadcrumbSchema(data);
     case 'service':
