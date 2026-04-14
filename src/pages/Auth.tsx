@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
 import { supabase } from '@/integrations/supabase/client';
 import { clearGmbProviderToken } from '@/lib/gmbAuth';
@@ -18,6 +18,7 @@ const passwordSchema = z.string().min(6, 'Password must be at least 6 characters
 export default function Auth() {
   const { user, roles, signIn, signUp, isLoading } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isGoogleLoading, setIsGoogleLoading] = useState(false);
   const [hasRedirected, setHasRedirected] = useState(false);
@@ -35,8 +36,8 @@ export default function Auth() {
     console.log('[Auth] useEffect:', { isLoading, hasUser: !!user, roles, hasRedirected });
     
     // Wait for auth to finish loading AND ensure user exists
-    if (isLoading || !user || hasRedirected) {
-      console.log('[Auth] Skipping redirect:', { isLoading, hasUser: !!user, hasRedirected });
+    if (isLoading || !user) {
+      console.log('[Auth] Skipping redirect:', { isLoading, hasUser: !!user });
       return;
     }
 
@@ -51,14 +52,34 @@ export default function Auth() {
       return;
     }
 
-    // Redirect authenticated users away from auth page
-    setHasRedirected(true);
-
+    // Get base path - admins go to /admin, dentists/dentists go to /dashboard
     const isSuperAdmin = roles.includes('super_admin') || roles.includes('district_manager');
     const isAdmin = isSuperAdmin || roles.some(r => ['seo_team', 'content_team', 'marketing_team', 'support_team'].includes(r));
     const isDentist = roles.includes('dentist');
     
     console.log('[Auth] Roles check:', { isSuperAdmin, isAdmin, isDentist, roles });
+
+    // Redirect authenticated users away from auth page
+    if (hasRedirected) {
+      // Already redirected before - but force redirect on first login success
+      // Check if we need to redirect based on current path
+      if (location.pathname === '/auth' || location.pathname === '/login') {
+        // Force redirect now
+        if (isSuperAdmin || isAdmin) {
+          navigate('/admin', { replace: true });
+        } else if (isDentist) {
+          navigate('/dashboard?tab=my-dashboard', { replace: true });
+        } else if (roles.length === 0) {
+          navigate('/onboarding?new=true', { replace: true });
+        } else {
+          navigate('/onboarding?new=true', { replace: true });
+        }
+      }
+      return;
+    }
+
+    // First time redirect - mark as redirected and navigate
+    setHasRedirected(true);
 
     // SuperAdmins go directly to /admin - no delays, no onboarding
     if (isSuperAdmin || isAdmin) {
@@ -78,7 +99,7 @@ export default function Auth() {
       // Has some other role, default to onboarding
       navigate('/onboarding?new=true', { replace: true });
     }
-  }, [user, roles, isLoading, navigate, hasRedirected]);
+  }, [user, roles, isLoading, navigate, hasRedirected, location]);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -101,7 +122,18 @@ export default function Auth() {
       toast.error(error.message.includes('Invalid login credentials') ? 'Invalid email or password' : error.message);
     } else {
       toast.success('Welcome back!');
-      // Navigation will be handled by the useEffect after roles are loaded
+      // Force redirect on successful login - useEffect might take time to trigger
+      setTimeout(() => {
+        if (!roles.length) {
+          navigate('/onboarding?new=true', { replace: true });
+        } else if (roles.includes('dentist')) {
+          navigate('/dashboard?tab=my-dashboard', { replace: true });
+        } else if (roles.includes('super_admin') || roles.some(r => ['seo_team', 'content_team', 'marketing_team', 'support_team'].includes(r))) {
+          navigate('/admin', { replace: true });
+        } else {
+          navigate('/onboarding?new=true', { replace: true });
+        }
+      }, 1500);
     }
   };
 

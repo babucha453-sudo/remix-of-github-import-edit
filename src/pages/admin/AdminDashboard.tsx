@@ -63,6 +63,7 @@ import {
   PanelLeft,
   Eye,
   Filter,
+  Image as ImageIcon,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -122,6 +123,8 @@ const DentistReputationHub = lazyRetry(() => import('@/components/reputation/Den
 const AdminReputationHub = lazyRetry(() => import('@/components/reputation/AdminReputationHub'));
 const SupportTicketsTab = lazyRetry(() => import('@/components/dentist/SupportTicketsTab'));
 const TeamManagementTab = lazyRetry(() => import('@/components/dentist/TeamManagementTab'));
+const GalleryManagementTab = lazyRetry(() => import('@/components/dentist/GalleryManagementTab'));
+const PlatformReviewsTab = lazyRetry(() => import('@/components/dentist/PlatformReviewsTab'));
 const DentistSettingsTab = lazyRetry(() => import('@/components/dentist/DentistSettingsTab'));
 const TemplatesTab = lazyRetry(() => import('@/components/dentist/TemplatesTab'));
 const InsuranceManagementTab = lazyRetry(() => import('@/components/dentist/InsuranceManagementTab'));
@@ -181,7 +184,13 @@ const DentistDashboardV2 = lazyRetry(() => import('@/components/dashboard-v2/Den
 
 // Define tabs for dentists (comprehensive view)
 const dentistTabGroups = [
-{
+  {
+    label: 'Dashboard',
+    tabs: [
+      { id: 'my-dashboard', label: 'Overview', icon: LayoutDashboard, highlight: true },
+    ],
+  },
+  {
       label: 'Data & SEO',
       tabs: [
         { id: 'locations', label: 'Locations', icon: MapPin },
@@ -210,6 +219,13 @@ const dentistTabGroups = [
     ],
   },
   {
+    label: 'Gallery',
+    tabs: [
+      { id: 'my-gallery', label: 'Before & After', icon: ImageIcon, highlight: true },
+      { id: 'my-platform-reviews', label: 'Reviews', icon: Star },
+    ],
+  },
+  {
     label: 'Reputation',
     tabs: [
       { id: 'my-reputation', label: 'Reputation Suite', icon: Star, highlight: true },
@@ -219,6 +235,13 @@ const dentistTabGroups = [
     label: 'Communication',
     tabs: [
       { id: 'my-templates', label: 'Templates', icon: FileText },
+    ],
+  },
+  {
+    label: 'Growth',
+    tabs: [
+      { id: 'my-analytics', label: 'Analytics', icon: BarChart3 },
+      { id: 'my-marketing', label: 'Marketing', icon: Megaphone },
     ],
   },
   {
@@ -566,6 +589,8 @@ export default function AdminDashboard() {
       case 'my-team': return <TeamManagementTab />;
       case 'my-services': return <ServicesTab />;
       case 'my-insurance': return <InsuranceManagementTab />;
+      case 'my-gallery': return <GalleryManagementTab />;
+      case 'my-platform-reviews': return <PlatformReviewsTab />;
       case 'my-reputation': return <DentistReputationHub />;
       case 'my-analytics': return <AnalyticsTab />;
       case 'my-marketing': return <MarketingTab />;

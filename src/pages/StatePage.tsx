@@ -687,48 +687,42 @@ const StatePage = ({ initialState, initialCities }: StatePageProps) => {
             </div>
           ) : cities && cities.length > 0 ? (
             <>
-              <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 max-w-5xl mx-auto">
-                {cities.slice(0, visibleCityCount).map((city, i) => (
-                  <Link
-                    key={city.id}
-                    to={`/${stateSlug}/${city.slug}/`}
-                    className="group bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-6 hover:border-emerald-500/50 hover:bg-white/10 transition-all"
-                  >
-                    <div className="flex items-center gap-3 mb-3">
-                      <div className="h-10 w-10 rounded-xl bg-emerald-500/20 flex items-center justify-center group-hover:bg-emerald-500/30 transition-colors">
-                        <MapPin className="h-5 w-5 text-emerald-400" />
-                      </div>
-                      <div>
-                        <h3 className="font-bold text-white group-hover:text-emerald-400 transition-colors">
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 max-w-6xl mx-auto">
+                {cities.slice(0, visibleCityCount).map((city, i) => {
+                  const dentistCount = (city.dentist_count || 0) > 0 ? city.dentist_count : (cityClinicCounts?.[city.id] || 0);
+                  return (
+                    <Link
+                      key={city.id}
+                      to={`/${stateSlug}/${city.slug}/`}
+                      className="group bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-3 hover:border-emerald-500/50 hover:bg-white/10 transition-all flex flex-col"
+                    >
+                      <div className="flex items-center gap-2 mb-2">
+                        <MapPin className="h-3.5 w-3.5 text-emerald-400 shrink-0" />
+                        <h3 className="font-semibold text-white text-sm truncate group-hover:text-emerald-400 transition-colors">
                           {city.name}
                         </h3>
-                        <p className="text-sm text-white/60">{stateAbbr}</p>
                       </div>
-                    </div>
-                    <div className="flex items-center justify-between text-sm">
-                      <span className="text-white/60">
-                        {(city.dentist_count || 0) > 0
-                          ? `${city.dentist_count || 0} Dentists`
-                          : `${cityClinicCounts?.[city.id] || 0} Clinics`}
-                      </span>
-                      <ArrowRight className="h-4 w-4 text-emerald-400 opacity-0 group-hover:opacity-100 transition-opacity" />
-                    </div>
-                  </Link>
-                ))}
+                      <div className="mt-auto flex items-center justify-between">
+                        <span className="text-xs text-white/60">
+                          {dentistCount > 0 ? `${dentistCount}+` : '0'}
+                        </span>
+                        <ArrowRight className="h-3 w-3 text-emerald-400 opacity-0 group-hover:opacity-100 transition-opacity" />
+                      </div>
+                    </Link>
+                  );
+                })}
               </div>
               
-              {/* Load More Button */}
+              {/* Load More Button - Compact */}
               {cities.length > visibleCityCount && (
-                <div className="text-center mt-8">
+                <div className="text-center mt-6">
                   <Button
                     variant="outline"
-                    onClick={() => setVisibleCityCount(prev => Math.min(prev + 10, cities.length))}
-                    className="inline-flex items-center gap-2 px-6 py-3 bg-transparent hover:bg-white/10 text-white font-semibold rounded-2xl border border-white/20 hover:border-emerald-500/50 transition-all"
+                    size="sm"
+                    onClick={() => setVisibleCityCount(prev => Math.min(prev + 12, cities.length))}
+                    className="inline-flex items-center gap-2 px-4 py-2 bg-transparent hover:bg-white/10 text-white font-medium rounded-xl border border-white/20 hover:border-emerald-500/50 transition-all text-sm"
                   >
-                    Load More Cities
-                    <span className="text-white/60 text-sm">
-                      ({visibleCityCount} of {cities.length})
-                    </span>
+                    Load More ({cities.length - visibleCityCount} more)
                   </Button>
                 </div>
               )}
@@ -797,15 +791,6 @@ const StatePage = ({ initialState, initialCities }: StatePageProps) => {
               </AccordionItem>
             ))}
           </Accordion>
-
-          {/* CTA */}
-          <div className="mt-12 text-center">
-            <p className="text-slate-400 mb-4">Still have questions?</p>
-            <a href="/contact" className="inline-flex items-center gap-2 px-6 py-3 bg-emerald-500 hover:bg-emerald-600 text-white font-bold rounded-xl transition-colors">
-              Contact Us
-              <ArrowRight className="h-4 w-4" />
-            </a>
-          </div>
         </div>
       </section>
 

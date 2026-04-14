@@ -230,26 +230,26 @@ export default function ServicesTab() {
   return (
     <div className="space-y-6">
       {/* Compact Header */}
-      <div className="flex items-center justify-between p-4 rounded-xl bg-white/90 border border-slate-700/50">
+      <div className="flex items-center justify-between p-4 rounded-2xl bg-gradient-to-r from-primary/10 to-teal/10 border border-primary/20">
         <div className="flex items-center gap-3">
-          <div className="h-10 w-10 rounded-lg bg-gradient-to-br from-primary to-teal flex items-center justify-center">
-            <Stethoscope className="h-5 w-5 text-gray-900" />
+          <div className="h-12 w-12 rounded-xl bg-gradient-to-br from-primary to-teal flex items-center justify-center shadow-lg shadow-primary/20">
+            <Stethoscope className="h-6 w-6 text-white" />
           </div>
           <div>
-            <h2 className="text-lg font-bold text-gray-900">Services & Treatments</h2>
-            <p className="text-sm text-gray-900/60">{clinicTreatments?.length || 0} services listed</p>
+            <h2 className="text-xl font-bold text-foreground">Services & Treatments</h2>
+            <p className="text-sm text-muted-foreground">{clinicTreatments?.length || 0} services listed</p>
           </div>
         </div>
         <Dialog open={isAddingService} onOpenChange={setIsAddingService}>
           <DialogTrigger asChild>
-            <Button size="sm" className="bg-primary hover:bg-primary/90">
+            <Button size="sm">
               <Plus className="h-4 w-4 mr-2" />
               Add Service
             </Button>
           </DialogTrigger>
-          <DialogContent className="sm:max-w-md bg-slate-900 border-slate-700/50">
+          <DialogContent className="sm:max-w-md">
             <DialogHeader>
-              <DialogTitle className="flex items-center gap-2 text-gray-900">
+              <DialogTitle className="flex items-center gap-2">
                 <Sparkles className="h-5 w-5 text-primary" />
                 Add Service
               </DialogTitle>
@@ -257,12 +257,12 @@ export default function ServicesTab() {
             <div className="space-y-4 py-4">
               {/* Search */}
               <div className="relative">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-900/40" />
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                 <Input
                   placeholder="Search treatments..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="pl-9 bg-white border-gray-300/50 text-gray-900"
+                  className="pl-9"
                 />
               </div>
 
@@ -275,14 +275,14 @@ export default function ServicesTab() {
                       type="button"
                       onClick={() => setSelectedTreatment(t.id)}
                       className={cn(
-                        "p-3 border rounded-lg text-left transition-all",
+                        "p-3 border rounded-xl text-left transition-all hover:shadow-md",
                         selectedTreatment === t.id
-                          ? "border-primary bg-primary/10"
-                          : "border-gray-300/50 hover:border-slate-500"
+                          ? "border-primary bg-primary/10 shadow-md"
+                          : "border-border hover:border-primary/50"
                       )}
                     >
                       <div className="flex items-center justify-between">
-                        <p className="font-medium text-sm text-gray-900 truncate">{t.name}</p>
+                        <p className="font-medium text-sm truncate">{t.name}</p>
                         {selectedTreatment === t.id && (
                           <Check className="h-4 w-4 text-primary shrink-0" />
                         )}
@@ -291,45 +291,37 @@ export default function ServicesTab() {
                   ))}
                 </div>
                 {filteredAvailable?.length === 0 && (
-                  <p className="text-gray-900/50 text-sm text-center py-4">
+                  <p className="text-muted-foreground text-sm text-center py-4">
                     {searchTerm ? 'No matches found' : 'All treatments added'}
                   </p>
                 )}
               </ScrollArea>
 
               {/* Pricing */}
-              <div className="grid grid-cols-2 gap-3 pt-2 border-t border-slate-700/50">
-                <div className="space-y-1">
-                  <Label className="text-xs text-gray-900/60">Price From (USD)</Label>
-                  <div className="relative">
-                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-900/40">$</span>
-                    <Input
-                      type="number"
-                      value={priceFrom}
-                      onChange={(e) => setPriceFrom(e.target.value)}
-                      placeholder="0"
-                      className="pl-7 bg-white border-gray-300/50 text-gray-900"
-                    />
-                  </div>
+              <div className="grid grid-cols-2 gap-3 pt-3 border-t">
+                <div className="space-y-1.5">
+                  <Label className="text-xs">Price From ($)</Label>
+                  <Input
+                    type="number"
+                    value={priceFrom}
+                    onChange={(e) => setPriceFrom(e.target.value)}
+                    placeholder="0"
+                  />
                 </div>
-                <div className="space-y-1">
-                  <Label className="text-xs text-gray-900/60">Price To (USD)</Label>
-                  <div className="relative">
-                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-900/40">$</span>
-                    <Input
-                      type="number"
-                      value={priceTo}
-                      onChange={(e) => setPriceTo(e.target.value)}
-                      placeholder="0"
-                      className="pl-7 bg-white border-gray-300/50 text-gray-900"
-                    />
-                  </div>
+                <div className="space-y-1.5">
+                  <Label className="text-xs">Price To ($)</Label>
+                  <Input
+                    type="number"
+                    value={priceTo}
+                    onChange={(e) => setPriceTo(e.target.value)}
+                    placeholder="0"
+                  />
                 </div>
               </div>
             </div>
             <DialogFooter>
               <Button
-                className="w-full bg-primary hover:bg-primary/90"
+                className="w-full"
                 onClick={() => addTreatment.mutate()}
                 disabled={!selectedTreatment || addTreatment.isPending}
               >

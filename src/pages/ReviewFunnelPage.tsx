@@ -29,6 +29,8 @@ export default function ReviewFunnelPage() {
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState('');
   const [patientName, setPatientName] = useState('');
+  const [patientEmail, setPatientEmail] = useState('');
+  const [patientPhone, setPatientPhone] = useState('');
   const [hoveredRating, setHoveredRating] = useState(0);
   const [isRedirecting, setIsRedirecting] = useState(false);
 
@@ -159,6 +161,8 @@ export default function ReviewFunnelPage() {
         await supabase.from('internal_reviews').insert({
           clinic_id: clinic.id,
           patient_name: patientName || 'Anonymous',
+          visitor_email: patientEmail || null,
+          visitor_phone: patientPhone || null,
           rating: event.rating,
           comment: event.comment || null,
         } as any);
@@ -417,6 +421,30 @@ export default function ReviewFunnelPage() {
                     placeholder="Enter your name"
                     value={patientName}
                     onChange={(e) => setPatientName(e.target.value)}
+                    className="rounded-xl"
+                  />
+                </div>
+
+                {/* Email */}
+                <div>
+                  <Label className="text-sm font-medium mb-1.5 block">Email (optional, so we can contact you)</Label>
+                  <Input
+                    type="email"
+                    placeholder="your@email.com"
+                    value={patientEmail}
+                    onChange={(e) => setPatientEmail(e.target.value)}
+                    className="rounded-xl"
+                  />
+                </div>
+
+                {/* Phone */}
+                <div>
+                  <Label className="text-sm font-medium mb-1.5 block">Phone (optional)</Label>
+                  <Input
+                    type="tel"
+                    placeholder="(123) 456-7890"
+                    value={patientPhone}
+                    onChange={(e) => setPatientPhone(e.target.value)}
                     className="rounded-xl"
                   />
                 </div>

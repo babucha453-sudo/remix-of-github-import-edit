@@ -42,6 +42,7 @@ export function DentistFinderMap({
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [mapReady, setMapReady] = useState(false);
+  const [loadingTimeout, setLoadingTimeout] = useState<NodeJS.Timeout | null>(null);
 
   const validMarkerCount = markers.filter(m => m.latitude != null && m.longitude != null).length;
   const hasCoordinates = validMarkerCount > 0;
@@ -67,6 +68,15 @@ export function DentistFinderMap({
     let mounted = true;
     setIsLoading(true);
     setError(null);
+
+    const loadingTimeoutId = setTimeout(() => {
+      if (mounted && isLoading) {
+        console.warn('[DentistFinderMap] Loading timeout - falling back to list view');
+        setViewMode('list');
+        setIsLoading(false);
+      }
+    }, 8000);
+    setLoadingTimeout(loadingTimeoutId);
 
     const initMap = async () => {
       try {
@@ -163,6 +173,7 @@ export function DentistFinderMap({
     return () => {
       mounted = false;
       clearTimeout(timeout);
+      if (loadingTimeout) clearTimeout(loadingTimeout);
       if (mapInstance.current) {
         try {
           mapInstance.current.remove();
@@ -172,7 +183,7 @@ export function DentistFinderMap({
         mapInstance.current = null;
       }
     };
-  }, [hasCoordinates, viewMode, markers, getMapCenter, onMarkerClick]);
+  }, [hasCoordinates, viewMode, markers, getMapCenter, onMarkerClick, loadingTimeout]);
 
   // Show list fallback
   if (!hasCoordinates || viewMode === 'list') {

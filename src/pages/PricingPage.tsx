@@ -49,6 +49,7 @@ import {
 import { toast } from 'sonner';
 import { useAuth } from '@/hooks/useAuth';
 import { useStripeCheckout } from '@/hooks/useStripeCheckout';
+import { useUserSubscriptionStatus } from '@/hooks/useUserSubscriptionStatus';
 import { useDentistClinic } from '@/hooks/useDentistClinic';
 
 // Monthly-only plans - value-driven growth model
@@ -252,6 +253,7 @@ export default function PricingPage() {
   const [searchParams] = useSearchParams();
   const { user } = useAuth();
   const { data: userClinic } = useDentistClinic();
+  const { data: subscriptionStatus } = useUserSubscriptionStatus(userClinic?.id || null);
   const checkout = useStripeCheckout();
   const [customModalOpen, setCustomModalOpen] = useState(false);
   const [checkingOutPlan, setCheckingOutPlan] = useState<string | null>(null);
@@ -307,9 +309,9 @@ export default function PricingPage() {
           {/* Hero Section - Pain-focused */}
           <section className="py-16 md:py-24 bg-gradient-to-b from-primary/5 to-background">
             <div className="container mx-auto px-4 text-center">
-              {/* Promotion Banner */}
+              {/* Promotion Banner - only show if user doesn't have a paid subscription */}
               <div className="max-w-3xl mx-auto mb-8">
-                <PromotionBanner variant="banner" />
+                <PromotionBanner variant="banner" show={!subscriptionStatus?.isPaid} />
               </div>
 
               <Badge className="mb-4 bg-teal/10 text-teal border-0">Monthly Plans • Cancel Anytime</Badge>

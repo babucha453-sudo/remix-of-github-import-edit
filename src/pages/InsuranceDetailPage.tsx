@@ -243,19 +243,18 @@ const InsuranceDetailPage = () => {
             </div>
           </div>
 
-          {/* Benefits Pills */}
-          <div className="grid grid-cols-3 gap-3 mt-6">
+          {/* Benefits Pills - Compact */}
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mt-4">
             {benefits.map((b, i) => (
               <div
                 key={i}
-                className="flex items-center gap-3 p-3 rounded-xl bg-card border border-border"
+                className="flex items-center gap-2 p-2.5 rounded-lg bg-card border border-border"
               >
-                <div className="h-9 w-9 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
-                  <b.icon className="h-4 w-4 text-primary" />
+                <div className="h-8 w-8 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
+                  <b.icon className="h-3.5 w-3.5 text-primary" />
                 </div>
                 <div className="min-w-0">
-                  <p className="font-bold text-sm truncate">{b.title}</p>
-                  <p className="text-xs text-muted-foreground truncate">{b.desc}</p>
+                  <p className="font-semibold text-xs truncate">{b.title}</p>
                 </div>
               </div>
             ))}
@@ -352,24 +351,6 @@ const InsuranceDetailPage = () => {
           >
             View All
           </Link>
-        </div>
-      </Section>
-
-      {/* CTA */}
-      <Section size="sm">
-        <div className="rounded-2xl p-6 md:p-8 bg-gradient-to-br from-primary/5 to-teal/5 border border-primary/20 text-center">
-          <h2 className="font-display text-xl md:text-2xl font-bold mb-2">
-            Need Help Finding Coverage?
-          </h2>
-          <p className="text-sm text-muted-foreground mb-4 max-w-md mx-auto">
-            Contact us and we'll help you find clinics that accept your insurance.
-          </p>
-          <Button asChild className="rounded-xl font-bold">
-            <Link to="/contact/">
-              <Phone className="h-4 w-4 mr-2" />
-              Contact Us
-            </Link>
-          </Button>
         </div>
       </Section>
     </PageLayout>

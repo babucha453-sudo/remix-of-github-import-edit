@@ -46,6 +46,7 @@ import {
 import NotificationSettingsCard from '@/components/dentist/NotificationSettingsCard';
 import AIInsightsCard from '@/components/dentist/AIInsightsCard';
 import DashboardWidgets from '@/components/dentist/DashboardWidgets';
+import UnifiedDashboardAnalytics from '@/components/dentist/UnifiedAnalytics';
 
 function VerificationPaymentButton({ clinicId }: { clinicId: string }) {
   const [isLoading, setIsLoading] = useState(false);
@@ -322,13 +323,14 @@ export default function DentistDashboardTab() {
     return null;
   }
 
-  // Hero stats data
+  // Hero stats data - Modern gradient cards matching homepage design
   const heroStats = [
     {
       label: 'Profile',
       value: isVerified ? 'Verified' : 'Pending',
       icon: Shield,
-      color: isVerified ? 'emerald' as const : 'gold' as const,
+      color: isVerified ? 'primary' as const : 'gold' as const,
+      gradient: isVerified ? 'from-primary/20 to-teal/10' as const : 'from-gold/20 to-amber/10' as const,
       progress: isVerified ? 100 : 60,
       onClick: () => navigateTo('my-profile'),
     },
@@ -337,6 +339,7 @@ export default function DentistDashboardTab() {
       value: clinic.review_count || 0,
       icon: Star,
       color: 'gold' as const,
+      gradient: 'from-gold/20 to-amber/10' as const,
       onClick: () => navigateTo('my-reputation'),
     },
     {
@@ -344,6 +347,7 @@ export default function DentistDashboardTab() {
       value: clinic.rating?.toFixed(1) || 'N/A',
       icon: Star,
       color: 'gold' as const,
+      gradient: 'from-gold/20 to-amber/10' as const,
       subtitle: 'Google',
     },
     {
@@ -352,6 +356,7 @@ export default function DentistDashboardTab() {
       subtitle: 'Last 30 days',
       icon: ThumbsUp,
       color: 'teal' as const,
+      gradient: 'from-teal/20 to-emerald/10' as const,
       onClick: () => navigateTo('my-reputation'),
     },
     {
@@ -360,6 +365,7 @@ export default function DentistDashboardTab() {
       subtitle: `${appointmentStats?.pending || 0} pending`,
       icon: Calendar,
       color: 'primary' as const,
+      gradient: 'from-primary/20 to-teal/10' as const,
       onClick: () => navigateTo('my-appointments'),
     },
     {
@@ -367,13 +373,15 @@ export default function DentistDashboardTab() {
       value: appointmentStats?.confirmed || 0,
       subtitle: 'Confirmed',
       icon: CheckCircle,
-      color: 'blue' as const,
+      color: 'teal' as const,
+      gradient: 'from-teal/20 to-emerald/10' as const,
     },
     {
       label: 'GMB Status',
       value: clinic.gmb_connected ? 'Connected' : 'Not Set',
       icon: Globe,
-      color: clinic.gmb_connected ? 'teal' as const : 'coral' as const,
+      color: clinic.gmb_connected ? 'primary' as const : 'coral' as const,
+      gradient: clinic.gmb_connected ? 'from-primary/20 to-teal/10' as const : 'from-coral/20 to-pink/10' as const,
       onClick: () => navigateTo('my-settings'),
     },
   ];
@@ -475,12 +483,12 @@ export default function DentistDashboardTab() {
         </Card>
       )}
 
-      {/* Header Section - Dark Modern Design with Graphics */}
-      <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 p-6 shadow-xl">
+      {/* Header Section - Homepage-style Modern Design */}
+      <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-primary/10 via-background to-teal/5 p-6 shadow-xl border border-primary/10">
         {/* Background Graphics */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          <div className="absolute top-0 right-0 w-64 h-64 bg-primary/20 rounded-full blur-3xl" />
-          <div className="absolute bottom-0 left-1/4 w-48 h-48 bg-teal/15 rounded-full blur-2xl" />
+          <div className="absolute top-0 right-0 w-64 h-64 bg-primary/10 rounded-full blur-3xl" />
+          <div className="absolute bottom-0 left-1/4 w-48 h-48 bg-teal/10 rounded-full blur-2xl" />
           <div className="absolute top-1/2 right-1/3 w-32 h-32 bg-gold/10 rounded-full blur-xl" />
           {/* Grid pattern */}
           <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:24px_24px]" />
@@ -496,28 +504,28 @@ export default function DentistDashboardTab() {
         
         <div className="relative flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div className="flex items-center gap-4">
-            <div className="h-16 w-16 rounded-2xl bg-gradient-to-br from-primary to-primary/60 flex items-center justify-center shadow-lg shadow-primary/30 ring-2 ring-white/10">
+            <div className="h-16 w-16 rounded-2xl bg-gradient-to-br from-primary to-teal flex items-center justify-center shadow-lg shadow-primary/20 ring-2 ring-primary/10">
               <Building2 className="h-8 w-8 text-white" />
             </div>
             <div>
               <div className="flex items-center gap-3">
-                <h1 className="text-2xl font-extrabold tracking-tight text-white">{clinic.name}</h1>
+                <h1 className="text-2xl font-extrabold tracking-tight text-foreground">{clinic.name}</h1>
                 {isVerified ? (
-                  <Badge className="bg-teal/20 text-teal border border-teal/30 text-[10px] shadow-lg shadow-teal/20">
+                  <Badge className="bg-gradient-to-r from-primary to-teal text-white border-0 shadow-lg">
                     <CheckCircle className="h-3 w-3 mr-1" />
                     Verified
                   </Badge>
                 ) : (
-                  <Badge className="bg-white/10 text-white/60 border border-white/20 text-[10px]">Unverified</Badge>
+                  <Badge className="bg-muted text-muted-foreground border-0">Unverified</Badge>
                 )}
               </div>
               <div className="flex items-center gap-3 mt-2">
-                <div className="flex items-center gap-1.5 text-white/70">
-                  <MapPin className="h-3.5 w-3.5" />
+                <div className="flex items-center gap-1.5 text-muted-foreground">
+                  <MapPin className="h-3.5 w-3.5 text-primary" />
                   <span className="text-sm">{clinic.city?.name || 'Location not set'}{clinic.area?.name ? ` • ${clinic.area.name}` : ''}</span>
                 </div>
                 {subscription?.plan && (
-                  <Badge className="bg-primary/20 text-primary border border-primary/30 text-[10px]">
+                  <Badge className="bg-gradient-to-r from-primary/20 to-teal/10 text-primary border-primary/20">
                     {subscription.plan.name}
                   </Badge>
                 )}
@@ -528,18 +536,18 @@ export default function DentistDashboardTab() {
           <div className="flex items-center gap-3">
             {/* Quick Stats Pills */}
             <div className="hidden lg:flex items-center gap-2">
-              <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/10 border border-white/10">
+              <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-gradient-to-r from-gold/20 to-amber/10 border border-gold/20">
                 <Star className="h-3.5 w-3.5 text-gold" />
-                <span className="text-sm font-medium text-white">{clinic.rating?.toFixed(1) || 'N/A'}</span>
+                <span className="text-sm font-medium text-foreground">{clinic.rating?.toFixed(1) || 'N/A'}</span>
               </div>
-              <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/10 border border-white/10">
+              <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-gradient-to-r from-teal/20 to-emerald/10 border border-teal/20">
                 <Users className="h-3.5 w-3.5 text-teal" />
-                <span className="text-sm font-medium text-white">{clinic.review_count || 0} reviews</span>
+                <span className="text-sm font-medium text-foreground">{clinic.review_count || 0} reviews</span>
               </div>
             </div>
             <Button 
               variant="outline" 
-              className="rounded-xl bg-white/10 border-white/20 text-white hover:bg-white hover:text-slate-900 transition-all"
+              className="rounded-xl border-primary/20 text-primary hover:bg-primary hover:text-white transition-all"
               onClick={() => window.open(`/clinic/${clinic.slug}`, "_blank")}
             >
               <Eye className="h-4 w-4 mr-2" />
@@ -548,7 +556,7 @@ export default function DentistDashboardTab() {
           </div>
         </div>
         
-        {/* Bottom accent line */}
+        {/* Bottom accent line - Homepage gradient */}
         <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-primary via-teal to-gold" />
       </div>
 
@@ -569,6 +577,14 @@ export default function DentistDashboardTab() {
 
       {/* Hero Stats Grid */}
       <HeroStatsGrid stats={heroStats} />
+
+      {/* Unified Analytics Dashboard */}
+      <UnifiedDashboardAnalytics
+        clinicId={clinic.id}
+        clinicName={clinic.name}
+        rating={clinic.rating}
+        reviewCount={clinic.review_count}
+      />
 
       {/* Dashboard Widgets (Reputation, Funnel, Today's Appointments) */}
       <DashboardWidgets

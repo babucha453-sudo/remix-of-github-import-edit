@@ -793,17 +793,15 @@ const CityPage = ({ initialState, initialCity }: CityPageProps) => {
                         <ArrowRight className="h-4 w-4" />
                       </a>
                     </div>
-                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3">
-                      {nearbyLocations.slice(0, 6).map((city) => (
+                    <div className="flex flex-wrap gap-2">
+                      {nearbyLocations.slice(0, 8).map((city) => (
                         <a
                           key={city.slug}
                           href={`/${stateSlug}/${city.slug}/`}
-                          className="flex items-center gap-2 p-3 bg-white border border-slate-200 rounded-xl hover:border-emerald-300 hover:shadow-md transition-all group"
+                          className="flex items-center gap-1.5 px-3 py-1.5 bg-white border border-slate-200 rounded-lg hover:border-emerald-300 hover:bg-emerald-50 transition-all group"
                         >
-                          <div className="w-8 h-8 bg-emerald-100 rounded-lg flex items-center justify-center">
-                            <MapPin className="h-4 w-4 text-emerald-600" />
-                          </div>
-                          <span className="font-medium text-sm text-slate-700 group-hover:text-emerald-700">
+                          <MapPin className="h-3 w-3 text-emerald-500 shrink-0" />
+                          <span className="font-medium text-xs text-slate-700 group-hover:text-emerald-700 whitespace-nowrap">
                             {city.name}
                           </span>
                         </a>
@@ -853,16 +851,6 @@ const CityPage = ({ initialState, initialCity }: CityPageProps) => {
               </AccordionItem>
             ))}
           </Accordion>
-        </div>
-      </section>
-
-      <section className="py-16 bg-slate-50">
-        <div className="max-w-4xl mx-auto px-4 text-center">
-          <p className="text-slate-400 mb-4">Still have questions?</p>
-          <a href="/contact" className="inline-flex items-center gap-2 px-6 py-3 bg-emerald-500 hover:bg-emerald-600 text-white font-bold rounded-xl transition-colors">
-            Contact Us
-            <ArrowRight className="h-4 w-4" />
-          </a>
         </div>
       </section>
     </PageLayout>

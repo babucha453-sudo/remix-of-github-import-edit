@@ -21,6 +21,7 @@ import {
   Building2,
   Shield,
   Sparkles,
+  Brain,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -33,12 +34,14 @@ import ReputationScoreTab from './reputation/ReputationScoreTab';
 import ReputationAlertsTab from './reputation/ReputationAlertsTab';
 import ReputationReviewRequestsTab from './reputation/ReputationReviewRequestsTab';
 import ReputationLogsHistoryTab from './reputation/ReputationLogsHistoryTab';
+import ReputationAIInsightsTab from './reputation/ReputationAIInsightsTab';
 import { NoPracticeLinked } from './NoPracticeLinked';
 import QRCodeGenerator from './QRCodeGenerator';
 import { toast } from 'sonner';
 
 const TABS = [
   { id: 'overview', label: 'Overview', icon: LayoutDashboard, description: 'Reputation snapshot' },
+  { id: 'ai-insights', label: 'AI Insights', icon: Brain, description: 'Smart analysis powered by AI' },
   { id: 'setup', label: 'Setup', icon: Settings, description: 'Configure integrations' },
   { id: 'requests', label: 'Review Requests', icon: Send, description: 'Send & track requests' },
   { id: 'qr-codes', label: 'QR Codes', icon: QrCode, description: 'In-clinic collection' },
@@ -192,6 +195,13 @@ export default function ReputationSuiteNew() {
             onSendRequest={handleSendRequest}
             onOpenQR={handleOpenQR}
             onSync={handleSync}
+          />
+        </TabsContent>
+
+        <TabsContent value="ai-insights" className="mt-0">
+          <ReputationAIInsightsTab
+            clinicId={clinic.id}
+            clinicName={clinic.name}
           />
         </TabsContent>
 

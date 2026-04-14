@@ -337,6 +337,47 @@ CREATE TABLE IF NOT EXISTS public.clinic_gallery (
   image_url TEXT NOT NULL,
   caption TEXT,
   display_order INTEGER DEFAULT 0,
+  is_profile BOOLEAN DEFAULT false,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+
+-- Clinic Team Members
+CREATE TABLE IF NOT EXISTS public.clinic_team (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  clinic_id UUID NOT NULL REFERENCES public.clinics(id) ON DELETE CASCADE,
+  name TEXT NOT NULL,
+  role TEXT,
+  bio TEXT,
+  image_url TEXT,
+  display_order INTEGER DEFAULT 0,
+  is_active BOOLEAN DEFAULT true,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+
+-- Clinic Before & After Cases
+CREATE TABLE IF NOT EXISTS public.clinic_before_after (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  clinic_id UUID NOT NULL REFERENCES public.clinics(id) ON DELETE CASCADE,
+  patient_name TEXT,
+  treatment_id UUID REFERENCES public.treatments(id),
+  description TEXT,
+  before_image_url TEXT NOT NULL,
+  after_image_url TEXT NOT NULL,
+  case_date DATE,
+  is_public BOOLEAN DEFAULT true,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+
+-- Platform Reviews (verified patient reviews)
+CREATE TABLE IF NOT EXISTS public.platform_reviews (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  clinic_id UUID NOT NULL REFERENCES public.clinics(id) ON DELETE CASCADE,
+  patient_id UUID REFERENCES public.patients(id) ON DELETE SET NULL,
+  patient_name TEXT NOT NULL,
+  rating INTEGER NOT NULL CHECK (rating >= 1 AND rating <= 5),
+  review_text TEXT,
+  is_verified BOOLEAN DEFAULT true,
+  is_public BOOLEAN DEFAULT true,
   created_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 

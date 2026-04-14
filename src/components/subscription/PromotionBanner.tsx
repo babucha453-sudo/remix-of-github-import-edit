@@ -5,9 +5,11 @@ import { cn } from '@/lib/utils';
 interface PromotionBannerProps {
   variant?: 'inline' | 'banner' | 'compact';
   className?: string;
+  show?: boolean;
 }
 
-export function PromotionBanner({ variant = 'banner', className }: PromotionBannerProps) {
+export function PromotionBanner({ variant = 'banner', className, show = true }: PromotionBannerProps) {
+  if (!show) return null;
   if (variant === 'compact') {
     return (
       <Badge className={cn(
