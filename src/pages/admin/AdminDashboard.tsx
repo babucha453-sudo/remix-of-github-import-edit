@@ -28,6 +28,7 @@ import {
   X,
   LogOut,
   Globe,
+  Calculator,
   Mail,
   Settings,
   Palette,
@@ -335,6 +336,7 @@ const adminTabGroups = [
       { id: 'ai-controls', label: 'AI', icon: Bot },
       { id: 'ai-search-control', label: 'AI Search', icon: Search },
       { id: 'api-control', label: 'API', icon: Zap },
+      { id: 'tools-management', label: 'Tools', icon: Zap },
       { id: 'support-admin', label: 'Support', icon: Shield },
       { id: 'audit', label: 'Logs', icon: ClipboardList },
     ],
@@ -420,21 +422,22 @@ export default function AdminDashboard() {
 
   // Determine which tab groups to show and filter by visibility + user permissions
   const rawTabGroups = isAdmin ? adminTabGroups : dentistTabGroups;
-  const dashboardType = isAdmin ? 'admin' : 'dentist';
-
-  const tabGroups = useMemo(() =>
-    rawTabGroups.map(group => ({
-      ...group,
-      tabs: group.tabs.filter(tab => {
-        if (!isTabVisible(tab.id, dashboardType)) return false;
-        if (dashboardType === 'admin' && !hasFullAccess) {
-          return canAccessTab(tab.id);
-        }
-        return true;
-      }),
-    })).filter(group => group.tabs.length > 0),
-    [rawTabGroups, dashboardType, isTabVisible, hasFullAccess, canAccessTab]
-  );
+  
+  // Check if user has dentist role - show all dentist tabs without filtering
+  const hasDentistRole = roles.includes('dentist');
+  
+  const tabGroups = hasDentistRole || !isAdmin
+    ? rawTabGroups // Dentists see ALL groups and tabs with no filtering
+    : rawTabGroups.map(group => ({
+        ...group,
+        tabs: group.tabs.filter(tab => {
+          if (!isTabVisible(tab.id, 'admin')) return false;
+          if (!hasFullAccess) {
+            return canAccessTab(tab.id);
+          }
+          return true;
+        }),
+      })).filter(group => group.tabs.length > 0);
 
   // Helper to navigate to a tab - just update state and URL without triggering re-renders
   const navigateToTab = (tabId: string) => {

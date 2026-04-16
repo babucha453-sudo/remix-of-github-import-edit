@@ -20,7 +20,7 @@ import { Breadcrumbs } from "@/components/layout/Breadcrumbs";
 import { useCity, useState as useStateData, useCitiesByStateSlug } from "@/hooks/useLocations";
 import { useSeoPageContent, parseMarkdownContent, parseFaqFromContent } from "@/hooks/useSeoPageContent";
 import { usePrerenderReady } from "@/hooks/usePrerenderReady";
-import { usePinnedProfiles, sortWithPinnedFirst } from "@/hooks/usePinnedProfiles";
+import { usePinnedProfiles, sortWithPinnedFirst, useTopDentists } from "@/hooks/usePinnedProfiles";
 import { normalizeStateSlug } from "@/lib/slug/normalizeStateSlug";
 import { DentistFinderMap, DentistFinderCard, DentistFinderProfile } from "@/components/finder";
 import NotFound from "./NotFound";
@@ -84,6 +84,9 @@ const CityPage = ({ initialState, initialCity }: CityPageProps) => {
 
   // Fetch pinned profiles for this city page
   const { data: pinnedProfiles } = usePinnedProfiles('city', normalizedStateSlug, citySlug);
+  
+  // Fetch top dentists for this city
+  const { data: topDentistIds } = useTopDentists(city?.id);
 
   // Fetch TOTAL clinic count for this city (for SEO content - not limited)
   const { data: totalClinicCount } = useQuery({
@@ -170,9 +173,14 @@ const CityPage = ({ initialState, initialCity }: CityPageProps) => {
   // Sort profiles with pinned ones first and apply filters
   const filteredProfiles = useMemo(() => {
     if (!rawProfiles) return [];
-    const sorted = sortWithPinnedFirst(rawProfiles, pinnedProfiles || []);
+    const sorted = sortWithPinnedFirst(rawProfiles, pinnedProfiles || [], topDentistIds || []);
     const pinnedIds = new Set((pinnedProfiles || []).map(p => p.id));
-    let result = sorted.map(p => ({ ...p, isPinned: pinnedIds.has(p.id) }));
+    const topSet = new Set(topDentistIds || []);
+    let result = sorted.map(p => ({ 
+      ...p, 
+      isPinned: pinnedIds.has(p.id),
+      isTopDentist: topSet.has(p.id)
+    }));
 
     if (filters.minRating > 0) {
       result = result.filter(p => (p.rating || 0) >= filters.minRating);
@@ -182,7 +190,7 @@ const CityPage = ({ initialState, initialCity }: CityPageProps) => {
     }
 
     return result;
-  }, [rawProfiles, pinnedProfiles, filters]);
+  }, [rawProfiles, pinnedProfiles, topDentistIds, filters]);
 
   const profiles = filteredProfiles;
 
@@ -270,24 +278,64 @@ const CityPage = ({ initialState, initialCity }: CityPageProps) => {
   const pageDescription = seoContent?.meta_description || `Compare ${clinicCountDisplay}+ verified dental clinics in ${cityName}, ${stateName}. Read patient reviews, check insurance, and book appointments online today.`;
   const pageH1 = seoContent?.h1 || `Best Dentists in ${locationDisplay}`;
 
-  const faqs = seoFaqs.length > 0 ? seoFaqs.map(f => ({ q: f.question, a: f.answer })) : [
-    {
-      q: `How do I find a good dentist in ${cityName}?`,
-      a: `Browse our verified list of dentists in ${cityName}. Look for verified badges, patient reviews, and specializations that match your needs.`,
-    },
-    {
-      q: `Are the dentists in ${cityName} verified?`,
-      a: `All dentists on our platform are licensed professionals. Profiles with the "Verified" badge have claimed and completed our verification process.`,
-    },
-    {
-      q: `How much does dental treatment cost in ${cityName}?`,
-      a: `Dental costs vary by treatment. A basic checkup typically ranges from $75-200, while specialized treatments can range from $3,000-6,000.`,
-    },
-    {
-      q: `Can I book emergency dental appointments in ${cityName}?`,
-      a: `Yes, many clinics in ${cityName} offer same-day emergency appointments. Use our search to find clinics with emergency availability.`,
-    },
+  const cityFaqSets = [
+    [
+      {
+        q: `How do I find a good dentist in ${cityName}?`,
+        a: `Browse our verified list of dentists in ${cityName}. Look for verified badges, patient reviews, and specializations that match your needs.`,
+      },
+      {
+        q: `Are the dentists in ${cityName} verified?`,
+        a: `All dentists on our platform are licensed professionals. Profiles with the "Verified" badge have claimed and completed our verification process.`,
+      },
+      {
+        q: `How much does dental treatment cost in ${cityName}?`,
+        a: `Dental costs vary by treatment. A basic checkup typically ranges from $75-200, while specialized treatments can range from $3,000-6,000.`,
+      },
+      {
+        q: `Can I book emergency dental appointments in ${cityName}?`,
+        a: `Yes, many clinics in ${cityName} offer same-day emergency appointments. Use our search to find clinics with emergency availability.`,
+      },
+    ],
+    [
+      {
+        q: `What dental services are available in ${cityName}?`,
+        a: `${cityName} dental clinics offer comprehensive services including preventive care, cosmetic dentistry, orthodontics, and emergency treatments.`,
+      },
+      {
+        q: `Does dental insurance cover treatments in ${cityName}?`,
+        a: `Most major dental insurance plans are accepted by clinics in ${cityName}. We recommend checking with your provider for specific coverage details.`,
+      },
+      {
+        q: `What is the average cost of a dental cleaning in ${cityName}?`,
+        a: `Professional teeth cleaning in ${cityName} typically costs between $75-150, depending on the clinic and your insurance coverage.`,
+      },
+      {
+        q: `How do I choose the right dentist in ${cityName}?`,
+        a: `Consider factors like verified credentials, patient reviews, services offered, and convenient booking. Our platform makes it easy to compare dentists in ${cityName}.`,
+      },
+    ],
+    [
+      {
+        q: `What should I expect during my first dental visit in ${cityName}?`,
+        a: `Your first visit typically includes an examination, X-rays if needed, and a discussion of your oral health goals with a qualified dentist in ${cityName}.`,
+      },
+      {
+        q: `Are there affordable dental options in ${cityName}?`,
+        a: `Yes, many ${cityName} clinics offer payment plans, accept various insurance plans, and provide options for patients without insurance.`,
+      },
+      {
+        q: `How often should I visit a dentist in ${cityName}?`,
+        a: `The American Dental Association recommends visiting your dentist at least twice a year for preventive care and cleanings.`,
+      },
+      {
+        q: `What makes ${cityName} dentists unique?`,
+        a: `${cityName} dental professionals are known for their commitment to patient care and use of modern dental technology and techniques.`,
+      },
+    ],
   ];
+  const faqSetIndex = Math.abs((citySlug?.length || 0) * 13 + (normalizedStateSlug?.length || 0) * 7) % cityFaqSets.length;
+  const faqs = seoFaqs.length > 0 ? seoFaqs.map(f => ({ q: f.question, a: f.answer })) : cityFaqSets[faqSetIndex];
 
   const shouldNoIndex = !profilesLoading && (!profiles || profiles.length < MIN_DENTIST_COUNT);
 
@@ -432,10 +480,13 @@ const CityPage = ({ initialState, initialCity }: CityPageProps) => {
                   <div className="md:col-span-2 bg-emerald-500 hover:bg-emerald-600 transition-colors">
                     <Button 
                       onClick={() => {
-                        const params = new URLSearchParams();
-                        if (searchLocation) params.set('city', citySlug || '');
-                        if (searchTreatment) params.set('treatment', searchTreatment);
-                        navigate(`/search?${params.toString()}`);
+                        if (searchTreatment) {
+                          navigate(`/${stateSlug}/${citySlug}/${searchTreatment}`);
+                        } else if (searchLocation) {
+                          navigate(`/${stateSlug}/${searchLocation}`);
+                        } else {
+                          navigate(`/${stateSlug}/${citySlug}/`);
+                        }
                       }}
                       className="w-full h-16 bg-emerald-500 hover:bg-emerald-600 text-white font-bold rounded-none text-lg"
                     >

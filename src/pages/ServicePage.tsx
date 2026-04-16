@@ -110,24 +110,64 @@ const ServicePage = () => {
     { label: treatmentName },
   ];
 
-  const faqs = seoFaqs.length > 0 ? seoFaqs.map(f => ({ q: f.question, a: f.answer })) : [
-    {
-      q: `What is ${treatmentName}?`,
-      a: treatment?.description || `${treatmentName} is a professional dental procedure designed to improve your oral health and smile. Our qualified dentists use the latest techniques.`,
-    },
-    {
-      q: `How long does ${treatmentName} take?`,
-      a: `Duration varies depending on individual needs. A typical ${treatmentName.toLowerCase()} session can take 30 minutes to 2 hours. Your dentist will provide an accurate estimate.`,
-    },
-    {
-      q: `Is ${treatmentName} painful?`,
-      a: `Modern dental techniques and anesthesia make most procedures comfortable. Your dentist will discuss pain management options.`,
-    },
-    {
-      q: `How much does ${treatmentName} cost?`,
-      a: `Costs vary by clinic and treatment needs. We recommend booking a consultation. Many clinics accept insurance and offer payment plans.`,
-    },
+  const serviceFaqSets = [
+    [
+      {
+        q: `What is ${treatmentName}?`,
+        a: treatment?.description || `${treatmentName} is a professional dental procedure designed to improve your oral health and smile. Our qualified dentists use the latest techniques.`,
+      },
+      {
+        q: `How long does ${treatmentName} take?`,
+        a: `Duration varies depending on individual needs. A typical ${treatmentName.toLowerCase()} session can take 30 minutes to 2 hours. Your dentist will provide an accurate estimate.`,
+      },
+      {
+        q: `Is ${treatmentName} painful?`,
+        a: `Modern dental techniques and anesthesia make most procedures comfortable. Your dentist will discuss pain management options.`,
+      },
+      {
+        q: `How much does ${treatmentName} cost?`,
+        a: `Costs vary by clinic and treatment needs. We recommend booking a consultation. Many clinics accept insurance and offer payment plans.`,
+      },
+    ],
+    [
+      {
+        q: `Who is a good candidate for ${treatmentName}?`,
+        a: `${treatmentName} is suitable for patients seeking to improve their dental health and appearance. A consultation with a qualified dentist will determine if this treatment is right for you.`,
+      },
+      {
+        q: `How long do results from ${treatmentName} last?`,
+        a: `With proper care and maintenance, results from ${treatmentName.toLowerCase()} can last for many years. Your dentist will provide specific aftercare instructions.`,
+      },
+      {
+        q: `What is the recovery time for ${treatmentName}?`,
+        a: `Recovery time varies by individual and treatment complexity. Most patients can return to normal activities within a few days to a week after the procedure.`,
+      },
+      {
+        q: `Are there alternatives to ${treatmentName}?`,
+        a: `Yes, there may be alternative treatments available depending on your specific dental needs. Discuss all options with your dentist during your consultation.`,
+      },
+    ],
+    [
+      {
+        q: `What happens during a ${treatmentName} procedure?`,
+        a: `During the ${treatmentName.toLowerCase()} procedure, your dentist will evaluate your needs, prepare the treatment area, and perform the procedure using modern dental techniques.`,
+      },
+      {
+        q: `How do I prepare for ${treatmentName}?`,
+        a: `Your dentist will provide specific pre-treatment instructions. This may include avoiding certain foods, medications, or arrangements for transportation.`,
+      },
+      {
+        q: `What aftercare is needed for ${treatmentName}?`,
+        a: `After ${treatmentName.toLowerCase()}, follow your dentist's aftercare instructions which may include avoiding certain foods, maintaining oral hygiene, and scheduling follow-up visits.`,
+      },
+      {
+        q: `Does insurance cover ${treatmentName}?`,
+        a: `Many dental insurance plans provide coverage for ${treatmentName.toLowerCase()}. Contact your insurance provider to understand your specific benefits and coverage.`,
+      },
+    ],
   ];
+  const faqSetIndex = Math.abs((serviceSlug?.length || 0) * 11 + (treatmentName?.length || 0) * 3) % serviceFaqSets.length;
+  const faqs = seoFaqs.length > 0 ? seoFaqs.map(f => ({ q: f.question, a: f.answer })) : serviceFaqSets[faqSetIndex];
 
   const relatedServices = (relatedTreatments || []).map(t => ({ name: t.name, slug: t.slug }));
 

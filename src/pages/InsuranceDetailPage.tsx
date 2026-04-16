@@ -23,7 +23,10 @@ import {
   ArrowLeft,
   FileCheck,
   Sparkles,
-  HeadphonesIcon
+  HeadphonesIcon,
+  MapPin,
+  ChevronRight,
+  ArrowRight
 } from "lucide-react";
 
 const PAGE_SIZE = 20;
@@ -329,6 +332,45 @@ const InsuranceDetailPage = () => {
       <Section variant="muted" size="md">
         <InsuranceFAQ insuranceName={insurance.name} />
       </Section>
+
+      {/* Popular Cities with This Insurance */}
+      {cities && cities.length > 0 && (
+        <Section size="md">
+          <div className="text-center mb-6">
+            <h2 className="text-xl font-bold">Find {insurance.name} Dentists by City</h2>
+            <p className="text-muted-foreground text-sm mt-1">
+              Browse dedicated {insurance.name} dentist pages in popular cities
+            </p>
+          </div>
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+            {cities.slice(0, 12).map((city) => (
+              <Link
+                key={city.id}
+                to={`/${city.stateSlug}/${city.slug}/${insurance.slug}-dentists`}
+                className="flex items-center gap-2 p-3 bg-card border border-border rounded-xl hover:border-primary hover:bg-primary/5 transition-all group"
+              >
+                <MapPin className="h-4 w-4 text-primary shrink-0" />
+                <div className="min-w-0 flex-1">
+                  <p className="font-semibold text-sm truncate">{city.name}</p>
+                  <p className="text-xs text-muted-foreground">{city.stateAbbreviation}</p>
+                </div>
+                <ChevronRight className="h-4 w-4 text-muted-foreground group-hover:text-primary shrink-0" />
+              </Link>
+            ))}
+          </div>
+          {cities.length > 12 && (
+            <div className="text-center mt-4">
+              <Link
+                to={`/insurance/${insurance.slug}?view=all`}
+                className="inline-flex items-center gap-2 text-primary font-medium hover:underline"
+              >
+                View all {cities.length} cities
+                <ArrowRight className="h-4 w-4" />
+              </Link>
+            </div>
+          )}
+        </Section>
+      )}
 
       {/* Other Insurance Links */}
       <Section size="md">

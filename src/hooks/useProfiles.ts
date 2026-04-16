@@ -14,6 +14,7 @@ export interface Profile {
   isVerified: boolean;
   isClaimed?: boolean;
   isPinned?: boolean;
+  isTopDentist?: boolean;
   clinicName?: string;
   clinicId?: string;
   languages?: string[];

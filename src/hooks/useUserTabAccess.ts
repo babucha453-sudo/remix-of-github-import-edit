@@ -13,7 +13,8 @@ export function useUserTabAccess() {
   const { user, roles } = useAuth();
   
   // Super admins and district managers have full access
-  const hasFullAccess = roles.includes('super_admin') || roles.includes('district_manager');
+  // Dentists also have full access to their own dashboard tabs
+  const hasFullAccess = roles.includes('super_admin') || roles.includes('district_manager') || roles.includes('dentist');
   
   // Fetch user-specific tab permissions for non-super-admin users
   const { data: userTabPermissions, isLoading } = useQuery({

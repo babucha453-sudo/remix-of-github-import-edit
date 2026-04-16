@@ -29,6 +29,8 @@ import DentistSettingsTab from '@/components/dentist/DentistSettingsTab';
 import SupportTicketsTab from '@/components/dentist/SupportTicketsTab';
 import NotificationPreferencesTab from '@/components/dentist/NotificationPreferencesTab';
 import FormWorkflowTab from '@/components/dentist/FormWorkflowTab';
+import GalleryManagementTab from '@/components/dentist/GalleryManagementTab';
+import PlatformReviewsTab from '@/components/dentist/PlatformReviewsTab';
 
 // Page title mapping
 const PAGE_TITLES: Record<string, { title: string; description?: string }> = {
@@ -46,6 +48,11 @@ const PAGE_TITLES: Record<string, { title: string; description?: string }> = {
   'my-services': { title: 'Treatments', description: 'Services you offer' },
   'my-insurance': { title: 'Insurance', description: 'Accepted insurance providers' },
   'my-reputation': { title: 'Reputation', description: 'Reviews and reputation management' },
+  'my-gallery': { title: 'Before & After', description: 'Showcase your work' },
+  'my-platform-reviews': { title: 'Reviews', description: 'Patient reviews' },
+  'my-analytics': { title: 'Analytics', description: 'Practice performance' },
+  'my-marketing': { title: 'Marketing', description: 'Marketing tools' },
+  'my-seo': { title: 'SEO', description: 'Search optimization' },
   'my-templates': { title: 'Templates', description: 'Message templates' },
   'my-settings': { title: 'Settings', description: 'Account preferences' },
   'my-support': { title: 'Support', description: 'Get help and support' },
@@ -97,6 +104,31 @@ export default function DentistDashboardV2() {
         return <InsuranceManagementTab />;
       case 'my-reputation':
         return <DentistReputationHub />;
+      case 'my-gallery':
+        return <GalleryManagementTab />;
+      case 'my-platform-reviews':
+        return <PlatformReviewsTab />;
+      case 'my-analytics':
+        return (
+          <div className="p-8 text-center">
+            <h2 className="text-xl font-semibold mb-2">Analytics</h2>
+            <p className="text-muted-foreground">Analytics dashboard coming soon</p>
+          </div>
+        );
+      case 'my-marketing':
+        return (
+          <div className="p-8 text-center">
+            <h2 className="text-xl font-semibold mb-2">Marketing</h2>
+            <p className="text-muted-foreground">Marketing tools coming soon</p>
+          </div>
+        );
+      case 'my-seo':
+        return (
+          <div className="p-8 text-center">
+            <h2 className="text-xl font-semibold mb-2">SEO</h2>
+            <p className="text-muted-foreground">SEO tools coming soon</p>
+          </div>
+        );
       case 'my-templates':
         return <TemplatesTab />;
       case 'my-notifications':

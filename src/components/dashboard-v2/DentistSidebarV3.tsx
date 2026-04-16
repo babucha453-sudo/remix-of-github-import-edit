@@ -40,6 +40,10 @@ import {
   Sparkles,
   Menu,
   X,
+  Image,
+  BarChart3,
+  Megaphone,
+  Search,
 } from 'lucide-react';
 
 // Navigation structure - Clean categories
@@ -73,13 +77,30 @@ const NAV_SECTIONS = [
     items: [
       { id: 'my-profile', label: 'Edit Profile', icon: Building2 },
       { id: 'my-team', label: 'Team', icon: UserCog },
+      { id: 'my-services', label: 'Treatments', icon: Stethoscope },
       { id: 'my-insurance', label: 'Insurance', icon: Shield },
+    ],
+  },
+  {
+    title: 'Gallery',
+    items: [
+      { id: 'my-gallery', label: 'Before & After', icon: Image, badge: 'NEW' },
+      { id: 'my-platform-reviews', label: 'Reviews', icon: Star },
     ],
   },
   {
     title: 'Growth',
     items: [
-      { id: 'my-reputation', label: 'Reputation', icon: Star, badge: 'PRO' },
+      { id: 'my-analytics', label: 'Analytics', icon: BarChart3 },
+      { id: 'my-marketing', label: 'Marketing', icon: Megaphone },
+      { id: 'my-seo', label: 'SEO', icon: Search },
+      { id: 'my-reputation', label: 'Reputation Suite', icon: Star, badge: 'PRO' },
+    ],
+  },
+  {
+    title: 'Communication',
+    items: [
+      { id: 'my-templates', label: 'Templates', icon: FileText },
     ],
   },
   {

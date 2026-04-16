@@ -38,6 +38,10 @@ import {
   LogOut,
   Sparkles,
   TrendingUp,
+  Image,
+  BarChart3,
+  Megaphone,
+  Search,
 } from 'lucide-react';
 
 // Navigation structure
@@ -77,6 +81,13 @@ const NAV_SECTIONS = [
     ],
   },
   {
+    title: 'Gallery',
+    items: [
+      { id: 'my-gallery', label: 'Before & After', icon: Image, badge: 'New' },
+      { id: 'my-platform-reviews', label: 'Reviews', icon: Star },
+    ],
+  },
+  {
     title: 'Reputation',
     items: [
       { id: 'my-reputation', label: 'Reputation Suite', icon: Star, badge: 'PRO' },
@@ -87,6 +98,14 @@ const NAV_SECTIONS = [
     items: [
       { id: 'my-templates', label: 'Templates', icon: FileText },
       { id: 'my-notifications', label: 'Notifications', icon: Inbox },
+    ],
+  },
+  {
+    title: 'Growth',
+    items: [
+      { id: 'my-analytics', label: 'Analytics', icon: BarChart3 },
+      { id: 'my-marketing', label: 'Marketing', icon: Megaphone },
+      { id: 'my-seo', label: 'SEO', icon: Search },
     ],
   },
   {

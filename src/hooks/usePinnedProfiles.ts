@@ -8,65 +8,115 @@ interface PinnedClinic {
 }
 
 export function usePinnedProfiles(pageType: 'homepage' | 'state' | 'city' | 'service', stateSlug?: string, citySlug?: string, serviceSlug?: string) {
-  const getSettingKey = () => {
-    if (pageType === 'homepage') return 'pinned_clinics_homepage';
-    if (pageType === 'state' && stateSlug) return `pinned_clinics_state_${stateSlug}`;
-    if (pageType === 'city' && stateSlug && citySlug) return `pinned_clinics_city_${stateSlug}_${citySlug}`;
-    if (pageType === 'service' && serviceSlug) return `pinned_clinics_service_${serviceSlug}`;
-    return null;
+  const getSettingKeys = (): string[] => {
+    const keys: string[] = [];
+    
+    if (pageType === 'homepage') {
+      keys.push('pinned_clinics_homepage');
+    }
+    if (pageType === 'state' && stateSlug) {
+      keys.push(`pinned_clinics_state_${stateSlug}`);
+    }
+    if (pageType === 'city' && stateSlug && citySlug) {
+      keys.push(`pinned_clinics_city_${stateSlug}_${citySlug}`);
+      keys.push(`pinned_clinics_${citySlug}`);
+    }
+    if (pageType === 'service' && serviceSlug) {
+      keys.push(`pinned_clinics_service_${serviceSlug}`);
+    }
+    
+    return keys;
   };
 
-  const settingKey = getSettingKey();
+  const settingKeys = getSettingKeys();
 
   return useQuery({
-    queryKey: ['pinned-profiles', settingKey],
+    queryKey: ['pinned-profiles', ...settingKeys],
     queryFn: async () => {
-      if (!settingKey) return [];
+      if (!settingKeys.length) return [];
       
-      const { data } = await supabase
+      const { data, error } = await supabase
+        .from('global_settings')
+        .select('value, key')
+        .in('key', settingKeys);
+      
+      if (error || !data?.length) return [];
+      
+      const allPins: PinnedClinic[] = [];
+      
+      for (const row of data) {
+        try {
+          const pins = typeof row.value === 'string' 
+            ? JSON.parse(row.value) 
+            : row.value;
+          if (Array.isArray(pins)) {
+            pins.forEach((id: string, index: number) => {
+              allPins.push({ id, position: index, featured: true });
+            });
+          }
+        } catch {}
+      }
+      
+      return allPins;
+    },
+    enabled: !!settingKeys.length,
+    staleTime: 5 * 60 * 1000,
+  });
+}
+
+export function useTopDentists(cityId?: string) {
+  return useQuery({
+    queryKey: ['top-dentists', cityId],
+    queryFn: async () => {
+      if (!cityId) return [];
+      
+      const { data, error } = await supabase
         .from('global_settings')
         .select('value')
-        .eq('key', settingKey)
+        .eq('key', `top_dentists_${cityId}`)
         .maybeSingle();
       
-      if (!data?.value) return [];
+      if (error || !data?.value) return [];
       
       try {
-        const pins = typeof data.value === 'string' 
+        const ids = typeof data.value === 'string' 
           ? JSON.parse(data.value) 
           : data.value;
-        return (Array.isArray(pins) ? pins : []) as PinnedClinic[];
+        return Array.isArray(ids) ? ids : [];
       } catch {
         return [];
       }
     },
-    enabled: !!settingKey,
-    staleTime: 5 * 60 * 1000, // Cache for 5 minutes
+    enabled: !!cityId,
+    staleTime: 5 * 60 * 1000,
   });
 }
 
-// Utility to sort profiles with pinned ones first
+// Utility to sort profiles with pinned and top dentists first
 export function sortWithPinnedFirst<T extends { id: string }>(
   profiles: T[],
-  pinnedIds: PinnedClinic[]
+  pinnedClinic: PinnedClinic[],
+  topDentistIds: string[] = []
 ): T[] {
-  if (!pinnedIds.length) return profiles;
-  
-  const pinnedMap = new Map(pinnedIds.map((p, i) => [p.id, i]));
+  const pinnedMap = new Map(pinnedClinic.map((p, i) => [p.id, i]));
+  const topSet = new Set(topDentistIds);
   
   return [...profiles].sort((a, b) => {
+    const aIsTop = topSet.has(a.id);
+    const bIsTop = topSet.has(b.id);
+    
+    if (aIsTop && !bIsTop) return -1;
+    if (bIsTop && !aIsTop) return 1;
+    
     const aPinIndex = pinnedMap.get(a.id);
     const bPinIndex = pinnedMap.get(b.id);
     
-    // Both pinned: sort by position
     if (aPinIndex !== undefined && bPinIndex !== undefined) {
       return aPinIndex - bPinIndex;
     }
-    // Only a is pinned: a comes first
     if (aPinIndex !== undefined) return -1;
-    // Only b is pinned: b comes first
     if (bPinIndex !== undefined) return 1;
-    // Neither pinned: maintain original order
+    
     return 0;
   });
 }

@@ -35,6 +35,7 @@ import {
   ClipboardList,
   BarChart3,
   Megaphone,
+  Image,
 } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import {
@@ -73,6 +74,13 @@ const NAV_SECTIONS = [
       { id: 'my-services', label: 'Treatments', icon: Stethoscope, badge: null },
       { id: 'my-insurance', label: 'Insurance', icon: Shield, badge: null },
       { id: 'my-templates', label: 'Templates', icon: FileText, badge: null },
+    ],
+  },
+  {
+    title: 'Gallery',
+    items: [
+      { id: 'my-gallery', label: 'Before & After', icon: Image, badge: 'new' },
+      { id: 'my-platform-reviews', label: 'Reviews', icon: Star, badge: null },
     ],
   },
   {

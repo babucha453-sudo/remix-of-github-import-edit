@@ -1,4 +1,4 @@
-import { Star, MapPin, CheckCircle, Clock, Building2, ChevronRight, Calendar, Pin } from "lucide-react";
+import { Star, MapPin, CheckCircle, Clock, Building2, ChevronRight, Calendar, Pin, Award } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { Profile } from "@/hooks/useProfiles";
@@ -61,7 +61,13 @@ export function ProfileCard({ profile, variant = "list" }: ProfileCardProps) {
             {/* Info */}
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-2 mb-1">
-                {profile.isPinned && (
+                {profile.isTopDentist && (
+                  <Badge variant="outline" className="text-[10px] py-0 px-1.5 bg-amber-100 text-amber-700 border-amber-300">
+                    <Award className="h-2.5 w-2.5 mr-0.5" />
+                    Top Dentist
+                  </Badge>
+                )}
+                {profile.isPinned && !profile.isTopDentist && (
                   <Badge variant="outline" className="text-[10px] py-0 px-1.5 bg-primary/10 text-primary border-primary/30">
                     <Pin className="h-2.5 w-2.5 mr-0.5" />
                     Featured

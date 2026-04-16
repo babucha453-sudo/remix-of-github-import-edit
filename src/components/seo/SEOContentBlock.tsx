@@ -107,18 +107,62 @@ export const SEOContentBlock = ({
     );
   }
 
-  const defaultContent = variant === 'service-location' 
-    ? `Find qualified ${treatmentName?.toLowerCase()} specialists in ${locationName}. Our directory includes verified dental professionals with expertise in ${treatmentName?.toLowerCase()} procedures.`
-    : variant === 'city'
-    ? `Discover top-rated dental professionals in ${locationName}. Browse verified clinics, compare services, and book appointments online.`
-    : variant === 'service'
-    ? `Learn about ${treatmentName} and find qualified specialists across the United States. Compare providers and book consultations.`
-    : `Find trusted dental care providers in ${locationName}. Our directory features verified clinics with patient reviews and online booking.`;
+  const defaultContentVariants = {
+    'service-location': [
+      `Looking for quality ${treatmentName?.toLowerCase()} care in ${locationName}? Our directory features verified dental professionals specializing in ${treatmentName?.toLowerCase()} procedures with proven patient satisfaction.`,
+      `${treatmentName} specialists in ${locationName} - browse ratings, compare experience, and book directly with top-rated providers in your area.`,
+      `Find experienced ${treatmentName?.toLowerCase()} dentists near you. Verified credentials, real patient reviews, and easy online booking.`,
+    ],
+    'city': [
+      `Quality dental care starts here in ${locationName}. Browse verified dentists, compare treatment options, and book appointments with confidence.`,
+      `Your smile matters - find trusted dentists in ${locationName} who prioritize patient care. Read reviews, compare services, and book online.`,
+      `Looking for a great dentist in ${locationName}? Our verified directory helps you find the right dental professional for your needs.`,
+    ],
+    'service': [
+      `Explore ${treatmentName} options across the United States. Compare qualified providers, read patient experiences, and book consultations.`,
+      `Learn about ${treatmentName} procedures and find experienced dental specialists. Quality care starts with informed decisions.`,
+      `${treatmentName} - find qualified dentists specializing in this treatment. Compare providers and book your appointment today.`,
+    ],
+    'state': [
+      `Quality dental care across ${locationName}. Browse verified dentists, compare services, and find the right provider for your needs.`,
+      `Find trusted dental professionals in ${locationName}. Our directory features verified clinics with real patient reviews and easy booking.`,
+      `Your perfect smile awaits in ${locationName}. Discover top-rated dentists and book your dental care today.`,
+    ],
+  };
 
-  const defaultTitle = variant === 'service-location' ? `About ${treatmentName} in ${locationName}` : 
-   variant === 'city' ? `Dental Care in ${locationName}` :
-   variant === 'service' ? `About ${treatmentName}` :
-   `Dental Services in ${locationName}`;
+  // Use hash-based selection for consistent but varied content
+  const variantKey = variant as keyof typeof defaultContentVariants;
+  const contentOptions = defaultContentVariants[variantKey] || defaultContentVariants['city'];
+  const contentIndex = Math.abs((locationName?.length || 0) + (treatmentName?.length || 0)) % contentOptions.length;
+  const defaultContent = contentOptions[contentIndex];
+
+  const titleVariants = {
+    'service-location': [
+      `About ${treatmentName} in ${locationName}`,
+      `${treatmentName} Specialists in ${locationName}`,
+      `Quality ${treatmentName} Care in ${locationName}`,
+    ],
+    'city': [
+      `Dental Care in ${locationName}`,
+      `Quality Dentistry in ${locationName}`,
+      `Your Smile Experts in ${locationName}`,
+    ],
+    'service': [
+      `About ${treatmentName}`,
+      `${treatmentName} Information`,
+      `Learn About ${treatmentName}`,
+    ],
+    'state': [
+      `Dental Services in ${locationName}`,
+      `Quality Dental Care in ${locationName}`,
+      `Find Dentists in ${locationName}`,
+    ],
+  };
+
+  const titleKey = variant as keyof typeof titleVariants;
+  const titleOptions = titleVariants[titleKey] || titleVariants['city'];
+  const titleIndex = Math.abs((locationName?.length || 0) * 7) % titleOptions.length;
+  const defaultTitle = titleOptions[titleIndex];
 
   return (
     <article className="space-y-6">

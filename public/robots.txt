@@ -151,9 +151,15 @@ Disallow: /*?fbclid=*
 Disallow: /*?gclid=*
 
 # ============================================
-# SITEMAP
+# SITEMAP - Dynamic Sitemaps
 # ============================================
 Sitemap: https://www.appointpanda.com/sitemap.xml
+Sitemap: https://www.appointpanda.com/api/sitemap.xml?type=static
+Sitemap: https://www.appointpanda.com/api/sitemap.xml?type=states
+Sitemap: https://www.appointpanda.com/api/sitemap.xml?type=cities&page=1
+Sitemap: https://www.appointpanda.com/api/sitemap.xml?type=clinics&page=1
+Sitemap: https://www.appointpanda.com/api/sitemap.xml?type=services
+Sitemap: https://www.appointpanda.com/api/sitemap.xml?type=insurance
 
 # ============================================
 # LLMs.txt FOR AI ASSISTANTS

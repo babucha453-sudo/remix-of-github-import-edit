@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
@@ -23,9 +23,27 @@ import {
   UserCog,
   Shield,
   Sparkles,
+  Image,
+  PlusCircle,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { NoPracticeLinked } from './NoPracticeLinked';
+
+const PREDEFINED_ROLES = [
+  'Dentist',
+  'Orthodontist',
+  'Periodontist',
+  'Endodontist',
+  'Oral Surgeon',
+  'Pediatric Dentist',
+  'Prosthodontist',
+  'Hygienist',
+  'Dental Assistant',
+  'Receptionist',
+  'Office Manager',
+  'Dental Technician',
+  'Other',
+];
 
 interface TeamMember {
   id: string;
@@ -48,6 +66,8 @@ export default function TeamManagementTab() {
   const [role, setRole] = useState('');
   const [bio, setBio] = useState('');
   const [imageUrl, setImageUrl] = useState('');
+  const [isUploading, setIsUploading] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const { data: clinic, isLoading: clinicLoading } = useQuery({
     queryKey: ['dentist-clinic-team', user?.id],
@@ -321,11 +341,16 @@ export default function TeamManagementTab() {
             </div>
             <div className="space-y-2">
               <Label>Role</Label>
-              <Input
-                placeholder="e.g. Dentist, Hygienist, Receptionist"
+              <select
+                className="w-full h-10 rounded-md border border-input bg-background px-3 py-2"
                 value={role}
                 onChange={(e) => setRole(e.target.value)}
-              />
+              >
+                <option value="">Select role</option>
+                {PREDEFINED_ROLES.map((r) => (
+                  <option key={r} value={r}>{r}</option>
+                ))}
+              </select>
             </div>
             <div className="space-y-2">
               <Label>Bio</Label>
@@ -337,12 +362,63 @@ export default function TeamManagementTab() {
               />
             </div>
             <div className="space-y-2">
-              <Label>Photo URL</Label>
-              <Input
-                placeholder="https://..."
-                value={imageUrl}
-                onChange={(e) => setImageUrl(e.target.value)}
-              />
+              <Label>Photo</Label>
+              <div className="flex items-center gap-3">
+                <div className="flex-1">
+                  <Input
+                    placeholder="Enter photo URL"
+                    value={imageUrl}
+                    onChange={(e) => setImageUrl(e.target.value)}
+                  />
+                </div>
+                <input
+                  type="file"
+                  ref={fileInputRef}
+                  accept="image/*"
+                  className="hidden"
+                  id="team-photo-upload"
+                  onChange={async (e) => {
+                    const file = e.target.files?.[0];
+                    if (!file) return;
+                    setIsUploading(true);
+                    try {
+                      const fileName = `team/${Date.now()}-${file.name}`;
+                      const { data, error } = await supabase.storage
+                        .from('clinic-images')
+                        .upload(fileName, file);
+                      if (error) throw error;
+                      const { data: urlData } = supabase.storage
+                        .from('clinic-images')
+                        .getPublicUrl(fileName);
+                      setImageUrl(urlData.publicUrl);
+                      toast.success('Photo uploaded');
+                    } catch (err: any) {
+                      toast.error('Upload failed: ' + err.message);
+                    } finally {
+                      setIsUploading(false);
+                    }
+                  }}
+                />
+                <label htmlFor="team-photo-upload">
+                  <Button variant="outline" size="sm" type="button" asChild>
+                    <span className="cursor-pointer">
+                      {isUploading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Image className="h-4 w-4 mr-2" />}
+                      Upload
+                    </span>
+                  </Button>
+                </label>
+              </div>
+              {imageUrl && (
+                <div className="mt-2 p-2 bg-muted/50 rounded-lg flex items-center gap-3">
+                  <Avatar className="h-12 w-12 rounded-full">
+                    <AvatarImage src={imageUrl} />
+                    <AvatarFallback>
+                      <UserCog className="h-6 w-6" />
+                    </AvatarFallback>
+                  </Avatar>
+                  <span className="text-xs text-muted-foreground flex-1">Preview</span>
+                </div>
+              )}
             </div>
           </div>
           <DialogFooter>

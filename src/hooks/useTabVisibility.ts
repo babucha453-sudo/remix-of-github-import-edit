@@ -16,19 +16,31 @@ export function useTabVisibility() {
   const { data, isLoading } = useQuery({
     queryKey: ['tab-visibility-settings'],
     queryFn: async () => {
-      const { data, error } = await supabase
-        .from('global_settings')
-        .select('*')
-        .eq('key', 'tab_visibility')
-        .maybeSingle();
-      if (error) throw error;
-      return data?.value as unknown as TabVisibility | null;
+      try {
+        const { data, error } = await supabase
+          .from('global_settings')
+          .select('*')
+          .eq('key', 'tab_visibility')
+          .maybeSingle();
+        if (error) {
+          console.warn('Tab visibility settings error:', error);
+          return DEFAULT_VISIBILITY;
+        }
+        return data?.value ? (data.value as unknown as TabVisibility) : DEFAULT_VISIBILITY;
+      } catch (err) {
+        console.warn('Tab visibility query failed:', err);
+        return DEFAULT_VISIBILITY;
+      }
     },
-    staleTime: 60000, // Cache for 1 minute
-    gcTime: 300000, // Keep in cache for 5 minutes
+    staleTime: 60000,
+    gcTime: 300000,
+    placeholderData: DEFAULT_VISIBILITY,
   });
 
   const isTabVisible = (tabId: string, dashboardType: 'admin' | 'dentist'): boolean => {
+    // For dentist dashboard, always show all tabs
+    if (dashboardType === 'dentist') return true;
+    
     if (!data) return true; // Default to visible if no settings
 
     const visibilityMap = dashboardType === 'admin' ? data.adminTabs : data.dentistTabs;
@@ -40,7 +52,7 @@ export function useTabVisibility() {
   };
 
   return {
-    visibility: data ?? DEFAULT_VISIBILITY,
+    visibility: data || DEFAULT_VISIBILITY,
     isLoading,
     isTabVisible,
   };

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useMutation } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -12,9 +12,10 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { 
   Calculator, Shield, Zap, ExternalLink, Edit, Save, Plus, Trash2, 
-  Search, DollarSign, MapPin, RefreshCw 
+  Search, DollarSign, MapPin, RefreshCw, CheckCircle, AlertTriangle
 } from 'lucide-react';
 import { toast } from 'sonner';
+import { syncAllInsurancesToAllClinics, getInsuranceStats } from '@/lib/insuranceSync';
 
 export default function ToolsManagementTab() {
   const [activeTab, setActiveTab] = useState('cost-calculator');
@@ -326,6 +327,28 @@ function InsuranceManager() {
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editName, setEditName] = useState('');
   const [newName, setNewName] = useState('');
+  const [syncing, setSyncing] = useState(false);
+
+  // Get insurance stats
+  const { data: stats } = useQuery({
+    queryKey: ['insurance-stats'],
+    queryFn: getInsuranceStats,
+  });
+
+  // Sync mutation
+  const syncMutation = useMutation({
+    mutationFn: syncAllInsurancesToAllClinics,
+    onMutate: () => { setSyncing(true); },
+    onSuccess: (result) => {
+      setSyncing(false);
+      if (result.success) {
+        toast.success(`Synced! Created ${result.linksCreated} links, ${result.linksAlreadyExist} already existed`);
+      } else {
+        toast.error(result.errors[0] || 'Sync failed');
+      }
+    },
+    onError: () => { setSyncing(false); toast.error('Sync failed'); },
+  });
 
   const { data: insurances, refetch } = useQuery({
     queryKey: ['admin-insurances'],
@@ -359,9 +382,37 @@ function InsuranceManager() {
   const addInsurance = async () => {
     if (!newName.trim()) return;
     const slug = newName.trim().toLowerCase().replace(/\s+/g, '-');
-    const { error } = await supabase.from('insurances').insert({ name: newName.trim(), slug });
-    if (error) { toast.error('Failed to add'); return; }
-    toast.success('Insurance added');
+    
+    // Insert the new insurance first
+    const { data: newInsurance, error } = await supabase
+      .from('insurances')
+      .insert({ name: newName.trim(), slug })
+      .select('id')
+      .single();
+    
+    if (error) { 
+      toast.error('Failed to add insurance'); 
+      return; 
+    }
+    
+    // Auto-assign new insurance to all active clinics
+    if (newInsurance?.id) {
+      const { data: clinics } = await supabase
+        .from('clinics')
+        .select('id')
+        .eq('is_active', true);
+      
+      if (clinics?.length) {
+        const links = clinics.map(c => ({ clinic_id: c.id, insurance_id: newInsurance.id }));
+        await supabase.from('clinic_insurances').insert(links).then(({ error }) => {
+          if (!error) {
+            console.log(`[InsuranceManager] Auto-assigned to ${clinics.length} clinics`);
+          }
+        });
+      }
+    }
+    
+    toast.success('Insurance added and auto-assigned to all clinics');
     setNewName('');
     refetch();
   };
@@ -370,10 +421,58 @@ function InsuranceManager() {
     <div className="space-y-6 mt-4">
       <Card>
         <CardHeader>
-          <CardTitle>Insurance Providers</CardTitle>
+          <CardTitle className="flex items-center gap-2">
+            <Shield className="h-5 w-5" />
+            Insurance Providers
+          </CardTitle>
           <CardDescription>Manage insurance providers shown in the Insurance Checker and clinic profiles</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
+          {/* Insurance Sync Status */}
+          <div className="bg-muted/50 rounded-lg p-4">
+            <div className="flex items-center justify-between mb-3">
+              <div className="flex items-center gap-2">
+                {stats?.isFullyLinked ? (
+                  <CheckCircle className="h-5 w-5 text-green-500" />
+                ) : (
+                  <AlertTriangle className="h-5 w-5 text-amber-500" />
+                )}
+                <span className="font-semibold">Insurance Assignment Status</span>
+              </div>
+              <Button 
+                onClick={() => syncMutation.mutate()} 
+                disabled={syncing}
+                variant={stats?.isFullyLinked ? "outline" : "default"}
+                size="sm"
+              >
+                <RefreshCw className={`h-4 w-4 mr-1 ${syncing ? 'animate-spin' : ''}`} />
+                {syncing ? 'Syncing...' : stats?.isFullyLinked ? 'Re-sync All' : 'Sync All to All'}
+              </Button>
+            </div>
+            <div className="grid grid-cols-2 md:grid-cols-5 gap-4 text-sm">
+              <div>
+                <span className="text-muted-foreground">Clinics</span>
+                <p className="font-bold text-lg">{stats?.totalClinics || 0}</p>
+              </div>
+              <div>
+                <span className="text-muted-foreground">Insurances</span>
+                <p className="font-bold text-lg">{stats?.totalInsurances || 0}</p>
+              </div>
+              <div>
+                <span className="text-muted-foreground">Total Links</span>
+                <p className="font-bold text-lg">{stats?.totalLinks || 0}</p>
+              </div>
+              <div>
+                <span className="text-muted-foreground">Expected</span>
+                <p className="font-bold text-lg">{stats?.expectedLinks || 0}</p>
+              </div>
+              <div>
+                <span className="text-muted-foreground">Missing</span>
+                <p className="font-bold text-lg text-red-500">{stats?.missingLinks || 0}</p>
+              </div>
+            </div>
+          </div>
+
           <div className="flex gap-2">
             <Input placeholder="Add new insurance provider..." value={newName} onChange={e => setNewName(e.target.value)} />
             <Button onClick={addInsurance} disabled={!newName.trim()}>

@@ -259,13 +259,7 @@ export function SearchBox({
       const [citySlug, targetStateSlug] = city.split('|');
       
       if (insurance) {
-        const params = new URLSearchParams();
-        params.set('city', citySlug);
-        params.set('state', targetStateSlug);
-        if (treatment) {
-          params.set('treatment', treatment);
-        }
-        navigate(`/insurance/${insurance}?${params.toString()}`);
+        navigate(`/${targetStateSlug}/${citySlug}/${insurance}-dentists`);
         return;
       }
       

@@ -1295,14 +1295,27 @@ export default function ProfileEditorTab() {
                     alt={img.caption || 'Gallery'} 
                     className="w-full h-32 object-cover"
                   />
-                  <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                  <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
+                    <Button 
+                      size="sm" 
+                      variant="secondary" 
+                      className="h-7 text-xs"
+                      onClick={() => {
+                        setFormData({ ...formData, cover_image_url: img.image_url });
+                        saveMutation.mutate();
+                        toast.success('Set as profile image');
+                      }}
+                    >
+                      <Camera className="h-3 w-3 mr-1" />
+                      Profile
+                    </Button>
                     <Button 
                       size="icon" 
                       variant="destructive" 
-                      className="h-8 w-8"
+                      className="h-7 w-7"
                       onClick={() => deleteImageMutation.mutate(img.id)}
                     >
-                      <Trash2 className="h-4 w-4" />
+                      <Trash2 className="h-3 w-3" />
                     </Button>
                   </div>
                 </div>

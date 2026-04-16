@@ -42,6 +42,7 @@ const ServicesPage = lazyRetry(() => import("./pages/ServicesPage"));
 const ServiceLocationPage = lazyRetry(() => import("./pages/ServiceLocationPage"));
 const ClinicPage = lazyRetry(() => import("./pages/ClinicPage"));
 const DentistPage = lazyRetry(() => import("./pages/DentistPage"));
+const InsuranceLocationPage = lazyRetry(() => import("./pages/InsuranceLocationPage"));
 
 // Blog Pages - lazy loaded
 const BlogPage = lazyRetry(() => import("./pages/BlogPage"));
@@ -141,6 +142,9 @@ const App = () => (
 
                   {/* Directory - State Pages (e.g., /ca, /ma) */}
                   <Route path="/:stateSlug" element={<StatePage />} />
+
+                  {/* Insurance + City pages - MUST be BEFORE city to take precedence */}
+                  <Route path="/:stateSlug/:citySlug/:insuranceSlug-dentists" element={<InsuranceLocationPage />} />
 
                   {/* Directory - City Pages (e.g., /ca/los-angeles) */}
                   <Route path="/:stateSlug/:citySlug" element={<CityPage />} />

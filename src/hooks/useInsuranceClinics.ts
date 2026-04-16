@@ -46,6 +46,9 @@ interface UseInsuranceClinicsResult {
  * Optimized hook for fetching paginated clinics for a specific insurance.
  * Uses server-side pagination through clinic_insurances join to avoid
  * fetching 6000+ clinic IDs client-side.
+ * 
+ * FALLBACK BEHAVIOR: If no clinics are found in clinic_insurances table,
+ * returns ALL active clinics (accepting all insurances by default).
  */
 export function useInsuranceClinics({
   insuranceId,
@@ -68,25 +71,112 @@ export function useInsuranceClinics({
       minRating,
     ],
     queryFn: async () => {
-      if (!insuranceId) return { clinics: [], totalCount: 0 };
+      if (!insuranceId) return { clinics: [], totalCount: 0, fallbackMode: true };
 
-      // Use a more efficient approach: query through clinic_insurances with embedded clinic data
-      // This avoids fetching thousands of IDs and hitting URL length limits
-      
-      // First, get total count for pagination
-      const { count: totalCount, error: countError } = await supabase
+      // Check if clinic_insurances table has records for this insurance (any status)
+      const { count: specificCount, error: countError } = await supabase
         .from("clinic_insurances")
-        .select("clinic_id, clinics!inner(id, is_active)", { count: "exact", head: true })
-        .eq("insurance_id", insuranceId)
-        .eq("clinics.is_active", true);
+        .select("clinic_id", { count: "exact", head: true })
+        .eq("insurance_id", insuranceId);
 
       if (countError) {
         console.error("Count query error:", countError);
         throw countError;
       }
 
+      // If NO records in clinic_insurances, use FALLBACK (all clinics accept all insurance)
+      if (!specificCount || specificCount === 0) {
+        console.log(`[InsuranceClinics] No records in clinic_insurances for ${insuranceId}, using fallback (ALL clinics)`);
+        
+        // Fetch ALL active clinics as fallback
+        const { count: totalCount, error: fallbackCountError } = await supabase
+          .from("clinics")
+          .select("id", { count: "exact", head: true })
+          .eq("is_active", true);
+
+        if (fallbackCountError) {
+          console.error("Fallback count error:", fallbackCountError);
+          throw fallbackCountError;
+        }
+
+        const from = (page - 1) * pageSize;
+        const to = from + pageSize - 1;
+
+        let query = supabase
+          .from("clinics")
+          .select(`
+            id, name, slug, rating, review_count, cover_image_url, verification_status, is_active,
+            city_id,
+            cities(id, name, slug, state:states(slug, abbreviation))
+          `)
+          .eq("is_active", true);
+
+        if (minRating && minRating > 0) {
+          query = query.gte("rating", minRating);
+        }
+
+        switch (sortBy) {
+          case "rating":
+            query = query.order("rating", { ascending: false, nullsFirst: false });
+            break;
+          case "reviews":
+            query = query.order("review_count", { ascending: false, nullsFirst: false });
+            break;
+          case "name":
+            query = query.order("name", { ascending: true });
+            break;
+        }
+
+        query = query.range(from, to);
+
+        const { data: fallbackData, error: fallbackError } = await query;
+
+        if (fallbackError) {
+          console.error("Fallback data error:", fallbackError);
+          throw fallbackError;
+        }
+
+        const clinics = (fallbackData || []).map((clinic: any) => {
+          const city = Array.isArray(clinic.cities) ? clinic.cities[0] : clinic.cities;
+          const state = Array.isArray(city?.state) ? city.state[0] : city?.state;
+
+          return {
+            id: clinic.id,
+            name: clinic.name,
+            slug: clinic.slug,
+            rating: clinic.rating,
+            review_count: clinic.review_count,
+            cover_image_url: clinic.cover_image_url,
+            verification_status: clinic.verification_status,
+            city: city
+              ? {
+                  id: city.id,
+                  name: city.name,
+                  slug: city.slug,
+                  state: state || null,
+                }
+              : null,
+            area: null,
+          } as ClinicResult;
+        });
+
+        let filteredClinics = clinics;
+        if (cityFilter && stateFilter) {
+          filteredClinics = clinics.filter((clinic) => {
+            return clinic.city?.slug === cityFilter && clinic.city?.state?.slug === stateFilter;
+          });
+        }
+
+        return {
+          clinics: filteredClinics,
+          totalCount: totalCount || 0,
+          fallbackMode: true,
+        };
+      }
+
+      // Standard path: use clinic_insurances table
+      
       // Now fetch paginated clinic data through the join
-      // We select from clinic_insurances and embed clinic data
       const from = (page - 1) * pageSize;
       const to = from + pageSize - 1;
 
@@ -101,8 +191,10 @@ export function useInsuranceClinics({
             cities(id, name, slug, state:states(slug, abbreviation))
           )
         `)
-        .eq("insurance_id", insuranceId)
-        .eq("clinics.is_active", true);
+        .eq("insurance_id", insuranceId);
+
+      // Also include is_active filter to ensure we only show active clinics
+      query = query.eq("clinics.is_active", true);
 
       // Apply rating filter if specified
       if (minRating && minRating > 0) {
@@ -170,7 +262,8 @@ export function useInsuranceClinics({
 
       return {
         clinics,
-        totalCount: totalCount || 0,
+        totalCount: specificCount || 0,
+        fallbackMode: false,
       };
     },
     enabled: !!insuranceId,
@@ -188,16 +281,63 @@ export function useInsuranceClinics({
 
 /**
  * Hook for fetching available filter options (cities) for an insurance
+ * Returns ALL cities with active clinics as fallback if no specific insurance matches exist
  */
 export function useInsuranceFilterOptions(insuranceId: string | undefined) {
-  const { data: cities } = useQuery({
-    queryKey: ["insurance-cities-v2", insuranceId],
+  const { data } = useQuery({
+    queryKey: ["insurance-cities-v3", insuranceId],
     queryFn: async () => {
-      if (!insuranceId) return [];
+      if (!insuranceId) return { cities: [], fallbackMode: false };
 
-      // Fetch unique cities through the join in batches
-      // Since we can't easily deduplicate on the server, we'll fetch a sample
-      const { data: clinicInsurances } = await supabase
+      // First check if there are any specific matches
+      const { data: clinicInsurances, count: specificCount } = await supabase
+        .from("clinic_insurances")
+        .select("clinic_id", { count: "exact" })
+        .eq("insurance_id", insuranceId);
+
+      // If no specific matches, use fallback - all cities with active clinics
+      if (!specificCount || specificCount === 0) {
+        const { data: allClinics } = await supabase
+          .from("clinics")
+          .select(`
+            id, is_active, city_id,
+            cities(id, name, slug, state:states(slug, abbreviation, name))
+          `)
+          .eq("is_active", true)
+          .limit(10000);
+
+        if (!allClinics?.length) return { cities: [], fallbackMode: false };
+
+        const cityMap = new Map<string, {
+          id: string;
+          name: string;
+          slug: string;
+          stateSlug: string;
+          stateAbbreviation: string;
+          stateName: string;
+        }>();
+
+        for (const clinic of allClinics) {
+          const city = Array.isArray(clinic.cities) ? clinic.cities[0] : clinic.cities;
+          if (!city?.id || cityMap.has(city.id)) continue;
+
+          const state = Array.isArray(city.state) ? city.state[0] : city.state;
+          cityMap.set(city.id, {
+            id: city.id,
+            name: city.name,
+            slug: city.slug,
+            stateSlug: state?.slug || "",
+            stateAbbreviation: state?.abbreviation || "",
+            stateName: state?.name || "",
+          });
+        }
+
+        const sortedCities = Array.from(cityMap.values()).sort((a, b) => a.name.localeCompare(b.name));
+        return { cities: sortedCities, fallbackMode: true };
+      }
+
+      // Use specific clinics
+      const { data: specificClinics } = await supabase
         .from("clinic_insurances")
         .select(`
           clinics!inner(
@@ -207,11 +347,10 @@ export function useInsuranceFilterOptions(insuranceId: string | undefined) {
         `)
         .eq("insurance_id", insuranceId)
         .eq("clinics.is_active", true)
-        .limit(1000); // Reasonable sample for cities
+        .limit(10000);
 
-      if (!clinicInsurances?.length) return [];
+      if (!specificClinics?.length) return { cities: [], fallbackMode: false };
 
-      // Deduplicate cities
       const cityMap = new Map<string, {
         id: string;
         name: string;
@@ -221,7 +360,7 @@ export function useInsuranceFilterOptions(insuranceId: string | undefined) {
         stateName: string;
       }>();
 
-      for (const row of clinicInsurances) {
+      for (const row of specificClinics) {
         const clinic = row.clinics as any;
         if (!clinic) continue;
 
@@ -241,11 +380,17 @@ export function useInsuranceFilterOptions(insuranceId: string | undefined) {
         });
       }
 
-      return Array.from(cityMap.values()).sort((a, b) => a.name.localeCompare(b.name));
+      return { 
+        cities: Array.from(cityMap.values()).sort((a, b) => a.name.localeCompare(b.name)),
+        fallbackMode: false 
+      };
     },
     enabled: !!insuranceId,
-    staleTime: 10 * 60 * 1000, // 10 minutes
+    staleTime: 10 * 60 * 1000,
   });
 
-  return { cities: cities || [] };
+  return { 
+    cities: data?.cities || [],
+    fallbackMode: data?.fallbackMode || false
+  };
 }

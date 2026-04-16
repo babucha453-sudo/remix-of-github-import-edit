@@ -18,7 +18,7 @@ import { Breadcrumbs } from "@/components/layout/Breadcrumbs";
 import { useState as useStateData, useCitiesByStateSlug } from "@/hooks/useLocations";
 import { useSeoPageContent, parseMarkdownContent, parseFaqFromContent } from "@/hooks/useSeoPageContent";
 import { usePrerenderReady } from "@/hooks/usePrerenderReady";
-import { usePinnedProfiles, sortWithPinnedFirst } from "@/hooks/usePinnedProfiles";
+import { usePinnedProfiles, sortWithPinnedFirst, useTopDentists } from "@/hooks/usePinnedProfiles";
 import { normalizeStateSlug } from "@/lib/slug/normalizeStateSlug";
 import { DentistFinderMap } from "@/components/finder";
 import NotFound from "./NotFound";
@@ -190,7 +190,6 @@ const StatePage = ({ initialState, initialCities }: StatePageProps) => {
   const profiles = useMemo(() => {
     if (!rawProfiles) return [];
     const sorted = sortWithPinnedFirst(rawProfiles, pinnedProfiles || []);
-    // Mark pinned profiles
     const pinnedIds = new Set((pinnedProfiles || []).map(p => p.id));
     return sorted.map(p => ({ ...p, isPinned: pinnedIds.has(p.id) }));
   }, [rawProfiles, pinnedProfiles]);
@@ -271,25 +270,79 @@ const StatePage = ({ initialState, initialCities }: StatePageProps) => {
   const pageDescription = seoContent?.meta_description || `Compare ${totalClinicCount}+ verified dental clinics across ${cities?.length || 0}+ cities in ${stateName}. Read reviews and book appointments online today.`;
   const pageH1 = seoContent?.h1 || `Find Dentists in ${stateName}`;
 
-  // Use SEO FAQs if available, otherwise use defaults
-  const faqs = seoFaqs.length > 0 ? seoFaqs.map(f => ({ q: f.question, a: f.answer })) : [
-    {
-      q: `How do I find a dentist in ${stateName}?`,
-      a: `Browse our verified list of dentists across ${stateName}. Select your city, then filter by specialty, rating, and insurance to find the perfect match.`,
-    },
-    {
-      q: `Are dentists in ${stateName} verified?`,
-      a: `All dentists on our platform are licensed professionals. Profiles with the "Verified" badge have completed our additional verification process.`,
-    },
-    {
-      q: `What cities in ${stateName} do you cover?`,
-      a: `We cover major cities across ${stateName} including ${cities?.slice(0, 5).map(c => c.name).join(', ') || 'multiple locations'}. More cities are being added regularly.`,
-    },
-    {
-      q: `Can I book same-day appointments?`,
-      a: `Many dental offices in ${stateName} offer same-day or next-day appointments. Use our search filters to find clinics with immediate availability.`,
-    },
+  // Use SEO FAQs if available, otherwise use unique defaults
+  const faqVariants = [
+    [
+      {
+        q: `What should I look for when choosing a dentist in ${stateName}?`,
+        a: `Look for verified credentials, patient reviews, years of experience, and services that match your needs. Our directory lets you compare all these factors side-by-side.`,
+      },
+      {
+        q: `Are the dentists in ${stateName} really verified?`,
+        a: `Yes. Every dentist on AppointPanda passes license verification. Look for the blue checkmark - it means we've confirmed their credentials.`,
+      },
+      {
+        q: `What's the average cost of dental work in ${stateName}?`,
+        a: `Costs vary by procedure and location within ${stateName}. Cleanings typically run $75-150, while complex procedures like implants can be $3000-6000. Get quotes from multiple dentists.`,
+      },
+      {
+        q: `How do I book an appointment in ${stateName}?`,
+        a: `Simply browse dentists, read reviews, and click "Book" - no phone calls needed. Many clinics offer same-week appointments.`,
+      },
+      {
+        q: `Does dental insurance work in ${stateName}?`,
+        a: `Most PPO and HMO plans are accepted. Filter by your insurance on the search results to find in-network dentists.`,
+      },
+    ],
+    [
+      {
+        q: `Emergency dentist in ${stateName} - what are my options?`,
+        a: `Several clinics in ${stateName} offer emergency dental services. Search for same-day availability or call your nearest dental office directly.`,
+      },
+      {
+        q: `Best neighborhoods for dentists in ${stateName}?`,
+        a: `Dental care quality varies by clinic, not neighborhood. Use our ratings and reviews to find the best dentists regardless of location.`,
+      },
+      {
+        q: `How often should I visit a dentist in ${stateName}?`,
+        a: `Most dentists recommend checkups every 6 months. If you have gum disease or cavities, more frequent visits may be needed.`,
+      },
+      {
+        q: `Can I get braces or Invisalign in ${stateName}?`,
+        a: `Yes! Many orthodontists in ${stateName} offer traditional braces and clear aligners like Invisalign. Search for orthodontic specialists.`,
+      },
+      {
+        q: `What if I don't have dental insurance in ${stateName}?`,
+        a: `Many clinics offer payment plans or in-house membership programs. Some also provide discounts for cash payments.`,
+      },
+    ],
+    [
+      {
+        q: `Finding a pediatric dentist in ${stateName}?`,
+        a: `Look for dentists who specialize in pediatric care or family dentistry. They have extra training for children's unique needs.`,
+      },
+      {
+        q: `Cosmetic dentistry options in ${stateName}?`,
+        a: `Most major cities in ${stateName} have cosmetic dentists offering veneers, whitening, and smile makeovers. Compare prices and before/after photos.`,
+      },
+      {
+        q: `How long does it take to get a dental implant in ${stateName}?`,
+        a: `The process typically takes 3-6 months over multiple visits. This includes consultation, surgery, healing, and placing the crown.`,
+      },
+      {
+        q: `Sedation dentistry in ${stateName} - is it available?`,
+        a: `Many dental offices offer sedation options for anxious patients - from nitrous oxide to IV sedation. Ask during booking.`,
+      },
+      {
+        q: `What dental issues need immediate attention in ${stateName}?`,
+        a: `Severe pain, bleeding, swelling, or knocked-out teeth are dental emergencies. Don't wait - call a dentist or visit an ER.`,
+      },
+    ],
   ];
+  
+  const faqIndex = Math.abs(stateName?.length || 0) % faqVariants.length;
+  const defaultFaqs = faqVariants[faqIndex];
+  const faqs = seoFaqs.length > 0 ? seoFaqs.map(f => ({ q: f.question, a: f.answer })) : defaultFaqs;
 
   const popularTreatments = (treatments || []).map(t => ({ name: t.name, slug: t.slug }));
 
