@@ -56,7 +56,7 @@ const formSchema = z.object({
   email: z.string().trim().email("Invalid email address").max(255, "Email must be less than 255 characters"),
   phone: z.string().trim().min(10, "Please enter a valid US phone number").max(20, "Phone number must be less than 20 characters"),
   streetAddress: z.string().trim().max(500, "Address must be less than 500 characters").optional(),
-  website: z.string().trim().url("Invalid website URL").max(255, "Website must be less than 255 characters").optional().or(z.literal("")),
+  website: z.string().trim().url("Invalid website URL").max(255, "Website must be less than 255 characters").or(z.literal("").transform(() => undefined)),
   description: z.string().trim().max(2000, "Description must be less than 2000 characters").optional(),
 });
 
@@ -233,25 +233,26 @@ const ListYourPracticePage = () => {
       return;
     }
 
-    try {
-      formSchema.parse(formData);
-    } catch (error) {
-      if (error instanceof z.ZodError) {
-        const newErrors: Record<string, string> = {};
-        error.errors.forEach(err => {
-          if (err.path[0]) {
-            newErrors[err.path[0] as string] = err.message;
-          }
-        });
-        setErrors(newErrors);
-        toast({
-          title: "Validation Error",
-          description: "Please check the form for errors.",
-          variant: "destructive",
-        });
-        return;
-      }
-    }
+     let validatedData = formData;
+     try {
+       validatedData = formSchema.parse(formData);
+     } catch (error) {
+       if (error instanceof z.ZodError) {
+         const newErrors: Record<string, string> = {};
+         error.errors.forEach(err => {
+           if (err.path[0]) {
+             newErrors[err.path[0] as string] = err.message;
+           }
+         });
+         setErrors(newErrors);
+         toast({
+           title: "Validation Error",
+           description: "Please check the form for errors.",
+           variant: "destructive",
+         });
+         return;
+       }
+     }
 
     setIsSubmitting(true);
 

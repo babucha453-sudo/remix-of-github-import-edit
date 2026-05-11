@@ -63,8 +63,7 @@ const bookingSchema = z.object({
   patient_email: z
     .string()
     .email("Please enter a valid email")
-    .optional()
-    .or(z.literal("")),
+    .min(1, "Email is required"),
   treatment_id: z.string().min(1, "Please select a service"),
   preferred_date: z.string().min(1, "Please select a date"),
   preferred_time: z.string().min(1, "Please select a time"),
@@ -570,24 +569,26 @@ export function CalendarBookingForm({
                 )}
               />
 
-              <FormField
-                control={form.control}
-                name="patient_email"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="text-sm font-medium">Email (Optional)</FormLabel>
-                    <FormControl>
-                      <Input
-                        type="email"
-                        placeholder="your@email.com"
-                        className="rounded-2xl h-14 border-2 border-slate-200 focus:border-emerald-500 transition-all"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+               <FormField
+                 control={form.control}
+                 name="patient_email"
+                 render={({ field }) => (
+                   <FormItem>
+                     <FormLabel className="text-sm font-medium">
+                       Email <span className="text-destructive">*</span>
+                     </FormLabel>
+                     <FormControl>
+                       <Input
+                         type="email"
+                         placeholder="your@email.com (required)"
+                         className="rounded-2xl h-14 border-2 border-slate-200 focus:border-emerald-500 transition-all"
+                         {...field}
+                       />
+                     </FormControl>
+                     <FormMessage />
+                   </FormItem>
+                 )}
+               />
             </div>
           )}
 
