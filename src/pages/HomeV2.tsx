@@ -19,6 +19,7 @@ import { useRealCounts } from "@/hooks/useRealCounts";
 import { useTreatments } from "@/hooks/useTreatments";
 import { useTopDentistsPerLocation } from "@/hooks/useProfiles";
 import { AutoScrollCarousel } from "@/components/AutoScrollCarousel";
+import { EmailCapture } from "@/components/EmailCapture";
 import { supabase } from "@/integrations/supabase/client";
 
 interface CityData {
@@ -859,6 +860,18 @@ const HomeV2 = () => {
                 </Button>
               </Link>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* EMAIL CAPTURE */}
+      <section className="py-16 md:py-20 bg-slate-50">
+        <div className="container mx-auto px-4">
+          <div className="max-w-2xl mx-auto">
+            <EmailCapture
+              headline="Get Dental Tips & Exclusive Offers"
+              subtext="Join 10,000+ patients who get weekly dental care tips and special offers"
+            />
           </div>
         </div>
       </section>

@@ -13,6 +13,7 @@ import { getContentBody, calculateReadingTime } from "@/lib/blogContent";
 import { usePrerenderReady } from "@/hooks/usePrerenderReady";
 import { BlogDentistList } from "@/components/blog/BlogDentistList";
 import { BlogFAQList } from "@/components/blog/BlogFAQList";
+import { EmailCapture } from "@/components/EmailCapture";
 import { 
   Calendar, User, Clock, ArrowLeft, Share2, Facebook, Twitter, Linkedin,
   MapPin, Search, Phone, Star, Shield, ArrowRight
@@ -588,6 +589,15 @@ const BlogPostPage = ({ initialPost, initialRelatedPosts }: BlogPostPageProps) =
                   </Button>
                 </div>
               </div>
+            </div>
+
+            {/* Email Capture */}
+            <div className="mt-10">
+              <EmailCapture
+                headline="Get More Dental Tips"
+                subtext="Subscribe to get weekly articles delivered to your inbox"
+                className="rounded-xl"
+              />
             </div>
           </article>
 

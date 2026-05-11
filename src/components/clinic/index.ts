@@ -6,3 +6,4 @@ export { ClinicReviewsSection } from './ClinicReviewsSection';
 export { BookingCalendar } from './BookingCalendar';
 export { InsuranceTab } from './InsuranceTab';
 export { BeforeAfterGallery } from './BeforeAfterGallery';
+export { UnclaimedProfileLeadForm } from './UnclaimedProfileLeadForm';

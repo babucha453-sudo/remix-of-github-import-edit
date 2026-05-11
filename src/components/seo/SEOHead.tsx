@@ -1,5 +1,6 @@
 import { Helmet } from 'react-helmet-async';
 import { classifyPath } from '@/config/pageRegistry';
+import { SITE_CONFIG } from '@/lib/seo';
 
 export interface SEOHeadProps {
   title: string;
@@ -15,7 +16,7 @@ export interface SEOHeadProps {
 }
 
 const SITE_NAME = 'AppointPanda';
-const BASE_URL = 'https://www.appointpanda.com';
+const BASE_URL = SITE_CONFIG.baseUrl;
 const DEFAULT_OG_IMAGE = `${BASE_URL}/og-image.png`;
 
 export const SEOHead = ({

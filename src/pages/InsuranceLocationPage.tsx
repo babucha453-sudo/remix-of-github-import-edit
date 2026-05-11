@@ -51,6 +51,7 @@ interface InsuranceLocationPageProps {
 const MIN_DENTIST_COUNT = 1;
 
 const InsuranceLocationPage = ({ initialState, initialCity }: InsuranceLocationPageProps) => {
+  console.log('🚀 InsuranceLocationPage MOUNTED', { stateSlug: useParams().stateSlug, citySlug: useParams().citySlug, insuranceSlug: useParams().insuranceSlug });
   const { stateSlug, citySlug, insuranceSlug } = useParams();
   const navigate = useNavigate();
   const normalizedStateSlug = normalizeStateSlug(stateSlug);
@@ -393,6 +394,52 @@ const InsuranceLocationPage = ({ initialState, initialCity }: InsuranceLocationP
         </div>
       </section>
 
+      {/* Trust Badges - Same as CityPage */}
+      <div className="bg-white border-b border-slate-100">
+        <div className="container px-4 py-6">
+          <div className="max-w-4xl mx-auto">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              <div className="flex items-center gap-3 p-4 bg-emerald-50 rounded-2xl border border-emerald-100">
+                <div className="w-12 h-12 bg-emerald-500 rounded-xl flex items-center justify-center shrink-0">
+                  <Shield className="h-6 w-6 text-white" />
+                </div>
+                <div>
+                  <p className="font-bold text-slate-800 text-lg">Insurance</p>
+                  <p className="text-xs text-slate-500">Accepted</p>
+                </div>
+              </div>
+              <div className="flex items-center gap-3 p-4 bg-amber-50 rounded-2xl border border-amber-100">
+                <div className="w-12 h-12 bg-amber-500 rounded-xl flex items-center justify-center shrink-0">
+                  <Star className="h-6 w-6 text-white fill-white" />
+                </div>
+                <div>
+                  <p className="font-bold text-slate-800 text-lg">4.9★</p>
+                  <p className="text-xs text-slate-500">Avg Rating</p>
+                </div>
+              </div>
+              <div className="flex items-center gap-3 p-4 bg-blue-50 rounded-2xl border border-blue-100">
+                <div className="w-12 h-12 bg-blue-500 rounded-xl flex items-center justify-center shrink-0">
+                  <CheckCircle2 className="h-6 w-6 text-white" />
+                </div>
+                <div>
+                  <p className="font-bold text-slate-800 text-lg">Verified</p>
+                  <p className="text-xs text-slate-500">Clinics</p>
+                </div>
+              </div>
+              <div className="flex items-center gap-3 p-4 bg-purple-50 rounded-2xl border border-purple-100">
+                <div className="w-12 h-12 bg-purple-500 rounded-xl flex items-center justify-center shrink-0">
+                  <Clock className="h-6 w-6 text-white" />
+                </div>
+                <div>
+                  <p className="font-bold text-slate-800 text-lg">60s</p>
+                  <p className="text-xs text-slate-500">To Book</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
       {/* Main Content */}
       <div className="py-16 md:py-20">
         <div className="container px-4">
@@ -514,6 +561,71 @@ const InsuranceLocationPage = ({ initialState, initialCity }: InsuranceLocationP
               </AccordionItem>
             ))}
           </Accordion>
+        </div>
+      </section>
+
+      {/* Insurance Content Section - Similar to CityPage */}
+      <section className="py-12 bg-white">
+        <div className="container px-4">
+          <div className="max-w-4xl mx-auto">
+            <div className="bg-gradient-to-br from-emerald-50 to-teal-50 rounded-3xl p-8 md:p-10 shadow-lg border border-emerald-100">
+              <div className="flex items-center gap-3 mb-6">
+                <div className="w-12 h-12 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-xl flex items-center justify-center">
+                  <Shield className="h-6 w-6 text-white" />
+                </div>
+                <div>
+                  <h2 className="text-2xl font-bold text-slate-800">
+                    About {insuranceName} Dental Coverage in {cityName}
+                  </h2>
+                  <p className="text-slate-500 text-sm">Your guide to using {insuranceName} for dental care</p>
+                </div>
+              </div>
+              <div className="prose prose-slate max-w-none">
+                <p className="text-lg text-slate-600 leading-relaxed">
+                  {insuranceName} provides comprehensive dental coverage accepted by many dental professionals in {cityName}. 
+                  Most plans cover preventive care at 100%, including regular checkups, cleanings, and x-rays. 
+                  Basic procedures like fillings typically have lower copays, while major procedures may require a waiting period.
+                </p>
+              </div>
+              
+              {/* Insurance Cost Guide */}
+              <div className="mt-8 pt-6 border-t border-emerald-200">
+                <h3 className="text-lg font-bold text-slate-800 mb-3">
+                  💰 Estimated Costs with {insuranceName} in {cityName}
+                </h3>
+                <div className="grid md:grid-cols-3 gap-4 text-sm">
+                  <div className="bg-white p-4 rounded-xl border border-emerald-100">
+                    <p className="font-semibold text-emerald-700 mb-1">Preventive (100% Covered)</p>
+                    <p className="text-slate-500">Cleanings: $0<br/>Checkups: $0<br/>X-Rays: $0</p>
+                  </div>
+                  <div className="bg-white p-4 rounded-xl border border-amber-100">
+                    <p className="font-semibold text-amber-700 mb-1">Basic Procedures</p>
+                    <p className="text-slate-500">Fillings: $50-150<br/>Extractions: $100-250</p>
+                  </div>
+                  <div className="bg-white p-4 rounded-xl border border-purple-100">
+                    <p className="font-semibold text-purple-700 mb-1">Major Procedures</p>
+                    <p className="text-slate-500">Crowns: $500-1000<br/>Implants: $1500-3000</p>
+                  </div>
+                </div>
+                <p className="text-xs text-slate-500 mt-3">*Costs are estimates and vary by plan. Contact {insuranceName} for exact coverage details.</p>
+              </div>
+
+              <div className="mt-6 flex flex-wrap gap-2">
+                <Link
+                  to={`/${stateSlug}/${citySlug}/`}
+                  className="px-4 py-2 bg-emerald-100 text-emerald-700 rounded-full text-sm font-medium hover:bg-emerald-200 transition-colors"
+                >
+                  All Dentists in {cityName}
+                </Link>
+                <Link
+                  to={`/insurance/${extractedInsuranceSlug}`}
+                  className="px-4 py-2 bg-white border border-emerald-200 text-emerald-700 rounded-full text-sm font-medium hover:bg-emerald-50 transition-colors"
+                >
+                  {insuranceName} Overview
+                </Link>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
     </PageLayout>

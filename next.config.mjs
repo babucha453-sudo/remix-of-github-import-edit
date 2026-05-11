@@ -42,7 +42,21 @@ const nextConfig = {
   
   // Optimize package imports
   experimental: {
-    optimizePackageImports: ['lucide-react', '@tanstack/react-query'],
+    optimizePackageImports: [
+      'lucide-react',
+      '@tanstack/react-query',
+      'recharts',
+      'framer-motion',
+      'date-fns',
+      '@radix-ui/react-dialog',
+      '@radix-ui/react-dropdown-menu',
+      '@radix-ui/react-tabs',
+      '@radix-ui/react-select',
+      '@radix-ui/react-accordion',
+      '@radix-ui/react-tooltip',
+      'clsx',
+      'tailwind-merge',
+    ],
   },
   
   env: {

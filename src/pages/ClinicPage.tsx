@@ -27,6 +27,7 @@ import {
   ClinicReviewsSection,
   InsuranceTab,
   BeforeAfterGallery,
+  UnclaimedProfileLeadForm,
 } from "@/components/clinic";
 import {
   Star,
@@ -294,6 +295,7 @@ const ClinicPage = () => {
             country: 'United States',
             phone: clinic.phone || '',
             url: `/clinic/${clinic.slug}/`,
+            image: clinic.cover_image_url || undefined,
             geo: clinic.latitude && clinic.longitude ? { lat: Number(clinic.latitude), lng: Number(clinic.longitude) } : undefined,
             rating: clinic.rating ? Number(clinic.rating) : undefined,
             reviewCount: clinic.review_count || undefined,
@@ -339,6 +341,7 @@ const ClinicPage = () => {
             height={600}
             loading="eager"
             fetchPriority="high"
+            sizes="(max-width: 768px) 100vw, 1200px"
             className="w-full h-full object-cover"
           />
         ) : (
@@ -547,6 +550,12 @@ const ClinicPage = () => {
             clinicName={clinic.name}
             variant="banner"
           />
+          <div className="mt-4">
+            <UnclaimedProfileLeadForm
+              clinicId={clinic.id}
+              clinicName={clinic.name}
+            />
+          </div>
         </Section>
       )}
 

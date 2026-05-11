@@ -2,16 +2,63 @@ import { useEffect, useRef, useCallback } from 'react';
 import { useRouter } from 'next/router';
 import { supabase } from '@/integrations/supabase/client';
 
-// Generate a unique session ID
+const SESSION_DURATION = 30 * 60 * 1000; // 30 minutes
+
+const getMidnight = (): number => {
+  const now = new Date();
+  const midnight = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, 0, 0, 0);
+  return midnight.getTime();
+};
+
+const isSessionExpired = (lastActivity: number, lastMidnight: number): boolean => {
+  const now = Date.now();
+  const activityExpired = now - lastActivity > SESSION_DURATION;
+  const midnightPassed = now >= getMidnight() && lastMidnight < getMidnight();
+  return activityExpired || midnightPassed;
+};
+
 const generateSessionId = (): string => {
-  if (typeof window === 'undefined') return '';
-  
-  const stored = sessionStorage.getItem('visitor_session_id');
-  if (stored) return stored;
-  
-  const newId = `${Date.now()}-${Math.random().toString(36).substring(2, 15)}`;
-  sessionStorage.setItem('visitor_session_id', newId);
-  return newId;
+  return `${Date.now()}-${Math.random().toString(36).substring(2, 15)}`;
+};
+
+const getOrCreateSession = (): { sessionId: string; lastActivity: number; lastMidnight: number; pageViewCount: number } => {
+  if (typeof window === 'undefined') {
+    return { sessionId: '', lastActivity: 0, lastMidnight: 0, pageViewCount: 0 };
+  }
+
+  const stored = localStorage.getItem('visitor_session');
+  if (stored) {
+    try {
+      const parsed = JSON.parse(stored);
+      if (!isSessionExpired(parsed.lastActivity, parsed.lastMidnight)) {
+        return parsed;
+      }
+    } catch {
+      // Invalid stored data, create new session
+    }
+  }
+
+  const newSession = {
+    sessionId: generateSessionId(),
+    lastActivity: Date.now(),
+    lastMidnight: getMidnight(),
+    pageViewCount: 0,
+  };
+  localStorage.setItem('visitor_session', JSON.stringify(newSession));
+  return newSession;
+};
+
+const updateSessionActivity = (): void => {
+  if (typeof window === 'undefined') return;
+  try {
+    const stored = localStorage.getItem('visitor_session');
+    if (stored) {
+      const parsed = JSON.parse(stored);
+      parsed.lastActivity = Date.now();
+      parsed.lastMidnight = getMidnight();
+      localStorage.setItem('visitor_session', JSON.stringify(parsed));
+    }
+  } catch {}
 };
 
 // Get UTM parameters from URL
@@ -69,13 +116,13 @@ const extractPathData = (path: string) => {
 export function useVisitorTracking() {
   const router = useRouter();
   const location = { pathname: router.pathname, search: router.asPath.includes('?') ? router.asPath.split('?')[1] : '' };
-  const sessionId = useRef<string>(generateSessionId());
+  const session = useRef(getOrCreateSession());
   const pageStartTime = useRef<number>(Date.now());
   const scrollDepth = useRef<number>(0);
-  const totalPageviews = useRef<number>(0);
   const totalEvents = useRef<number>(0);
   const sessionStartTime = useRef<number>(Date.now());
   const initialized = useRef<boolean>(false);
+  const sessionId = session.current.sessionId;
 
   // Track scroll depth
   useEffect(() => {
@@ -104,7 +151,7 @@ export function useVisitorTracking() {
         await supabase.functions.invoke('track-visitor', {
           body: {
             type: 'session',
-            sessionId: sessionId.current,
+            sessionId,
             data: {
               referrer,
               landingPage: window.location.pathname?.substring(0, 500),
@@ -123,10 +170,18 @@ export function useVisitorTracking() {
   // Track page views
   useEffect(() => {
     const trackPageView = async () => {
-      // Don't track admin pages
       if (location.pathname.startsWith('/admin')) return;
 
-      totalPageviews.current++;
+      updateSessionActivity();
+      const stored = localStorage.getItem('visitor_session');
+      let pageViewCount = 1;
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        parsed.pageViewCount = (parsed.pageViewCount || 0) + 1;
+        pageViewCount = parsed.pageViewCount;
+        localStorage.setItem('visitor_session', JSON.stringify(parsed));
+      }
+
       pageStartTime.current = Date.now();
       scrollDepth.current = 0;
 
@@ -134,18 +189,18 @@ export function useVisitorTracking() {
       const pathData = extractPathData(location.pathname);
 
       try {
-        // Truncate values to avoid validation errors
         const referrer = document.referrer ? document.referrer.substring(0, 500) : null;
         
         await supabase.functions.invoke('track-visitor', {
           body: {
             type: 'pageview',
-            sessionId: sessionId.current,
+            sessionId,
             data: {
               pagePath: location.pathname?.substring(0, 500),
               pageTitle: document.title?.substring(0, 200),
               pageType,
               referrer,
+              pageViewCount,
               ...pathData,
             },
           },
@@ -157,14 +212,13 @@ export function useVisitorTracking() {
 
     trackPageView();
 
-    // Track time on previous page when leaving
     return () => {
       const timeOnPage = Math.round((Date.now() - pageStartTime.current) / 1000);
       if (timeOnPage > 1) {
         supabase.functions.invoke('track-visitor', {
           body: {
             type: 'pageview',
-            sessionId: sessionId.current,
+            sessionId,
             data: {
               pagePath: location.pathname,
               timeOnPage,
@@ -189,7 +243,7 @@ export function useVisitorTracking() {
       await supabase.functions.invoke('track-visitor', {
         body: {
           type: 'event',
-          sessionId: sessionId.current,
+          sessionId,
           data: {
             eventType,
             eventCategory,
@@ -214,7 +268,7 @@ export function useVisitorTracking() {
       await supabase.functions.invoke('track-visitor', {
         body: {
           type: 'journey',
-          sessionId: sessionId.current,
+          sessionId,
           data: {
             stage,
             stepNumber,
@@ -242,7 +296,7 @@ export function useVisitorTracking() {
       await supabase.functions.invoke('track-visitor', {
         body: {
           type: 'link-patient',
-          sessionId: sessionId.current,
+          sessionId,
           data: {
             patientName,
             patientEmail,
@@ -256,7 +310,7 @@ export function useVisitorTracking() {
       await supabase.functions.invoke('track-visitor', {
         body: {
           type: 'journey',
-          sessionId: sessionId.current,
+          sessionId,
           data: {
             stage: 'converted',
             stepNumber: 99,
@@ -272,7 +326,8 @@ export function useVisitorTracking() {
   }, [location.pathname]);
 
   return {
-    sessionId: sessionId.current,
+    sessionId,
+    pageViewCount: session.current.pageViewCount,
     trackEvent,
     trackJourneyStep,
     linkPatient,

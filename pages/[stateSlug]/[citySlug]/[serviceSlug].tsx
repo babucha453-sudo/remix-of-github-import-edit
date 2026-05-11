@@ -2,6 +2,7 @@ import type { GetStaticProps, GetStaticPaths } from "next";
 import type { DehydratedState } from "@tanstack/react-query";
 import { dehydrate, HydrationBoundary, QueryClient } from "@tanstack/react-query";
 import ServiceLocationPage from "@/pages/ServiceLocationPage";
+import InsuranceLocationPage from "@/pages/InsuranceLocationPage";
 import { createClient } from '@supabase/supabase-js';
 
 type Props = {
@@ -27,10 +28,10 @@ const HARDCODED_SERVICES = [
 ];
 
 const HARDCODED_CITIES: Record<string, string[]> = {
-  'ca': ['los-angeles', 'san-diego', 'san-francisco', 'san-jose', 'sacramento', 'fresno', 'oakland', 'long-beach', 'bakersfield', 'anaheim'],
-  'ma': ['boston', 'worcester', 'springfield', 'cambridge', 'lowell', 'brockton', 'quincy', 'lynn', 'arlington', 'attleboro', 'barnstable', 'billerica', 'brookline', 'medford', 'malden', 'newton', 'somerville'],
-  'ct': ['hartford', 'new-haven', 'stamford', 'bridgeport', 'waterbury', 'norwalk', 'danbury', 'west-hartford', 'fairfield', 'bristol'],
-  'nj': ['newark', 'jersey-city', 'paterson', 'elizabeth', 'trenton', 'camden', 'woodbridge', 'edison', 'toms-river', 'hamilton'],
+  'ca': ['los-angeles', 'san-diego', 'san-francisco', 'san-jose', 'sacramento', 'fresno', 'oakland', 'long-beach', 'bakersfield', 'anaheim', 'alameda', 'berkeley', 'irvine', 'santa-ana', 'riverside', 'stockton', 'santa-rosa', 'hayward', 'glendale', 'palmdale', 'chula-vista', 'fontana', 'moreno-valley', 'huntington-beach', 'ontario', 'salinas', 'pomona', 'escondido', 'sunnyvale', 'torrance', 'pasadena', 'fullerton', 'orange', 'roseville', 'inglewood', 'contracosta'],
+  'ma': ['boston', 'worcester', 'springfield', 'cambridge', 'lowell', 'brockton', 'quincy', 'lynn', 'arlington', 'attleboro', 'barnstable', 'billerica', 'brookline', 'medford', 'malden', 'newton', 'somerville', 'waltham', 'lawrence', 'framingham', 'haverhill', 'plymouth', 'revere', 'woburn', 'fall-river', 'milford', 'weymmouth', 'braintree', 'chelsea'],
+  'ct': ['hartford', 'new-haven', 'stamford', 'bridgeport', 'waterbury', 'norwalk', 'danbury', 'west-hartford', 'fairfield', 'bristol', 'meriden', 'stratford', 'middletown', 'norwich', 'trumbull', 'manchester', 'east-hartford', 'greenwich', 'westport', 'shelton'],
+  'nj': ['newark', 'jersey-city', 'paterson', 'elizabeth', 'trenton', 'camden', 'woodbridge', 'edison', 'toms-river', 'hamilton', 'trenton', 'brick', 'cherry-hill', 'old-bridge', 'jackson', 'howell', 'middletown', 'montclair', ' vineland', 'point-pleasant', 'rahway', 'union', 'perth-amboy', 'passaic', 'hoboken'],
 };
 
 const HARDCODED_STATES: Record<string, any> = {
@@ -39,6 +40,14 @@ const HARDCODED_STATES: Record<string, any> = {
   'ct': { id: 'ct', name: 'Connecticut', slug: 'ct', abbreviation: 'CT' },
   'nj': { id: 'nj', name: 'New Jersey', slug: 'nj', abbreviation: 'NJ' },
 };
+
+// Hardcoded insurance providers
+const HARDCODED_INSURANCES = [
+  'aetna', 'delta-dental', 'cigna', 'metlife', 'unitedhealthcare', 
+  'humana', 'guardian', 'anthem', 'blue-cross-blue-shield', 'principal',
+  'sunlife', 'metlife-dental', 'united-concordia', 'delta-dental-premium',
+  'aetna-dental', 'cigna-dental', 'guardian-dental', 'humana-dental'
+];
 
 export const getStaticPaths: GetStaticPaths = async () => {
   const supabase = createClient(supabaseUrl, supabaseKey);
@@ -53,14 +62,29 @@ export const getStaticPaths: GetStaticPaths = async () => {
     
     const serviceSlugs = (services || []).map((s: any) => s.slug);
     
-    // Generate paths for all state/city combinations
+    // Get insurances  
+    const { data: insurances } = await supabase
+      .from('insurances')
+      .select('slug')
+      .eq('is_active', true)
+      .limit(50);
+    const insuranceSlugs = (insurances || []).map((i: any) => `${i.slug}-dentists`);
+    
+    // Generate paths for all state/city/service combinations
     const paths: { params: { stateSlug: string; citySlug: string; serviceSlug: string } }[] = [];
     
     for (const [state, cities] of Object.entries(HARDCODED_CITIES)) {
+      // Service pages
       for (const city of cities) {
         for (const service of (serviceSlugs.length > 0 ? serviceSlugs : HARDCODED_SERVICES).slice(0, 15)) {
           paths.push({
             params: { stateSlug: state, citySlug: city, serviceSlug: service }
+          });
+        }
+        // Insurance pages for this city
+        for (const insurance of (insuranceSlugs.length > 0 ? insuranceSlugs : HARDCODED_INSURANCES.map(i => `${i}-dentists`))) {
+          paths.push({
+            params: { stateSlug: state, citySlug: city, serviceSlug: insurance }
           });
         }
       }
@@ -74,9 +98,16 @@ export const getStaticPaths: GetStaticPaths = async () => {
     
     for (const [state, cities] of Object.entries(HARDCODED_CITIES)) {
       for (const city of cities) {
+        // Service pages
         for (const service of HARDCODED_SERVICES) {
           paths.push({
             params: { stateSlug: state, citySlug: city, serviceSlug: service }
+          });
+        }
+        // Insurance pages
+        for (const insurance of HARDCODED_INSURANCES.map(i => `${i}-dentists`)) {
+          paths.push({
+            params: { stateSlug: state, citySlug: city, serviceSlug: insurance }
           });
         }
       }
@@ -102,6 +133,16 @@ export const getStaticProps: GetStaticProps<Props> = async ({ params }) => {
   const isKnownState = HARDCODED_STATES[stateSlug];
   const isKnownCity = HARDCODED_CITIES[stateSlug]?.includes(citySlug);
   const isKnownService = HARDCODED_SERVICES.includes(serviceSlug);
+  
+  // Check if it's an insurance page (ends with -dentists)
+  const isInsurancePage = serviceSlug?.endsWith('-dentists');
+  
+  // Allow both services AND insurance pages
+  const isValidPage = isKnownService || isInsurancePage;
+  
+  if (!isValidPage) {
+    console.log(`[ServiceLocationPage] Unknown service: ${serviceSlug}, but allowing for insurance pages`);
+  }
   
   try {
     // Try to fetch state
@@ -209,8 +250,8 @@ export const getStaticProps: GetStaticProps<Props> = async ({ params }) => {
     };
   } catch (error) {
     console.error('[ISR] Error fetching service location:', error);
-    // For known combinations, don't return 404
-    if (isKnownState && isKnownCity && isKnownService) {
+    // For known combinations OR insurance pages, don't return 404
+    if ((isKnownState && isKnownCity && isKnownService) || isInsurancePage) {
       return {
         props: {
           dehydratedState: dehydrate(queryClient),
@@ -231,6 +272,17 @@ export default function ServiceLocationPageWrapper({
   citySlug, 
   serviceSlug 
 }: Props) {
+  // Use InsuranceLocationPage for insurance pages (serviceSlug ends with -dentists)
+  const isInsurancePage = serviceSlug?.endsWith('-dentists');
+  
+  if (isInsurancePage) {
+    return (
+      <HydrationBoundary key={`insurance-${stateSlug}-${citySlug}-${serviceSlug}`} state={dehydratedState}>
+        <InsuranceLocationPage />
+      </HydrationBoundary>
+    );
+  }
+  
   return (
     <HydrationBoundary key={`${stateSlug}-${citySlug}-${serviceSlug}`} state={dehydratedState}>
       <ServiceLocationPage />

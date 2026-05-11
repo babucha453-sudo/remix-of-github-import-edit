@@ -181,6 +181,14 @@ const ServicePage = () => {
         noindex={shouldNoIndex}
       />
       <StructuredData
+        type="breadcrumb"
+        items={[
+          { name: "Home", url: "/" },
+          { name: "Dental Services", url: "/services" },
+          { name: treatmentName },
+        ]}
+      />
+      <StructuredData
         type="service"
         name={treatmentName}
         description={treatment?.description || `Professional ${treatmentName} services`}

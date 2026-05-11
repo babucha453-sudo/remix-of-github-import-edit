@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { SEOHead } from "@/components/seo/SEOHead";
+import { EmailCapture } from "@/components/EmailCapture";
 import { StructuredData } from "@/components/seo/StructuredData";
 import { useRealCounts } from "@/hooks/useRealCounts";
 import { Calendar, User, ArrowRight, Clock, Tag, MapPin, Search, Star, Sparkles, BookOpen, TrendingUp } from "lucide-react";
@@ -367,15 +368,11 @@ const BlogPage = () => {
             </div>
 
             {/* Newsletter CTA */}
-            <div className="card-modern p-6 bg-gradient-to-br from-gold/10 to-gold/5 border-gold/20">
-              <h3 className="font-bold text-lg mb-2">Stay Updated</h3>
-              <p className="text-sm text-muted-foreground mb-4">
-                Get the latest dental health tips and news delivered to your inbox.
-              </p>
-              <Button asChild variant="outline" className="w-full rounded-xl font-bold border-gold/30 hover:bg-gold/10">
-                <Link to="/contact">Subscribe</Link>
-              </Button>
-            </div>
+            <EmailCapture
+              headline="Never Miss a Dental Tip"
+              subtext="Get weekly dental tips and exclusive offers delivered to your inbox"
+              className="rounded-xl"
+            />
           </aside>
         </div>
       </Section>

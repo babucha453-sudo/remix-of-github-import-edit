@@ -62,7 +62,9 @@ export function ClinicGallery({ images, clinicName }: ClinicGalleryProps) {
               src={img.image_url}
               alt={img.caption || `${clinicName} photo ${i + 1}`}
               className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-              loading="lazy"
+              loading={i === 0 ? "eager" : "lazy"}
+              fetchPriority={i === 0 ? "high" : "low"}
+              sizes={i === 0 ? "(max-width: 768px) 100vw, 50vw" : "(max-width: 768px) 50vw, 25vw"}
               onError={(e) => {
                 (e.target as HTMLImageElement).src = '/placeholder.svg';
               }}
