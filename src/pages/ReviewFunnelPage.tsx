@@ -189,74 +189,91 @@ export default function ReviewFunnelPage() {
     }
   }, [clinic?.id]);
 
-  const handleThumbsUp = async () => {
-    if (!clinic) {
-      console.error('[ReviewFunnel] Cannot proceed - clinic data not loaded');
-      toast.error('Please wait while we load clinic information...');
-      return;
-    }
-    
-    // Wait for OAuth data to be ready if it's still loading
-    if (oauthLoading) {
-      console.log('[ReviewFunnel] Waiting for OAuth data to load...');
-      toast.info('Loading review settings...');
-      return;
-    }
-    
-    setIsRedirecting(true);
-    recordClick.mutate('thumbs_up');
-    
-    try {
-      await recordEvent.mutateAsync({ event_type: 'thumbs_up' });
-    } catch (err) {
-      console.error('[ReviewFunnel] Failed to record event:', err);
-    }
-    
-    // Get the Google review URL with comprehensive fallback
-    let googleReviewUrl = getGoogleReviewUrl();
-    
-    // If no URL found and we have a place ID, construct it directly
-    if (!googleReviewUrl && clinic.google_place_id) {
-      googleReviewUrl = `https://search.google.com/local/writereview?placeid=${clinic.google_place_id}`;
-      console.log('[ReviewFunnel] Using fallback place ID URL:', googleReviewUrl);
-    }
-    
-    console.log('[ReviewFunnel] Thumbs up clicked, final Google URL:', googleReviewUrl);
-    
-    if (googleReviewUrl) {
-      recordClick.mutate('google_redirect');
-      toast.success('Redirecting to Google Reviews...');
-      // Redirect immediately without timeout
-      console.log('[ReviewFunnel] Redirecting now to:', googleReviewUrl);
-      window.location.href = googleReviewUrl;
-    } else {
-      // No Google review URL configured - show thank you page
-      console.warn('[ReviewFunnel] No Google review URL configured for clinic:', clinic.id, clinic.name);
-      toast.info('Thank you for your feedback! Google review link not yet configured.');
-      setStep('success');
-      setIsRedirecting(false);
-    }
-  };
+   const handleThumbsUp = async () => {
+     if (!clinic) {
+       console.error('[ReviewFunnel] Cannot proceed - clinic data not loaded');
+       toast.error('Please wait while we load clinic information...');
+       return;
+     }
+     
+     // Wait for OAuth data to be ready if it's still loading
+     if (oauthLoading) {
+       console.log('[ReviewFunnel] Waiting for OAuth data to load...');
+       toast.info('Loading review settings...');
+       return;
+     }
+     
+     // Prevent multiple rapid submissions
+     if (isRedirecting) return;
+     
+     setIsRedirecting(true);
+     
+     try {
+       // Record click and event, wait for both to complete
+       await Promise.all([
+         recordClick.mutateAsync('thumbs_up'),
+         recordEvent.mutateAsync({ event_type: 'thumbs_up' })
+       ]);
+       
+       // Get the Google review URL with comprehensive fallback
+       let googleReviewUrl = getGoogleReviewUrl();
+       
+       // If no URL found and we have a place ID, construct it directly
+       if (!googleReviewUrl && clinic.google_place_id) {
+         googleReviewUrl = `https://search.google.com/local/writereview?placeid=${clinic.google_place_id}`;
+         console.log('[ReviewFunnel] Using fallback place ID URL:', googleReviewUrl);
+       }
+       
+       console.log('[ReviewFunnel] Thumbs up clicked, final Google URL:', googleReviewUrl);
+       
+       if (googleReviewUrl) {
+         await recordClick.mutateAsync('google_redirect');
+         toast.success('Redirecting to Google Reviews...');
+         // Redirect after mutations complete
+         console.log('[ReviewFunnel] Redirecting now to:', googleReviewUrl);
+         window.location.href = googleReviewUrl;
+       } else {
+         // No Google review URL configured - show thank you page
+         console.warn('[ReviewFunnel] No Google review URL configured for clinic:', clinic.id, clinic.name);
+         toast.info('Thank you for your feedback! Google review link not yet configured.');
+         setStep('success');
+         setIsRedirecting(false);
+       }
+     } catch (err) {
+       console.error('[ReviewFunnel] Failed to process thumbs up:', err);
+       toast.error('Failed to process your feedback. Please try again.');
+       setIsRedirecting(false);
+     }
+   };
 
   const handleThumbsDown = () => {
     recordClick.mutate('thumbs_down');
     setStep('negative');
   };
 
-  const handleSubmitFeedback = async () => {
-    if (rating === 0) {
-      toast.error('Please select a rating');
-      return;
-    }
-    recordClick.mutate('feedback_submitted');
-    await recordEvent.mutateAsync({
-      event_type: 'thumbs_down',
-      rating,
-      comment: comment.trim() || undefined,
-    });
-    setStep('success');
-    toast.success('Thank you for your feedback');
-  };
+   const handleSubmitFeedback = async () => {
+     if (rating === 0) {
+       toast.error('Please select a rating');
+       return;
+     }
+     
+     // Prevent multiple rapid submissions
+     if (recordEvent.isPending) return;
+     
+     try {
+       recordClick.mutate('feedback_submitted');
+       await recordEvent.mutateAsync({
+         event_type: 'thumbs_down',
+         rating,
+         comment: comment.trim() || undefined,
+       });
+       setStep('success');
+       toast.success('Thank you for your feedback');
+     } catch (err) {
+       console.error('[ReviewFunnel] Failed to submit feedback:', err);
+       toast.error('Failed to submit feedback. Please try again.');
+     }
+   };
 
   if (isLoading) {
     return (
