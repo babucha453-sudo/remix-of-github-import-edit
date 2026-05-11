@@ -147,6 +147,7 @@ export function InlineBookingCalendar({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [selectedDate, setSelectedDate] = useState<Date | undefined>();
+  const [appointmentId, setAppointmentId] = useState<string | null>(null);
 
   // Determine clinic ID for fetching hours
   const targetClinicIdForHours = profileType === "clinic" ? profileId : clinicId;
@@ -287,6 +288,8 @@ export function InlineBookingCalendar({
         .single();
 
       if (error) throw error;
+
+      setAppointmentId(insertedAppointment?.id || null);
 
       // Send confirmation email (fire-and-forget)
       if (insertedAppointment?.id && data.patient_email) {

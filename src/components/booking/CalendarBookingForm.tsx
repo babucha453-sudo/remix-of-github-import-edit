@@ -1,12 +1,17 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { useQuery } from "@tanstack/react-query";
-import { format, addDays, isSameDay, startOfDay } from "date-fns";
+import { format, addDays, isSameDay, startOfDay, getDay } from "date-fns";
 import { cn } from "@/lib/utils";
+import {
+  getTimeSlotsForDate,
+  getClosedDays,
+  type ClinicHours,
+} from "@/lib/bookingUtils";
 import { Calendar } from "@/components/ui/calendar";
 import {
   Form,
@@ -84,25 +89,7 @@ interface CalendarBookingFormProps {
   onClose?: () => void;
 }
 
-// Format time range display (1-hour intervals)
-const formatTimeRange = (hour: number): string => {
-  const endHour = hour + 1;
-  
-  const formatHour = (h: number) => {
-    if (h < 12) return `${h}:00 AM`;
-    if (h === 12) return `12:00 PM`;
-    return `${h - 12}:00 PM`;
-  };
-  
-  return `${formatHour(hour)} - ${formatHour(endHour)}`;
-};
 
-// 1-hour intervals from 9 AM to 6 PM
-const timeSlots = Array.from({ length: 9 }, (_, i) => {
-  const hour = i + 9;
-  const time = `${hour.toString().padStart(2, "0")}:00`;
-  return { value: time, label: formatTimeRange(hour) };
-});
 
 export function CalendarBookingForm({
   profileId,
@@ -120,6 +107,7 @@ export function CalendarBookingForm({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [selectedDate, setSelectedDate] = useState<Date | undefined>();
+  const [appointmentId, setAppointmentId] = useState<string | null>(null);
 
   const { data: treatments } = useQuery({
     queryKey: ["booking-treatments"],
@@ -132,6 +120,30 @@ export function CalendarBookingForm({
       return data || [];
     },
   });
+
+  const targetClinicIdForHours = profileType === "clinic" ? profileId : clinicId;
+
+  const { data: clinicHours } = useQuery({
+    queryKey: ["clinic-hours", targetClinicIdForHours],
+    queryFn: async () => {
+      if (!targetClinicIdForHours) return [];
+      const { data } = await supabase
+        .from("clinic_hours")
+        .select("day_of_week, open_time, close_time, is_closed")
+        .eq("clinic_id", targetClinicIdForHours);
+      return (data || []) as ClinicHours[];
+    },
+    enabled: !!targetClinicIdForHours,
+  });
+
+  const closedDays = useMemo(() => {
+    return getClosedDays(clinicHours);
+  }, [clinicHours]);
+
+  const timeSlots = useMemo(() => {
+    if (!selectedDate) return [];
+    return getTimeSlotsForDate(selectedDate, clinicHours);
+  }, [selectedDate, clinicHours]);
 
   const form = useForm<BookingFormData>({
     resolver: zodResolver(bookingSchema),
@@ -217,6 +229,8 @@ export function CalendarBookingForm({
         console.error('Appointment insert error:', error);
         throw error;
       }
+
+      setAppointmentId(insertedAppointment?.id || null);
 
       // Send confirmation email (fire-and-forget)
       if (insertedAppointment?.id && data.patient_email) {
@@ -458,7 +472,7 @@ export function CalendarBookingForm({
                         mode="single"
                         selected={selectedDate}
                         onSelect={handleDateSelect}
-                        disabled={(date) => date < addDays(new Date(), 1) || date.getDay() === 0}
+                        disabled={(date) => date < addDays(new Date(), 1) || closedDays.includes(getDay(date))}
                         className="rounded-2xl border border-border p-2 sm:p-3 pointer-events-auto w-full max-w-[320px]"
                       />
                     </div>
