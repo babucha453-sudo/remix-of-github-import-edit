@@ -348,6 +348,48 @@ const ContactPage = () => {
                       className="mt-2 h-11 md:h-12 rounded-xl bg-muted/50 border-border/50 focus:border-primary"
                     />
                   </div>
+                  {userType === 'dentist' ? (
+                    <div>
+                      <Label htmlFor="practiceName" className="font-bold text-sm">Practice Name</Label>
+                      <Input
+                        id="practiceName"
+                        name="practiceName"
+                        placeholder="Smile Dental Care"
+                        value={formData.practiceName}
+                        onChange={handleChange}
+                        className="mt-2 h-11 md:h-12 rounded-xl bg-muted/50 border-border/50 focus:border-primary"
+                      />
+                    </div>
+                  ) : (
+                    <div>
+                      <Label htmlFor="subject" className="font-bold text-sm">Subject *</Label>
+                      <Input
+                        id="subject"
+                        name="subject"
+                        placeholder="How can we help?"
+                        value={formData.subject}
+                        onChange={handleChange}
+                        className={`mt-2 h-11 md:h-12 rounded-xl bg-muted/50 border-border/50 focus:border-primary ${errors.subject ? "border-destructive" : ""}`}
+                      />
+                      {errors.subject && <p className="text-sm text-destructive mt-1">{errors.subject}</p>}
+                    </div>
+                  )}
+                </div>
+
+                {userType === 'dentist' && (
+                  <div>
+                    <Label htmlFor="subject" className="font-bold text-sm">Subject *</Label>
+                    <Input
+                      id="subject"
+                      name="subject"
+                      placeholder="Listing my practice, Partnership inquiry..."
+                      value={formData.subject}
+                      onChange={handleChange}
+                      className={`mt-2 h-11 md:h-12 rounded-xl bg-muted/50 border-border/50 focus:border-primary ${errors.subject ? "border-destructive" : ""}`}
+                    />
+                    {errors.subject && <p className="text-sm text-destructive mt-1">{errors.subject}</p>}
+                  </div>
+                )}
 
                 <div>
                   <Label htmlFor="message" className="font-bold text-sm">Message *</Label>
