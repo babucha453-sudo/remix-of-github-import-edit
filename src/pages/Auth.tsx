@@ -155,10 +155,16 @@ export default function Auth() {
     setIsSubmitting(false);
 
     if (error) {
-      toast.error(error.message.includes('already registered') ? 'This email is already registered. Please sign in.' : error.message);
+      const errMsg = error.message.toLowerCase();
+      if (errMsg.includes('already registered') || errMsg.includes('already exists') || errMsg.includes('user already')) {
+        toast.error('This email is already registered. Please sign in.');
+      } else if (errMsg.includes('rate_limit') || errMsg.includes('too many') || errMsg.includes('over_email')) {
+        toast.error('Too many signup attempts with this email. Please wait a few minutes and try again, or use "Continue with Google" to sign up.');
+      } else {
+        toast.error(error.message);
+      }
     } else {
-      toast.success('Account created successfully!');
-      // Navigation will be handled by the useEffect after roles are loaded
+      toast.success('Account created successfully! Check your email to confirm your account.');
     }
   };
 
@@ -333,6 +339,17 @@ export default function Auth() {
                 <Button type="submit" className="w-full" disabled={isSubmitting}>
                   {isSubmitting ? 'Creating account...' : 'Create Account'}
                 </Button>
+                <p className="text-xs text-muted-foreground text-center">
+                  Having trouble signing up?{' '}
+                  <button
+                    type="button"
+                    className="text-primary underline-offset-2 hover:underline cursor-pointer"
+                    onClick={handleGoogleSignIn}
+                  >
+                    Use Google to sign up
+                  </button>
+                  {' '}— it's faster and avoids email verification.
+                </p>
               </form>
             </TabsContent>
           </Tabs>
