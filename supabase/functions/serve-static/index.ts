@@ -1296,15 +1296,16 @@ serve(async (req) => {
         );
 
         return new Response(html, {
-          status: 200,
-          headers: {
-            ...corsHeaders,
-            'Content-Type': 'text/html; charset=utf-8',
-            'Cache-Control': 'public, max-age=3600, s-maxage=86400',
-            'x-static-cache': cached ? 'refreshed' : 'prerendered',
-            'x-generated-at': new Date().toISOString(),
-          },
-        });
+        status: 200,
+        headers: {
+          ...corsHeaders,
+          'Content-Type': 'text/html; charset=utf-8',
+          'Cache-Control': 'public, max-age=3600, s-maxage=86400',
+          'X-Robots-Tag': 'index, follow',
+          'x-static-cache': cached ? 'refreshed' : 'prerendered',
+          'x-generated-at': new Date().toISOString(),
+        },
+      });
       }
 
       // Serve cached content
@@ -1313,7 +1314,17 @@ serve(async (req) => {
         .download(cacheEntry.storage_path);
 
       if (!downloadError && fileData) {
-        const html = await fileData.text();
+        let html = await fileData.text();
+        
+        const hasNoindex = /<meta\s+name=["']robots["']\s+content=["'][^"']*noindex[^"']*["']\s*\/?>/gi.test(html);
+        if (hasNoindex) {
+          console.log(`Fixing poisoned noindex in cached page: ${requestedPath}`);
+          html = html.replace(
+            /<meta\s+name=["']robots["']\s+content=["'][^"']*noindex[^"']*["']\s*\/?>/gi,
+            '<meta name="robots" content="index, follow">'
+          );
+        }
+        
         console.log(`Served cached page for ${requestedPath} (generated: ${cacheEntry.generated_at})`);
 
         return new Response(html, {
@@ -1322,6 +1333,7 @@ serve(async (req) => {
             ...corsHeaders,
             'Content-Type': 'text/html; charset=utf-8',
             'Cache-Control': 'public, max-age=3600, s-maxage=86400',
+            'X-Robots-Tag': 'index, follow',
             'x-static-cache': 'hit',
             'x-generated-at': cacheEntry.generated_at,
           },
@@ -1346,6 +1358,7 @@ serve(async (req) => {
           ...corsHeaders,
           'Content-Type': 'text/html; charset=utf-8',
           'Cache-Control': 'public, max-age=300, s-maxage=600',
+          'X-Robots-Tag': 'index, follow',
           'x-static-cache': cached ? 'prerendered-cached' : 'prerendered',
           'x-generated-at': new Date().toISOString(),
         },
@@ -1376,6 +1389,7 @@ serve(async (req) => {
       headers: {
         ...corsHeaders,
         'Content-Type': 'text/html; charset=utf-8',
+        'X-Robots-Tag': 'index, follow',
         'x-static-cache': 'miss-fallback',
         'Cache-Control': 'no-cache, no-store, must-revalidate',
       },

@@ -138,6 +138,85 @@ const handler = async (req: Request): Promise<Response> => {
       });
     }
 
+    // Send welcome email after successful claim
+    const resendApiKey = Deno.env.get("RESEND_API_KEY");
+    if (resendApiKey) {
+      const { data: clinicData } = await supabaseClient
+        .from("clinics")
+        .select("name, email, slug")
+        .eq("id", clinicId)
+        .single();
+
+      if (clinicData) {
+        const welcomeHtml = `
+          <!DOCTYPE html>
+          <html>
+          <head>
+            <meta charset="utf-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          </head>
+          <body style="margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; background-color: #f4f4f5;">
+            <table cellpadding="0" cellspacing="0" style="width: 100%; max-width: 600px; margin: 0 auto; background-color: #ffffff;">
+              <tr>
+                <td style="padding: 40px 40px 20px; text-align: center; background: linear-gradient(135deg, #0d9488 0%, #14b8a6 100%);">
+                  <h1 style="margin: 0; color: #ffffff; font-size: 24px; font-weight: bold;">Welcome to Appoint Panda!</h1>
+                </td>
+              </tr>
+              <tr>
+                <td style="padding: 40px; text-align: center;">
+                  <h2 style="margin: 0 0 20px; color: #1e293b; font-size: 22px;">Congratulations, ${clinicData.name}!</h2>
+                  <p style="margin: 0 0 20px; color: #374151; font-size: 16px;">
+                    Your profile has been successfully verified and claimed. You now have access to:
+                  </p>
+                  <ul style="text-align: left; color: #475569; font-size: 15px; line-height: 2;">
+                    <li>Update your clinic information</li>
+                    <li>Manage patient appointments</li>
+                    <li>View and respond to patient reviews</li>
+                    <li>Track leads and conversions</li>
+                    <li>Access analytics dashboard</li>
+                  </ul>
+                  <div style="margin: 30px 0;">
+                    <a href="https://www.appointpanda.com/dashboard?tab=my-dashboard" style="display: inline-block; background: linear-gradient(135deg, #0d9488 0%, #14b8a6 100%); color: #ffffff; padding: 14px 32px; text-decoration: none; border-radius: 8px; font-weight: 600;">
+                      Go to Dashboard
+                    </a>
+                  </div>
+                  <p style="margin: 20px 0; color: #6b7280; font-size: 14px;">
+                    Need help getting started? Check out our onboarding guide or contact support.
+                  </p>
+                </td>
+              </tr>
+              <tr>
+                <td style="padding: 30px 40px; background-color: #f4f4f5; text-align: center;">
+                  <p style="margin: 0; color: #6b7280; font-size: 12px;">
+                    © ${new Date().getFullYear()} Appoint Panda. All rights reserved.
+                  </p>
+                </td>
+              </tr>
+            </table>
+          </body>
+          </html>
+        `;
+
+        const userEmail = user.email;
+        if (userEmail) {
+          await fetch("https://api.resend.com/emails", {
+            method: "POST",
+            headers: {
+              Authorization: `Bearer ${resendApiKey}`,
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              from: "Appoint Panda <no-reply@appointpanda.com>",
+              to: [userEmail],
+              subject: `Welcome! Your profile for ${clinicData.name} is now live`,
+              html: welcomeHtml,
+            }),
+          });
+          console.log("Welcome email sent to:", userEmail);
+        }
+      }
+    }
+
     return new Response(JSON.stringify({ 
       success: true, 
       message: "Profile claimed successfully!" 

@@ -40,6 +40,36 @@ export function UnclaimedProfileLeadForm({ clinicId, clinicName }: UnclaimedProf
       return;
     }
 
+    // Trigger email notification to clinic owner
+    try {
+      const { data: leadData } = await supabase
+        .from("clinic_lead_requests")
+        .select("id")
+        .eq("clinic_id", clinicId)
+        .order("created_at", { ascending: false })
+        .limit(1)
+        .single();
+
+      if (leadData?.id) {
+        supabase.functions.invoke("lead-email-notification", {
+          body: { lead_id: leadData.id },
+        });
+        
+        supabase.functions.invoke("lead-notification-webhook", {
+          body: {
+            clinic_id: clinicId,
+            patient_name: data.name,
+            patient_email: data.email,
+            patient_phone: data.phone,
+            message: data.message,
+            source: "unclaimed_profile_form",
+          },
+        });
+      }
+    } catch (notificationError) {
+      console.error("Failed to trigger lead notifications:", notificationError);
+    }
+
     setIsSuccess(true);
     setIsSubmitting(false);
   };

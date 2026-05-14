@@ -29,6 +29,7 @@ import {
   Globe,
   AlertCircle
 } from "lucide-react";
+import { toast } from "sonner";
 
 type ClaimMethod = "otp" | "manual";
 type EmailSource = "domain" | "claim_email";
@@ -83,10 +84,64 @@ const ClaimProfilePage = () => {
     address: "",
     notes: ""
   });
+  const [isGoogleLoading, setIsGoogleLoading] = useState(false);
+  const [googleChecked, setGoogleChecked] = useState(false);
 
-  // Get domain from selected clinic's website
   const clinicDomain = selectedClinic ? extractDomain(selectedClinic.website) : null;
   const fullBusinessEmail = emailPrefix && clinicDomain ? `${emailPrefix}@${clinicDomain}` : "";
+
+  // Check if user is logged in with Google OAuth
+  useEffect(() => {
+    const checkGoogleSession = async () => {
+      if (!user || googleChecked) return;
+      
+      const { data: { session } } = await supabase.auth.getSession();
+      const isGoogleUser = session?.provider === "google" || 
+        session?.user?.app_metadata?.provider === "google" ||
+        user.app_metadata?.provider === "google";
+      
+      if (isGoogleUser) {
+        setGoogleChecked(true);
+      }
+    };
+    
+    checkGoogleSession();
+  }, [user, googleChecked]);
+
+  const handleGoogleSignIn = async () => {
+    setIsGoogleLoading(true);
+    try {
+      const currentOrigin = window.location.origin;
+      const redirectTo = `${currentOrigin}/auth/callback?redirect=/claim-profile?clinic=${selectedClinic?.id || ""}`;
+      
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: "google",
+        options: {
+          redirectTo,
+          queryParams: {
+            access_type: "offline",
+            prompt: "select_account",
+          },
+        },
+      });
+
+      if (error) throw error;
+    } catch (error: any) {
+      toast.error(error.message || "Failed to sign in with Google");
+      setIsGoogleLoading(false);
+    }
+  };
+
+  // If user is logged in with Google and we're in auth-required step, proceed directly
+  useEffect(() => {
+    if (user && googleChecked && selectedClinic && (step === "choose-method" || step === "otp-verify")) {
+      // Check if clinic is already claimed
+      if (selectedClinic.claim_status !== "claimed") {
+        // User with Google can proceed to claim directly
+        console.log("Google user detected, user can proceed with claim flow");
+      }
+    }
+  }, [user, googleChecked, selectedClinic, step]);
   
   // Get claim emails from clinic
   const claimEmails: string[] = selectedClinic?.claim_emails || [];
@@ -548,6 +603,40 @@ const ClaimProfilePage = () => {
                     )}
                   </div>
                 </div>
+
+                {!user && (
+                  <div className="mb-6 p-5 rounded-xl border-2 border-primary/30 bg-primary/5">
+                    <h3 className="font-display font-bold mb-2">Sign in to continue</h3>
+                    <p className="text-sm text-muted-foreground mb-4">
+                      Sign in with Google for faster verification. If you have a Google account associated with your clinic email, you can verify instantly.
+                    </p>
+                    <Button
+                      variant="outline"
+                      className="w-full h-12 border-primary/50 hover:bg-primary/10"
+                      onClick={handleGoogleSignIn}
+                      disabled={isGoogleLoading}
+                    >
+                      {isGoogleLoading ? (
+                        <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                      ) : (
+                        <img 
+                          src="https://www.gstatic.com/images/branding/product/2x/googleg_48dp.png" 
+                          alt="Google" 
+                          className="h-5 w-5 mr-2"
+                        />
+                      )}
+                      Sign in with Google
+                    </Button>
+                    <div className="relative my-5">
+                      <div className="absolute inset-0 flex items-center">
+                        <span className="w-full border-t" />
+                      </div>
+                      <div className="relative flex justify-center text-xs uppercase">
+                        <span className="bg-background px-3 text-muted-foreground">Or continue below</span>
+                      </div>
+                    </div>
+                  </div>
+                )}
 
                 <h2 className="font-display text-xl font-bold mb-2">How would you like to verify?</h2>
                 <p className="text-sm text-muted-foreground mb-5">

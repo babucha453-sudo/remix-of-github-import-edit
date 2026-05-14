@@ -31,6 +31,9 @@ import NotificationPreferencesTab from '@/components/dentist/NotificationPrefere
 import FormWorkflowTab from '@/components/dentist/FormWorkflowTab';
 import GalleryManagementTab from '@/components/dentist/GalleryManagementTab';
 import PlatformReviewsTab from '@/components/dentist/PlatformReviewsTab';
+import AnalyticsTab from './AnalyticsTab';
+import MarketingTab from './MarketingTab';
+import SEOTab from './SEOTab';
 
 // Page title mapping
 const PAGE_TITLES: Record<string, { title: string; description?: string }> = {
@@ -109,26 +112,11 @@ export default function DentistDashboardV2() {
       case 'my-platform-reviews':
         return <PlatformReviewsTab />;
       case 'my-analytics':
-        return (
-          <div className="p-8 text-center">
-            <h2 className="text-xl font-semibold mb-2">Analytics</h2>
-            <p className="text-muted-foreground">Analytics dashboard coming soon</p>
-          </div>
-        );
+        return <AnalyticsTab onNavigate={handleTabChange} />;
       case 'my-marketing':
-        return (
-          <div className="p-8 text-center">
-            <h2 className="text-xl font-semibold mb-2">Marketing</h2>
-            <p className="text-muted-foreground">Marketing tools coming soon</p>
-          </div>
-        );
+        return <MarketingTab onNavigate={handleTabChange} />;
       case 'my-seo':
-        return (
-          <div className="p-8 text-center">
-            <h2 className="text-xl font-semibold mb-2">SEO</h2>
-            <p className="text-muted-foreground">SEO tools coming soon</p>
-          </div>
-        );
+        return <SEOTab onNavigate={handleTabChange} />;
       case 'my-templates':
         return <TemplatesTab />;
       case 'my-notifications':

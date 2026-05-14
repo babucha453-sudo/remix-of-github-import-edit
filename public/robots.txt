@@ -1,9 +1,6 @@
 # AppointPanda Robots.txt
-# Last updated: 2026-04-14
-# SEO Audit Complete - All fixes applied
-# 
-# IMPORTANT: All indexable pages are now allowed for Googlebot
-# Private/admin pages remain blocked
+# Last updated: 2026-05-14
+# SEO - Dynamic Sitemap v2
 
 # ============================================
 # GOOGLEBOT
@@ -24,7 +21,6 @@ Disallow: /appointment/
 Disallow: /review/
 Disallow: /rq/
 Disallow: /form/
-# SEO FIX: Allow search result pages (CRITICAL for SEO)
 Allow: /search
 Allow: /find-dentist
 Disallow: /ae/
@@ -151,15 +147,71 @@ Disallow: /*?fbclid=*
 Disallow: /*?gclid=*
 
 # ============================================
-# SITEMAP - Dynamic Sitemaps
+# SITEMAP INDEX - Dynamic Sitemap with 1000 URL chunks
 # ============================================
 Sitemap: https://www.appointpanda.com/sitemap.xml
-Sitemap: https://www.appointpanda.com/api/sitemap.xml?type=static
-Sitemap: https://www.appointpanda.com/api/sitemap.xml?type=states
-Sitemap: https://www.appointpanda.com/api/sitemap.xml?type=cities&page=1
-Sitemap: https://www.appointpanda.com/api/sitemap.xml?type=clinics&page=1
-Sitemap: https://www.appointpanda.com/api/sitemap.xml?type=services
-Sitemap: https://www.appointpanda.com/api/sitemap.xml?type=insurance
+Sitemap: https://www.appointpanda.com/sitemap-static.xml
+Sitemap: https://www.appointpanda.com/sitemap-states.xml
+Sitemap: https://www.appointpanda.com/sitemap-cities.xml
+Sitemap: https://www.appointpanda.com/sitemap-services.xml
+Sitemap: https://www.appointpanda.com/sitemap-service-locations.xml
+Sitemap: https://www.appointpanda.com/sitemap-service-locations-2.xml
+Sitemap: https://www.appointpanda.com/sitemap-service-locations-3.xml
+Sitemap: https://www.appointpanda.com/sitemap-service-locations-4.xml
+Sitemap: https://www.appointpanda.com/sitemap-service-locations-5.xml
+Sitemap: https://www.appointpanda.com/sitemap-insurance.xml
+Sitemap: https://www.appointpanda.com/sitemap-profiles.xml
+Sitemap: https://www.appointpanda.com/sitemap-profiles-2.xml
+Sitemap: https://www.appointpanda.com/sitemap-profiles-3.xml
+Sitemap: https://www.appointpanda.com/sitemap-profiles-4.xml
+Sitemap: https://www.appointpanda.com/sitemap-profiles-5.xml
+Sitemap: https://www.appointpanda.com/sitemap-profiles-6.xml
+Sitemap: https://www.appointpanda.com/sitemap-profiles-7.xml
+Sitemap: https://www.appointpanda.com/sitemap-profiles-8.xml
+Sitemap: https://www.appointpanda.com/sitemap-profiles-9.xml
+Sitemap: https://www.appointpanda.com/sitemap-profiles-10.xml
+Sitemap: https://www.appointpanda.com/sitemap-profiles-11.xml
+Sitemap: https://www.appointpanda.com/sitemap-profiles-12.xml
+Sitemap: https://www.appointpanda.com/sitemap-profiles-13.xml
+Sitemap: https://www.appointpanda.com/sitemap-profiles-14.xml
+Sitemap: https://www.appointpanda.com/sitemap-profiles-15.xml
+Sitemap: https://www.appointpanda.com/sitemap-profiles-16.xml
+Sitemap: https://www.appointpanda.com/sitemap-profiles-17.xml
+Sitemap: https://www.appointpanda.com/sitemap-profiles-18.xml
+Sitemap: https://www.appointpanda.com/sitemap-profiles-19.xml
+Sitemap: https://www.appointpanda.com/sitemap-profiles-20.xml
+Sitemap: https://www.appointpanda.com/sitemap-profiles-21.xml
+Sitemap: https://www.appointpanda.com/sitemap-profiles-22.xml
+Sitemap: https://www.appointpanda.com/sitemap-profiles-23.xml
+Sitemap: https://www.appointpanda.com/sitemap-profiles-24.xml
+Sitemap: https://www.appointpanda.com/sitemap-profiles-25.xml
+Sitemap: https://www.appointpanda.com/sitemap-profiles-26.xml
+Sitemap: https://www.appointpanda.com/sitemap-profiles-27.xml
+Sitemap: https://www.appointpanda.com/sitemap-profiles-28.xml
+Sitemap: https://www.appointpanda.com/sitemap-profiles-29.xml
+Sitemap: https://www.appointpanda.com/sitemap-profiles-30.xml
+Sitemap: https://www.appointpanda.com/sitemap-profiles-31.xml
+Sitemap: https://www.appointpanda.com/sitemap-profiles-32.xml
+Sitemap: https://www.appointpanda.com/sitemap-profiles-33.xml
+Sitemap: https://www.appointpanda.com/sitemap-profiles-34.xml
+Sitemap: https://www.appointpanda.com/sitemap-profiles-35.xml
+Sitemap: https://www.appointpanda.com/sitemap-profiles-36.xml
+Sitemap: https://www.appointpanda.com/sitemap-profiles-37.xml
+Sitemap: https://www.appointpanda.com/sitemap-profiles-38.xml
+Sitemap: https://www.appointpanda.com/sitemap-profiles-39.xml
+Sitemap: https://www.appointpanda.com/sitemap-profiles-40.xml
+Sitemap: https://www.appointpanda.com/sitemap-profiles-41.xml
+Sitemap: https://www.appointpanda.com/sitemap-profiles-42.xml
+Sitemap: https://www.appointpanda.com/sitemap-profiles-43.xml
+Sitemap: https://www.appointpanda.com/sitemap-profiles-44.xml
+Sitemap: https://www.appointpanda.com/sitemap-profiles-45.xml
+Sitemap: https://www.appointpanda.com/sitemap-profiles-46.xml
+Sitemap: https://www.appointpanda.com/sitemap-profiles-47.xml
+Sitemap: https://www.appointpanda.com/sitemap-profiles-48.xml
+Sitemap: https://www.appointpanda.com/sitemap-profiles-49.xml
+Sitemap: https://www.appointpanda.com/sitemap-profiles-50.xml
+Sitemap: https://www.appointpanda.com/sitemap-blog.xml
+Sitemap: https://www.appointpanda.com/sitemap-dentists.xml
 
 # ============================================
 # LLMs.txt FOR AI ASSISTANTS

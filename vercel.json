@@ -112,63 +112,51 @@
     },
     {
       "source": "/sitemap.xml",
-      "destination": "https://fnewyocguujowqxyiqsy.supabase.co/functions/v1/sitemap"
+      "destination": "https://fnewyocguujowqxyiqsy.supabase.co/functions/v1/dynamic-sitemap"
     },
     {
       "source": "/sitemap-static.xml",
-      "destination": "https://fnewyocguujowqxyiqsy.supabase.co/functions/v1/sitemap?type=static"
+      "destination": "https://fnewyocguujowqxyiqsy.supabase.co/functions/v1/dynamic-sitemap?type=static"
     },
     {
       "source": "/sitemap-states.xml",
-      "destination": "https://fnewyocguujowqxyiqsy.supabase.co/functions/v1/sitemap?type=states"
+      "destination": "https://fnewyocguujowqxyiqsy.supabase.co/functions/v1/dynamic-sitemap?type=states"
     },
     {
       "source": "/sitemap-cities.xml",
-      "destination": "https://fnewyocguujowqxyiqsy.supabase.co/functions/v1/sitemap?type=cities"
-    },
-    {
-      "source": "/sitemap-cities-:chunk.xml",
-      "destination": "https://fnewyocguujowqxyiqsy.supabase.co/functions/v1/sitemap?type=cities&chunk=:chunk"
-    },
-    {
-      "source": "/sitemap-locations.xml",
-      "destination": "https://fnewyocguujowqxyiqsy.supabase.co/functions/v1/sitemap?type=locations"
+      "destination": "https://fnewyocguujowqxyiqsy.supabase.co/functions/v1/dynamic-sitemap?type=cities"
     },
     {
       "source": "/sitemap-services.xml",
-      "destination": "https://fnewyocguujowqxyiqsy.supabase.co/functions/v1/sitemap?type=services"
+      "destination": "https://fnewyocguujowqxyiqsy.supabase.co/functions/v1/dynamic-sitemap?type=services"
     },
     {
       "source": "/sitemap-service-locations.xml",
-      "destination": "https://fnewyocguujowqxyiqsy.supabase.co/functions/v1/sitemap?type=service-locations"
+      "destination": "https://fnewyocguujowqxyiqsy.supabase.co/functions/v1/dynamic-sitemap?type=service-locations"
     },
     {
       "source": "/sitemap-service-locations-:chunk.xml",
-      "destination": "https://fnewyocguujowqxyiqsy.supabase.co/functions/v1/sitemap?type=service-locations&chunk=:chunk"
+      "destination": "https://fnewyocguujowqxyiqsy.supabase.co/functions/v1/dynamic-sitemap?type=service-locations&chunk=:chunk"
+    },
+    {
+      "source": "/sitemap-insurance.xml",
+      "destination": "https://fnewyocguujowqxyiqsy.supabase.co/functions/v1/dynamic-sitemap?type=insurance"
     },
     {
       "source": "/sitemap-profiles.xml",
-      "destination": "https://fnewyocguujowqxyiqsy.supabase.co/functions/v1/sitemap?type=profiles"
+      "destination": "https://fnewyocguujowqxyiqsy.supabase.co/functions/v1/dynamic-sitemap?type=profiles"
     },
     {
       "source": "/sitemap-profiles-:chunk.xml",
-      "destination": "https://fnewyocguujowqxyiqsy.supabase.co/functions/v1/sitemap?type=profiles&chunk=:chunk"
+      "destination": "https://fnewyocguujowqxyiqsy.supabase.co/functions/v1/dynamic-sitemap?type=profiles&chunk=:chunk"
     },
     {
-      "source": "/sitemap-clinics.xml",
-      "destination": "https://fnewyocguujowqxyiqsy.supabase.co/functions/v1/sitemap?type=clinics"
-    },
-    {
-      "source": "/sitemap-clinics-:chunk.xml",
-      "destination": "https://fnewyocguujowqxyiqsy.supabase.co/functions/v1/sitemap?type=clinics&chunk=:chunk"
+      "source": "/sitemap-blog.xml",
+      "destination": "https://fnewyocguujowqxyiqsy.supabase.co/functions/v1/dynamic-sitemap?type=blog"
     },
     {
       "source": "/sitemap-dentists.xml",
-      "destination": "https://fnewyocguujowqxyiqsy.supabase.co/functions/v1/sitemap?type=dentists"
-    },
-    {
-      "source": "/sitemap-posts.xml",
-      "destination": "https://fnewyocguujowqxyiqsy.supabase.co/functions/v1/sitemap?type=posts"
+      "destination": "https://fnewyocguujowqxyiqsy.supabase.co/functions/v1/dynamic-sitemap?type=dentists"
     },
     {
       "source": "/robots.txt",

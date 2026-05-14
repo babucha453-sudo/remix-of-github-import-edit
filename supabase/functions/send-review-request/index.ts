@@ -12,6 +12,9 @@ interface ReviewRequestPayload {
   recipientName: string;
   channel: 'email' | 'sms' | 'whatsapp';
   customMessage?: string;
+  appointmentId?: string;
+  autoTrigger?: boolean;
+  sequenceStep?: number;
 }
 
 interface ClinicBranding {
@@ -183,15 +186,29 @@ Deno.serve(async (req) => {
     const whatsappFromNumber = (whatsappConfig.from_number as string) || '+14155238886';
 
     const payload: ReviewRequestPayload = await req.json();
-    const { clinicId, recipientEmail, recipientPhone, recipientName, channel, customMessage } = payload;
+    const { clinicId, recipientEmail, recipientPhone, recipientName, channel, customMessage, appointmentId, autoTrigger, sequenceStep } = payload;
 
     console.log(`Processing review request for ${channel} to ${recipientEmail || recipientPhone}`);
+
+    if (autoTrigger && appointmentId) {
+      const { data: apptData } = await supabase
+        .from('appointments')
+        .select('clinic_id, patient_name, patient_email, patient_phone')
+        .eq('id', appointmentId)
+        .single();
+      
+      if (apptData) {
+        clinicIdToUse = apptData.clinic_id;
+      }
+    }
+
+    let clinic = null;
 
     // Fetch clinic data
     const { data: clinic, error: clinicError } = await supabase
       .from('clinics')
       .select('id, name, slug, cover_image_url, google_place_id')
-      .eq('id', clinicId)
+      .eq('id', clinicIdToUse)
       .maybeSingle();
 
     if (clinicError) {
@@ -337,18 +354,42 @@ Deno.serve(async (req) => {
       }
     }
 
-    // Log the request
+    // Log the request to review_requests
     await supabase.from('review_requests').insert({
-      clinic_id: clinicId,
-      recipient_name: recipientName,
-      recipient_email: recipientEmail,
-      recipient_phone: recipientPhone,
+      clinic_id: clinicIdToUse,
+      appointment_id: appointmentId || null,
+      patient_name: recipientName,
+      patient_email: recipientEmail,
+      patient_phone: recipientPhone,
       channel,
-      custom_message: customMessage,
       status: success ? 'sent' : 'failed',
       sent_at: success ? new Date().toISOString() : null,
-      error_message: errorMessage || null,
     });
+
+    // Log to review_automation_log for automation tracking
+    await supabase.from('review_automation_log').insert({
+      appointment_id: appointmentId || null,
+      clinic_id: clinicIdToUse,
+      patient_name: recipientName,
+      patient_email: recipientEmail,
+      patient_phone: recipientPhone,
+      sequence_step: sequenceStep || 0,
+      channel,
+      status: success ? 'sent' : 'failed',
+      email_sent: channel === 'email' ? success : false,
+      sms_sent: channel === 'sms' ? success : false,
+      sent_at: success ? new Date().toISOString() : null,
+    });
+
+    if (success && appointmentId) {
+      await supabase
+        .from('appointments')
+        .update({ 
+          review_requested: true,
+          review_requested_at: new Date().toISOString()
+        })
+        .eq('id', appointmentId);
+    }
 
     if (!success && errorMessage) {
       throw new Error(errorMessage);

@@ -4,6 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { useCaptcha } from "@/hooks/useCaptcha";
 import { useQuery } from "@tanstack/react-query";
 import { format, addDays, isSameDay, startOfDay, getDay } from "date-fns";
 import { cn } from "@/lib/utils";
@@ -102,6 +103,7 @@ export function CalendarBookingForm({
   onClose,
 }: CalendarBookingFormProps) {
   const { toast } = useToast();
+  const { executeCaptcha, isLoading: captchaLoading } = useCaptcha();
   const [currentStep, setCurrentStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
@@ -186,6 +188,17 @@ export function CalendarBookingForm({
   const onSubmit = async (data: BookingFormData) => {
     setIsSubmitting(true);
     try {
+      const captchaToken = await executeCaptcha();
+      if (!captchaToken) {
+        toast({
+          title: "Verification Failed",
+          description: "Please complete the CAPTCHA verification and try again.",
+          variant: "destructive",
+        });
+        setIsSubmitting(false);
+        return;
+      }
+
       const targetClinicId = profileType === "clinic" ? profileId : clinicId || null;
       
       // Check if this is a returning patient by phone or email
@@ -606,8 +619,8 @@ export function CalendarBookingForm({
                 <ArrowRight className="h-4 w-4 ml-2" />
               </Button>
             ) : (
-              <Button type="submit" className="flex-1 rounded-xl h-12 font-bold" disabled={isSubmitting}>
-                {isSubmitting ? "Submitting..." : "Confirm Booking"}
+              <Button type="submit" className="flex-1 rounded-xl h-12 font-bold" disabled={isSubmitting || captchaLoading}>
+                {isSubmitting || captchaLoading ? "Verifying..." : "Confirm Booking"}
               </Button>
             )}
           </div>
