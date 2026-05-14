@@ -348,6 +348,7 @@ const ContactPage = () => {
                       className="mt-2 h-11 md:h-12 rounded-xl bg-muted/50 border-border/50 focus:border-primary"
                     />
                   </div>
+                </div>
 
                 <div>
                   <Label htmlFor="message" className="font-bold text-sm">Message *</Label>
