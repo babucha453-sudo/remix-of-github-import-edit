@@ -18,6 +18,7 @@ import { AnalyticsProvider } from "@/components/analytics/AnalyticsProvider";
 import Index from "./pages/Index";
 import AISearchPage from "./pages/AISearchPage";
 import NotFound from "./pages/NotFound";
+import DentistSignupPage from "./pages/DentistSignupPage";
 
 // Lazy-loaded pages - code split for smaller initial bundle
 const Auth = lazyRetry(() => import("./pages/Auth"));
@@ -159,6 +160,7 @@ const App = () => (
                   {/* Auth */}
                   <Route path="/auth" element={<Auth />} />
                   <Route path="/auth/callback" element={<AuthCallback />} />
+                  <Route path="/signup/dentist" element={<DentistSignupPage />} />
                   <Route path="/onboarding" element={<GMBOnboarding />} />
                   <Route path="/gmb-select" element={<GMBBusinessSelection />} />
 
