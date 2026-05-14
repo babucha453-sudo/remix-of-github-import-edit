@@ -56,18 +56,41 @@ interface DashboardOverviewV3Props {
 export default function DashboardOverviewV3({ onNavigate }: DashboardOverviewV3Props) {
   const { user, profile } = useAuth();
 
-  // Fetch clinic
+  // Fetch clinic - check BOTH claimed_by AND clinic_members
   const { data: clinic, isLoading: clinicLoading } = useQuery({
     queryKey: ['dashboard-v3-clinic', user?.id],
     queryFn: async () => {
+      // First try by claimed_by
       const { data, error } = await supabase
         .from('clinics')
         .select('*, clinic_hours(*), clinic_images(*)')
         .eq('claimed_by', user?.id)
         .limit(1)
         .single();
+
+      if (data) return data;
       if (error && error.code !== 'PGRST116') throw error;
-      return data;
+
+      // Fallback: check clinic_members for owner role
+      const { data: memberData } = await supabase
+        .from('clinic_members')
+        .select('clinic_id')
+        .eq('user_id', user?.id)
+        .eq('role', 'owner')
+        .limit(1)
+        .single();
+
+      if (memberData?.clinic_id) {
+        const { data: memberClinic, error: memberError } = await supabase
+          .from('clinics')
+          .select('*, clinic_hours(*), clinic_images(*)')
+          .eq('id', memberData.clinic_id)
+          .single();
+        if (memberClinic) return memberClinic;
+        if (memberError && memberError.code !== 'PGRST116') throw memberError;
+      }
+
+      return null;
     },
     enabled: !!user?.id,
   });

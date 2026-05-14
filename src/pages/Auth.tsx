@@ -11,85 +11,44 @@ import { toast } from 'sonner';
 import { Loader2 } from 'lucide-react';
 
 export default function Auth() {
-  const { user, roles, signIn, signUp, isLoading } = useAuth();
+  const { user, roles, signIn, isLoading } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isGoogleLoading, setIsGoogleLoading] = useState(false);
-  const [hasRedirected, setHasRedirected] = useState(false);
-  
+
   // Login form
   const [loginEmail, setLoginEmail] = useState('');
   const [loginPassword, setLoginPassword] = useState('');
 
   useEffect(() => {
-    console.log('[Auth] useEffect:', { isLoading, hasUser: !!user, roles, hasRedirected });
-    
-    // Wait for auth to finish loading AND ensure user exists
-    if (isLoading || !user) {
-      console.log('[Auth] Skipping redirect:', { isLoading, hasUser: !!user });
-      return;
-    }
+    if (isLoading || !user) return;
 
-    // Check if there's an active GMB flow - don't redirect if so
     const isGmbFlow = localStorage.getItem('gmb_listing_flow') === 'true' ||
                       localStorage.getItem('gmb_relink_flow') === 'true' ||
                       localStorage.getItem('gmb_pending') === 'true' ||
                       localStorage.getItem('gmb_restore_session') === 'true';
-    
-    if (isGmbFlow) {
-      console.log('[Auth] GMB flow in progress, not redirecting');
-      return;
-    }
+    if (isGmbFlow) return;
 
-    // Get base path - admins go to /admin, dentists/dentists go to /dashboard
     const isSuperAdmin = roles.includes('super_admin') || roles.includes('district_manager');
     const isAdmin = isSuperAdmin || roles.some(r => ['seo_team', 'content_team', 'marketing_team', 'support_team'].includes(r));
     const isDentist = roles.includes('dentist');
-    
-    console.log('[Auth] Roles check:', { isSuperAdmin, isAdmin, isDentist, roles });
 
-    // Redirect authenticated users away from auth page
-    if (hasRedirected) {
-      // Already redirected before - but force redirect on first login success
-      // Check if we need to redirect based on current path
-      if (location.pathname === '/auth' || location.pathname === '/login') {
-        // Force redirect now
-        if (isSuperAdmin || isAdmin) {
-          navigate('/admin', { replace: true });
-        } else if (isDentist) {
-          navigate('/dashboard?tab=my-dashboard', { replace: true });
-        } else if (roles.length === 0) {
-          navigate('/onboarding?new=true', { replace: true });
-        } else {
-          navigate('/onboarding?new=true', { replace: true });
-        }
+    const shouldRedirect = ['/auth', '/login', '/signup/dentist'].includes(location.pathname);
+    if (!shouldRedirect) return;
+
+    const timer = setTimeout(() => {
+      if (isSuperAdmin || isAdmin) {
+        navigate('/admin', { replace: true });
+      } else if (isDentist) {
+        navigate('/dashboard?tab=my-dashboard', { replace: true });
+      } else {
+        navigate('/onboarding?new=true', { replace: true });
       }
-      return;
-    }
+    }, 300);
 
-    // First time redirect - mark as redirected and navigate
-    setHasRedirected(true);
-
-    // SuperAdmins go directly to /admin - no delays, no onboarding
-    if (isSuperAdmin || isAdmin) {
-      console.log('[Auth] Redirecting to /admin');
-      navigate('/admin', { replace: true });
-    } else if (isDentist) {
-      console.log('[Auth] Redirecting to /dashboard');
-      // Dentists go to their dashboard
-      navigate('/dashboard?tab=my-dashboard', { replace: true });
-    } else if (roles.length === 0) {
-      console.log('[Auth] No roles, redirecting to /onboarding');
-      // User has no roles - might still be loading, or is a new user
-      // Send to onboarding
-      navigate('/onboarding?new=true', { replace: true });
-    } else {
-      console.log('[Auth] Unknown role, redirecting to /onboarding');
-      // Has some other role, default to onboarding
-      navigate('/onboarding?new=true', { replace: true });
-    }
-  }, [user, roles, isLoading, navigate, hasRedirected, location]);
+    return () => clearTimeout(timer);
+  }, [user, roles, isLoading, navigate, location.pathname]);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();

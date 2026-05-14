@@ -111,11 +111,17 @@ const cookieStorage = {
   setItem: (key: string, value: string): void => {
     if (typeof document === 'undefined') return;
     const expires = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toUTCString();
-    document.cookie = `${key}=${value};expires=${expires};path=/;SameSite=Lax;max-age=${7 * 24 * 60 * 60}`;
+    const hostname = typeof window !== 'undefined' ? window.location.hostname : '';
+    const isProd = hostname && !hostname.includes('localhost') && !hostname.includes('127.0.0.1') && !hostname.includes('.vercel.app');
+    const domainAttr = isProd ? `;domain=.${hostname.split('.').slice(-2).join('.')}` : '';
+    document.cookie = `${key}=${value};expires=${expires};path=/;SameSite=Lax;Secure${domainAttr};max-age=${7 * 24 * 60 * 60}`;
   },
   removeItem: (key: string): void => {
     if (typeof document === 'undefined') return;
-    document.cookie = `${key}=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/`;
+    const hostname = typeof window !== 'undefined' ? window.location.hostname : '';
+    const isProd = hostname && !hostname.includes('localhost') && !hostname.includes('127.0.0.1') && !hostname.includes('.vercel.app');
+    const domainAttr = isProd ? `;domain=.${hostname.split('.').slice(-2).join('.')}` : '';
+    document.cookie = `${key}=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/${domainAttr}`;
   },
 };
 

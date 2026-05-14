@@ -452,8 +452,10 @@ export default function AuthCallback() {
         localStorage.removeItem('gmb_link_token');
         localStorage.removeItem('gmb_pending');
         localStorage.removeItem('gmb_listing_flow');
+        localStorage.removeItem('gmb_relink_flow');
         localStorage.removeItem('gmb_restore_session');
         clearOriginalSession();
+        clearGmbProviderToken();
       }
     };
 

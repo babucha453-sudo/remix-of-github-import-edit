@@ -138,6 +138,49 @@ const handler = async (req: Request): Promise<Response> => {
       });
     }
 
+    // Create or update dentist record with proper linkage
+    const baseSlug = (user.user_metadata?.full_name || user.email?.split('@')[0] || 'dentist')
+      .toLowerCase().replace(/[^a-z0-9\s-]/g, '').replace(/\s+/g, '-').replace(/-+/g, '-').slice(0, 80);
+
+    const { data: existingSlugs } = await supabaseClient
+      .from('dentists')
+      .select('slug')
+      .like('slug', `${baseSlug}%`);
+
+    let dentistSlug = baseSlug;
+    if (existingSlugs && existingSlugs.length > 0) {
+      const exactMatch = existingSlugs.some((row: any) => row.slug === baseSlug);
+      if (exactMatch) {
+        let counter = 2;
+        while (existingSlugs.some((row: any) => row.slug === `${baseSlug}-${counter}`)) counter++;
+        dentistSlug = `${baseSlug}-${counter}`;
+      }
+    }
+
+    const { data: existingDentist } = await supabaseClient
+      .from("dentists")
+      .select("id")
+      .eq("user_id", user.id)
+      .maybeSingle();
+
+    if (existingDentist) {
+      await supabaseClient.from("dentists").update({
+        clinic_id: clinicId,
+        email: user.email,
+        is_primary: true,
+      }).eq("id", existingDentist.id);
+    } else {
+      await supabaseClient.from("dentists").insert({
+        user_id: user.id,
+        clinic_id: clinicId,
+        name: user.user_metadata?.full_name || user.email?.split('@')[0] || 'Dentist',
+        slug: dentistSlug,
+        email: user.email,
+        is_primary: true,
+        is_active: true,
+      });
+    }
+
     // Send welcome email after successful claim
     const resendApiKey = Deno.env.get("RESEND_API_KEY");
     if (resendApiKey) {

@@ -487,6 +487,49 @@ serve(async (req) => {
       clinicSlug = newClinic.slug;
     }
 
+    // Create or update dentist record for proper user-linkage
+    const { data: existingDentist } = await supabaseAdmin
+      .from("dentists")
+      .select("id")
+      .eq("user_id", userId)
+      .maybeSingle();
+
+    const baseSlug = (userName || 'dentist')
+      .toLowerCase().replace(/[^a-z0-9\s-]/g, '').replace(/\s+/g, '-').replace(/-+/g, '-').slice(0, 80);
+
+    const { data: existingSlugs } = await supabaseAdmin
+      .from('dentists')
+      .select('slug')
+      .like('slug', `${baseSlug}%`);
+
+    let dentistSlug = baseSlug;
+    if (existingSlugs && existingSlugs.length > 0) {
+      const exactMatch = existingSlugs.some((row: any) => row.slug === baseSlug);
+      if (exactMatch) {
+        let counter = 2;
+        while (existingSlugs.some((row: any) => row.slug === `${baseSlug}-${counter}`)) counter++;
+        dentistSlug = `${baseSlug}-${counter}`;
+      }
+    }
+
+    if (existingDentist) {
+      await supabaseAdmin.from("dentists").update({
+        clinic_id: clinicId,
+        email: userEmail,
+        is_primary: true,
+      }).eq("id", existingDentist.id);
+    } else {
+      await supabaseAdmin.from("dentists").insert({
+        user_id: userId,
+        clinic_id: clinicId,
+        name: userName || 'Dentist',
+        slug: dentistSlug,
+        email: userEmail,
+        is_primary: true,
+        is_active: true,
+      });
+    }
+
     // 3) Store business hours if available
     if (business.hours && business.hours.length > 0) {
       // First delete existing hours

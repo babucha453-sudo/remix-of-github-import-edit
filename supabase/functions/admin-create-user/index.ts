@@ -158,6 +158,56 @@ serve(async (req) => {
 
     console.log("User created successfully:", newUser.user.id);
 
+    // Send welcome email with Resend
+    const resendApiKey = Deno.env.get("RESEND_API_KEY");
+    if (resendApiKey && newUser.user.email) {
+      try {
+        const welcomeHtml = `<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body style="margin:0;padding:0;background:#f4f7fb;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;">
+  <div style="max-width:520px;margin:40px auto;background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,0.08);">
+    <div style="background:linear-gradient(135deg,#0097b2,#00c5cc);padding:40px;text-align:center;">
+      <h1 style="margin:0;font-size:26px;font-weight:800;color:#fff;">Appoint<span style="color:#ffd700;">Panda</span></h1>
+    </div>
+    <div style="padding:40px;">
+      <h2 style="margin:0 0 8px;font-size:22px;color:#1a1a2e;">Welcome, ${fullName}!</h2>
+      <p style="margin:0 0 24px;color:#666;line-height:1.6;">Your AppointPanda account has been created. Sign in below to manage your dental practice.</p>
+      <div style="background:#f4f7fb;border-radius:12px;padding:20px;margin-bottom:24px;">
+        <p style="margin:0 0 4px;font-size:13px;color:#888;font-weight:600;text-transform:uppercase;">Email</p>
+        <p style="margin:0 0 4px;font-size:14px;color:#333;"><strong>${email}</strong></p>
+        <p style="margin:0 0 4px;font-size:13px;color:#888;font-weight:600;text-transform:uppercase;">Password</p>
+        <p style="margin:0;font-size:14px;color:#333;"><strong>${password}</strong></p>
+      </div>
+      <p style="margin:0 0 20px;font-size:13px;color:#888;">Please change your password after your first login.</p>
+      <a href="${Deno.env.get("NEXT_PUBLIC_SITE_URL") ?? "https://appointpanda.com"}/auth" style="display:inline-block;background:linear-gradient(135deg,#0097b2,#00c5cc);color:#fff;font-weight:700;font-size:15px;padding:14px 32px;border-radius:12px;text-decoration:none;">Sign In to AppointPanda</a>
+      <p style="margin:28px 0 0;font-size:12px;color:#aaa;text-align:center;">© ${new Date().getFullYear()} AppointPanda</p>
+    </div>
+  </div>
+</body>
+</html>`;
+
+        await fetch("https://api.resend.com/emails", {
+          method: "POST",
+          headers: { Authorization: `Bearer ${resendApiKey}`, "Content-Type": "application/json" },
+          body: JSON.stringify({
+            from: "AppointPanda <noreply@appointpanda.com>",
+            to: newUser.user.email,
+            subject: `Welcome to AppointPanda, ${fullName}!`,
+            html: welcomeHtml,
+          }),
+        });
+        console.log("Welcome email sent to:", newUser.user.email);
+      } catch (emailError) {
+        console.error("Failed to send welcome email:", emailError);
+      }
+    } else {
+      console.warn("RESEND_API_KEY not configured or no email - skipping welcome email");
+    }
+
     return new Response(JSON.stringify({ 
       success: true, 
       userId: newUser.user.id,

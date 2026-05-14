@@ -221,6 +221,7 @@ serve(async (req) => {
       email,
       phone,
       clinic_id: clinic.id,
+      user_id: userId,
       is_primary: true,
       is_active: true,
     });

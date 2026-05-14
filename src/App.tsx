@@ -166,7 +166,7 @@ const App = () => (
 
                   {/* Dashboards */}
                   <Route path="/admin" element={<AdminDashboard />} />
-                  <Route path="/dashboard" element={<AdminDashboard />} />
+                  <Route path="/dashboard" element={<DentistDashboardV2 />} />
                   <Route path="/dashboard-v2" element={<DentistDashboardV2 />} />
 
                   {/* Static Pages */}

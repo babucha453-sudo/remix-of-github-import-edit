@@ -177,7 +177,7 @@ async function verifySupabaseSession(request: NextRequest): Promise<SupabaseSess
   // Look for Supabase auth cookie (sb-{project-ref}-auth-token or similar)
   const authTokenCookie = cookies.find((cookie) => {
     const name = cookie.name.toLowerCase();
-    return name.includes('auth-token') || name.includes('sb-');
+    return (name.includes('auth-token') || name.includes('sb-')) && name !== 'supabase-auth-token';
   });
   
   if (!authTokenCookie) {
@@ -207,19 +207,12 @@ async function verifySupabaseSession(request: NextRequest): Promise<SupabaseSess
       // Also check expires_at for session expiration
       if (sessionObj.expires_at) {
         const currentTime = Math.floor(Date.now() / 1000);
-        // Supabase stores expires_at as Unix timestamp
-        if (sessionObj.expires_at < currentTime - 60) {
+        // Supabase stores expires_at as Unix timestamp - use 5 min grace period
+        if (sessionObj.expires_at < currentTime - 300) {
           return null;
         }
       }
-      // Handle expires_in (seconds from now)
-      if (sessionObj.expires_in && sessionObj.expires_at === undefined) {
-        const currentTime = Math.floor(Date.now() / 1000);
-        const issuedAt = sessionObj.expires_in > 0 ? currentTime - (3600 - sessionObj.expires_in) : currentTime;
-        if (issuedAt + sessionObj.expires_in < currentTime - 60) {
-          return null;
-        }
-      }
+      // Handle expires_in (seconds from now) - don't reject, let Supabase handle refresh
     } catch {
       // Not JSON, treat as raw JWT
     }
@@ -326,9 +319,10 @@ export async function middleware(request: NextRequest) {
     }
 
     if (isAdminRoute(pathname)) {
+      const adminRoles = ['super_admin', 'district_manager', 'seo_team', 'content_team', 'marketing_team', 'support_team'];
       const userRole = session.user?.role || session.user?.app_metadata?.role;
-      
-      if (userRole !== 'admin' && userRole !== 'superadmin') {
+      const isAdmin = adminRoles.includes(userRole) || session.user?.email === 'admin@appointpanda.com';
+      if (!isAdmin) {
         const redirectUrl = new URL('/', request.url);
         return NextResponse.redirect(redirectUrl);
       }

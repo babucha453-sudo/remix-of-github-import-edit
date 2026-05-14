@@ -34,8 +34,8 @@ serve(async (req) => {
 
     let event: Stripe.Event;
 
-    // Verify webhook signature if secret is configured
-    if (webhookSecret && signature) {
+    // Verify webhook signature if secret is configured - REQUIRED in production
+    if (webhookSecret && webhookSecret.trim() !== '' && signature) {
       try {
         event = await stripe.webhooks.constructEventAsync(
           body,
@@ -51,9 +51,12 @@ serve(async (req) => {
         );
       }
     } else {
-      // Parse without verification (for testing)
-      event = JSON.parse(body);
-      console.warn('Processing webhook without signature verification');
+      // No secret configured - reject webhook for security
+      console.error('STRIPE_WEBHOOK_SECRET not configured - cannot process webhooks safely');
+      return new Response(
+        JSON.stringify({ error: 'Webhook secret not configured' }),
+        { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
     }
 
     console.log('Processing webhook event:', event.type);

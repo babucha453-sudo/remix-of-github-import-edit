@@ -185,21 +185,43 @@ export function clearOriginalSession() {
  */
 export function clearAllGmbCache() {
   if (typeof window === 'undefined' || typeof localStorage === 'undefined') return;
-  
+
   // Clear provider tokens
   clearGmbProviderToken();
-  
+
   // Clear original session
   clearOriginalSession();
-  
+
   // Clear any flow markers
   try {
     localStorage.removeItem('gmb_relink_flow');
     localStorage.removeItem('gmb_restore_session');
+    localStorage.removeItem('gmb_listing_flow');
+    localStorage.removeItem('gmb_pending');
+    localStorage.removeItem('gmb_link_token');
     sessionStorage.removeItem('gmb_provider_token');
   } catch {
     // ignore
   }
-  
+
   console.log('[GMB] All GMB cache cleared');
 }
+
+// Cleanup stale GMB flow flags on app init (call once on app load)
+const FLOW_FLAG_KEYS = ['gmb_listing_flow', 'gmb_relink_flow', 'gmb_pending', 'gmb_restore_session'];
+const MAX_FLOW_AGE_MS = 24 * 60 * 60 * 1000; // 24 hours
+
+export function cleanupStaleFlowFlags() {
+  if (typeof window === 'undefined' || typeof localStorage === 'undefined') return;
+  const now = Date.now();
+  FLOW_FLAG_KEYS.forEach(key => {
+    const ts = localStorage.getItem(`${key}_ts`);
+    if (ts && now - parseInt(ts) > MAX_FLOW_AGE_MS) {
+      localStorage.removeItem(key);
+      localStorage.removeItem(`${key}_ts`);
+    }
+  });
+}
+
+// Auto-cleanup on module load
+cleanupStaleFlowFlags();
