@@ -119,7 +119,7 @@ export function SmartBookingModal({
         patient_name: data.patientName,
         patient_phone: data.patientPhone,
         patient_email: data.patientEmail,
-        appointment_date: appointmentDate,
+        preferred_date: appointmentDate,
         appointment_time: data.timeSlot,
         service_type: data.serviceName,
         notes: data.notes,
@@ -161,7 +161,7 @@ export function SmartBookingModal({
 
   return (
     <Dialog open={open} onOpenChange={handleClose}>
-      <DialogContent className="sm:max-w-lg max-w-[calc(100vw-1rem)] rounded-2xl border border-gray-100 bg-white p-0 overflow-hidden max-h-[90vh]">
+      <DialogContent className="sm:max-w-lg max-w-[calc(100vw-1rem)] rounded-2xl border border-gray-100 bg-white p-0 overflow-hidden max-h-[90vh]" hideCloseButton>
         {/* Header */}
         <div className="bg-gradient-to-r from-emerald-50 via-white to-white px-6 py-5 border-b border-gray-100">
           <div className="flex items-center justify-between">
@@ -200,7 +200,7 @@ export function SmartBookingModal({
             
             <button 
               onClick={handleClose} 
-              className="text-gray-400 hover:text-gray-600 text-2xl leading-none"
+              className="text-gray-400 hover:text-gray-600 text-2xl leading-none w-8 h-8 flex items-center justify-center rounded-lg hover:bg-gray-100"
             >
               ×
             </button>

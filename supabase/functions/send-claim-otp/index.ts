@@ -288,6 +288,17 @@ const handler = async (req: Request): Promise<Response> => {
       const result = await emailResponse.json();
       console.log("OTP email sent via Resend to:", emailToSend, result);
       
+      if (!emailResponse.ok) {
+        console.error("Resend API error:", result);
+        return new Response(JSON.stringify({ 
+          success: false, 
+          error: result.message || "Failed to send email via Resend"
+        }), {
+          status: 500,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+      
       return new Response(JSON.stringify({ 
         success: true, 
         message: `Verification code sent to ${method}`

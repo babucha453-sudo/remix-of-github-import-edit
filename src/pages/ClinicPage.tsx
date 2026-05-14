@@ -27,7 +27,6 @@ import {
   ClinicReviewsSection,
   InsuranceTab,
   BeforeAfterGallery,
-  UnclaimedProfileLeadForm,
 } from "@/components/clinic";
 import {
   Star,
@@ -550,12 +549,6 @@ const ClinicPage = () => {
             clinicName={clinic.name}
             variant="banner"
           />
-          <div className="mt-4">
-            <UnclaimedProfileLeadForm
-              clinicId={clinic.id}
-              clinicName={clinic.name}
-            />
-          </div>
         </Section>
       )}
 

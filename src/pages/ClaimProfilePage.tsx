@@ -188,6 +188,15 @@ const ClaimProfilePage = () => {
     enabled: searchQuery.length >= 2,
   });
 
+  // Auto-select clinic if only one result matches exactly
+  useEffect(() => {
+    if (searchResults && searchResults.length === 1 && searchQuery === prefilledClinic) {
+      const clinic = searchResults[0];
+      console.log('🔍 Auto-selecting clinic:', clinic.name);
+      handleSelectClinic(clinic);
+    }
+  }, [searchResults, searchQuery, prefilledClinic]);
+
   const handleSelectClinic = (clinic: any) => {
     setSelectedClinic(clinic);
     setEmailPrefix("");

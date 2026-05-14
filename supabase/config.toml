@@ -127,6 +127,12 @@ verify_jwt = false  # Service role: form notifications
 [functions.send-booking-email]
 verify_jwt = false  # Service role: booking confirmations
 
+[functions.send-appointment-reminder]
+verify_jwt = false  # Service role: sends SMS reminders to patients
+
+[functions.appointment-reminder-trigger]
+verify_jwt = false  # Service role: cron job to trigger appointment reminders
+
 # --------------------------------------------------------------------------
 # SEO Functions (Service role - internal use)
 # --------------------------------------------------------------------------
@@ -279,3 +285,10 @@ verify_jwt = false  # Service role: data recovery tool
 # --------------------------------------------------------------------------
 [functions.import-gz-csv]
 verify_jwt = false  # Service role: bulk CSV import from storage
+
+# --------------------------------------------------------------------------
+# CRON SCHEDULES
+# --------------------------------------------------------------------------
+# Run appointment reminder trigger every hour to check for upcoming appointments
+[scheduler.appointment-reminder-trigger]
+cron = "0 * * * *"  # Every hour
