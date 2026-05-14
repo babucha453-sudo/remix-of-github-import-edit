@@ -174,8 +174,10 @@ async function verifySupabaseSession(request: NextRequest): Promise<SupabaseSess
   const cookieStore = request.cookies;
   const cookies = cookieStore.getAll();
   
+  // Look for Supabase auth cookie (sb-{project-ref}-auth-token or similar)
   const authTokenCookie = cookies.find((cookie) => {
-    return cookie.name.includes('-auth-token') && !cookie.name.includes('sb-access-token');
+    const name = cookie.name.toLowerCase();
+    return name.includes('auth-token') || name.includes('sb-');
   });
   
   if (!authTokenCookie) {
@@ -183,8 +185,46 @@ async function verifySupabaseSession(request: NextRequest): Promise<SupabaseSess
   }
 
   try {
-    const tokenValue = authTokenCookie.value;
-    const parts = tokenValue.split('.');
+    let tokenValue = authTokenCookie.value;
+    
+    // URL-decode if needed
+    try {
+      tokenValue = decodeURIComponent(tokenValue);
+    } catch {
+      // Keep original value if decoding fails
+    }
+    
+    // Try to parse as JSON first (cookie storage format)
+    // If that fails, try parsing as raw JWT
+    let jwtToken = tokenValue;
+    
+    try {
+      const sessionObj = JSON.parse(tokenValue);
+      // This is a session object - extract access_token
+      if (sessionObj.access_token) {
+        jwtToken = sessionObj.access_token;
+      }
+      // Also check expires_at for session expiration
+      if (sessionObj.expires_at) {
+        const currentTime = Math.floor(Date.now() / 1000);
+        // Supabase stores expires_at as Unix timestamp
+        if (sessionObj.expires_at < currentTime - 60) {
+          return null;
+        }
+      }
+      // Handle expires_in (seconds from now)
+      if (sessionObj.expires_in && sessionObj.expires_at === undefined) {
+        const currentTime = Math.floor(Date.now() / 1000);
+        const issuedAt = sessionObj.expires_in > 0 ? currentTime - (3600 - sessionObj.expires_in) : currentTime;
+        if (issuedAt + sessionObj.expires_in < currentTime - 60) {
+          return null;
+        }
+      }
+    } catch {
+      // Not JSON, treat as raw JWT
+    }
+    
+    const parts = jwtToken.split('.');
     
     if (parts.length < 2) {
       return null;
@@ -195,18 +235,25 @@ async function verifySupabaseSession(request: NextRequest): Promise<SupabaseSess
 
     if (payload.exp) {
       const currentTime = Math.floor(Date.now() / 1000);
-      if (payload.exp < currentTime) {
+      // Allow 60-second grace period for clock skew / token refresh
+      if (payload.exp < currentTime - 60) {
         return null;
       }
     }
 
+    // Ensure we have a valid user ID
+    const userId = payload.sub || payload.user_id || payload.user?.id;
+    if (!userId) {
+      return null;
+    }
+
     return {
       user: {
-        id: payload.sub || payload.user_id || '',
-        email: payload.email,
-        role: payload.role || payload.app_metadata?.role,
-        app_metadata: payload.app_metadata,
-        user_metadata: payload.user_metadata,
+        id: userId,
+        email: payload.email || payload.user?.email,
+        role: payload.role || payload.app_metadata?.role || payload.user?.role,
+        app_metadata: payload.app_metadata || payload.user?.app_metadata,
+        user_metadata: payload.user_metadata || payload.user?.user_metadata,
       },
       exp: payload.exp,
       aal: payload.aal,

@@ -94,14 +94,39 @@ function createDummyClient(): ReturnType<typeof createClient<Database>> {
   } as any;
 }
 
+// Cookie-based storage adapter for Supabase session
+// This enables the session to be accessible to the middleware
+const cookieStorage = {
+  getItem: (key: string): string | null => {
+    if (typeof document === 'undefined') return null;
+    const cookies = document.cookie.split(';');
+    for (const cookie of cookies) {
+      const [cookieKey, ...valueParts] = cookie.trim().split('=');
+      if (cookieKey === key) {
+        return valueParts.join('=');
+      }
+    }
+    return null;
+  },
+  setItem: (key: string, value: string): void => {
+    if (typeof document === 'undefined') return;
+    const expires = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toUTCString();
+    document.cookie = `${key}=${value};expires=${expires};path=/;SameSite=Lax;max-age=${7 * 24 * 60 * 60}`;
+  },
+  removeItem: (key: string): void => {
+    if (typeof document === 'undefined') return;
+    document.cookie = `${key}=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/`;
+  },
+};
+
 // Create the actual client or a dummy for SSR
 export const supabase =
   !SUPABASE_URL || !SUPABASE_ANON_KEY
     ? createDummyClient()
     : createClient<Database>(SUPABASE_URL, SUPABASE_ANON_KEY, {
         auth: {
-          // On the server, `storage` must be undefined (no localStorage).
-          storage: (isBrowser ? window.localStorage : undefined) as any,
+          // Use cookie storage so middleware can access session
+          storage: isBrowser ? cookieStorage : undefined,
           persistSession: isBrowser,
           autoRefreshToken: isBrowser,
           detectSessionInUrl: isBrowser,
