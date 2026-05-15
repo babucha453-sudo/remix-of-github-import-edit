@@ -150,22 +150,55 @@ const ServiceLocationPage = () => {
   const pageDescription = seoContent?.meta_description || `Find the best ${treatmentName.toLowerCase()} specialists in ${locationDisplay}. Compare ${profileCountDisplay}+ verified clinics, read reviews, and book online today.`;
   const pageH1 = seoContent?.h1 || `${treatmentName} in ${locationDisplay}`;
 
+  const cityName = locationName;
   const faqs = seoFaqs.length > 0 ? seoFaqs.map(f => ({ q: f.question, a: f.answer })) : [
     {
-      q: `Where can I find ${treatmentName} specialists in ${locationName}?`,
-      a: `We have ${profiles?.length || 0}+ verified ${treatmentName.toLowerCase()} specialists in ${locationName}. Browse our directory above to compare ratings and book appointments.`,
+      q: `Where can I find ${treatmentName} specialists in ${cityName}?`,
+      a: `Finding qualified ${treatmentName.toLowerCase()} specialists in ${cityName} is easy with our verified directory. We feature ${profiles?.length || 0}+ dental professionals offering ${treatmentName.toLowerCase()} services across the ${cityName} area. Each provider is licensed and many have completed our additional verification process. Browse profiles, compare experience, read patient reviews, and book appointments directly online through our secure booking system.`,
     },
     {
-      q: `How much does ${treatmentName} cost in ${locationName}?`,
-      a: `${treatmentName} costs in ${locationName} vary by clinic. A typical range is $500-15,000. We recommend booking a consultation for an accurate quote.`,
+      q: `How much does ${treatmentName} cost in ${cityName}?`,
+      a: `${treatmentName} costs in ${cityName} vary significantly based on the complexity of your case, the dentist's experience, and the specific materials or technology used. On average, basic ${treatmentName.toLowerCase()} procedures start around $500, while more complex cases can range from $2,000 to $15,000 or more. Many dental offices in ${cityName} offer payment plans, and we recommend scheduling a consultation to get an accurate quote tailored to your specific needs.`,
     },
     {
-      q: `Are the ${treatmentName} dentists in ${locationName} verified?`,
-      a: `All dentists on our platform are licensed. Profiles with the "Verified" badge have completed our additional verification process.`,
+      q: `Are the ${treatmentName} dentists in ${cityName} verified?`,
+      a: `All dentists on our AppointPanda platform in ${cityName} are licensed dental professionals who have passed basic credential verification. Many profiles display a "Verified" badge, which indicates they have completed our additional verification process including license confirmation, business verification, and identity verification. We continuously monitor credentials and encourage patients to share their experiences through verified reviews.`,
     },
     {
-      q: `How do I book a ${treatmentName} appointment in ${locationName}?`,
-      a: `Browse the specialists above, click "Book Now" on any profile, and follow the easy booking process. The clinic will confirm your appointment.`,
+      q: `How do I book a ${treatmentName} appointment in ${cityName}?`,
+      a: `Booking a ${treatmentName.toLowerCase()} appointment in ${cityName} is simple with AppointPanda. Browse our directory of verified providers, read patient reviews, compare ratings and experience, then click "Book Now" on any profile. You'll see available time slots directly from the clinic's schedule, select your preferred date and time, and complete your booking online. The clinic will send a confirmation email with all the details including preparation instructions.`,
+    },
+    {
+      q: `What should I look for when choosing a ${treatmentName} dentist in ${cityName}?`,
+      a: `When selecting a ${treatmentName.toLowerCase()} provider in ${cityName}, consider several important factors: years of experience and specialized training, patient reviews and overall ratings, before-and-after photos of their work, the technology and materials they use, their communication style and consultation approach, accepted insurance plans and payment options, and office location and hours. Our directory makes it easy to compare these factors across multiple providers in ${cityName}.`,
+    },
+    {
+      q: `Does insurance cover ${treatmentName} in ${cityName}?`,
+      a: `Dental insurance coverage for ${treatmentName.toLowerCase()} in ${cityName} depends on your specific plan and the medical necessity of the procedure. Preventive ${treatmentName.toLowerCase()} is often covered at 100%, while major procedures may be covered at 50-80%. Many insurance plans have annual maximums and deductibles. We recommend checking with your insurance provider about specific coverage for ${treatmentName} procedures, and our directory shows which clinics accept various insurance plans.`,
+    },
+    {
+      q: `How long does ${treatmentName} take in ${cityName}?`,
+      a: `The duration of ${treatmentName.toLowerCase()} treatment in ${cityName} varies based on the procedure type and individual case complexity. Simple consultations and examinations take 30-60 minutes, while basic procedures typically require 1-2 hours. More complex ${treatmentName.toLowerCase()} cases may need multiple appointments spanning several weeks. During your initial consultation in ${cityName}, your dentist will provide a personalized timeline based on your specific treatment plan.`,
+    },
+    {
+      q: `What is the recovery time after ${treatmentName} in ${cityName}?`,
+      a: `Recovery time after ${treatmentName.toLowerCase()} in ${cityName} depends on the procedure type. Most patients return to normal activities within 1-3 days for basic procedures, while more complex treatments may require 1-2 weeks of recovery. Your dentist in ${cityName} will provide specific post-procedure instructions including pain management, diet restrictions, activity limitations, and follow-up appointment scheduling to ensure optimal healing.`,
+    },
+    {
+      q: `Are there specialists for ${treatmentName} in ${cityName}, ${stateAbbr}?`,
+      a: `Yes, ${cityName}, ${stateAbbr} has several dental specialists who focus specifically on ${treatmentName.toLowerCase()} procedures. These may include endodontists for root-related treatments, periodontists for gum and bone procedures, oral surgeons for surgical extractions, and prosthodontists for complex restorative work. General dentists in ${cityName} also perform many ${treatmentName.toLowerCase()} procedures. Our directory allows you to filter by specialty and specific services.`,
+    },
+    {
+      q: `What questions should I ask during my ${treatmentName} consultation in ${cityName}?`,
+      a: `During your ${treatmentName.toLowerCase()} consultation in ${cityName}, ask about: the dentist's experience and success rate with your specific procedure, available anesthesia and pain management options, expected outcomes and potential risks, number of appointments needed, total cost and payment plans, insurance coverage and pre-authorization requirements, alternative treatment options, and post-procedure care instructions. A thorough consultation in ${cityName} ensures you have all the information needed to make an informed decision.`,
+    },
+    {
+      q: `How do I prepare for my ${treatmentName} appointment in ${cityName}?`,
+      a: `To prepare for your ${treatmentName.toLowerCase()} appointment in ${cityName}: gather your dental records and X-rays if available, verify your insurance coverage and benefits, list any medications you're taking, note any allergies or health conditions, write down questions for your dentist, and arrive 15-20 minutes early to complete paperwork. If you're anxious about the procedure, discuss sedation options during your consultation. Your ${cityName} dental office will provide specific preparation instructions based on your planned treatment.`,
+    },
+    {
+      q: `What happens if I need to cancel or reschedule my ${treatmentName} appointment in ${cityName}?`,
+      a: `If you need to cancel or reschedule your ${treatmentName.toLowerCase()} appointment in ${cityName}, contact the dental office as soon as possible—ideally 24-48 hours in advance. Most ${cityName} dental practices have cancellation policies and may charge a fee for last-minute cancellations or no-shows. When rescheduling, ask about available alternative times that work with your schedule. Our online booking system also allows you to manage your appointments easily through the confirmation email or your patient portal.`,
     },
   ];
 
@@ -365,6 +398,18 @@ const ServiceLocationPage = () => {
                 title={`${treatmentName} in Nearby Cities`}
               />
             )}
+          </div>
+        </div>
+      </Section>
+
+      {/* Quick Answer */}
+      <Section size="lg">
+        <div className="max-w-3xl mx-auto">
+          <div className="mb-6 p-5 bg-emerald-50 border border-emerald-200 rounded-xl">
+            <h3 className="font-bold text-slate-800 mb-2">Quick Answer</h3>
+            <p className="text-slate-600 text-sm leading-relaxed">
+              Finding {treatmentName} specialists in {cityName} is easy with our verified directory. Browse qualified providers, compare experience and ratings, read patient reviews, and book appointments directly online. Our network includes general dentists and specialists offering {treatmentName} services in the {cityName} area.
+            </p>
           </div>
         </div>
       </Section>

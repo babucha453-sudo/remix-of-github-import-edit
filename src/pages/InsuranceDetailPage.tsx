@@ -31,10 +31,14 @@ import {
 
 const PAGE_SIZE = 20;
 
-const InsuranceDetailPage = () => {
-  const { insuranceSlug } = useParams();
+interface InsuranceDetailPageProps {
+  insuranceSlug?: string;
+}
+
+const InsuranceDetailPage = ({ insuranceSlug: insuranceSlugProp }: InsuranceDetailPageProps) => {
+  const { insuranceSlug: insuranceSlugParams } = useParams();
   const [searchParams, setSearchParams] = useSearchParams();
-  const slug = insuranceSlug || "";
+  const slug = insuranceSlugProp || insuranceSlugParams || "";
 
   // Parse URL params
   const currentPage = parseInt(searchParams.get("page") || "1", 10);

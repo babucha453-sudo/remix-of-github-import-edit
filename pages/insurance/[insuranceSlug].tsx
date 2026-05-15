@@ -76,7 +76,7 @@ export const getStaticProps: GetStaticProps<Props> = async ({ params }) => {
 export default function InsuranceDetailPageWrapper({ dehydratedState, insuranceSlug }: Props) {
   return (
     <HydrationBoundary state={dehydratedState}>
-      <InsuranceDetailPage />
+      <InsuranceDetailPage insuranceSlug={insuranceSlug} />
     </HydrationBoundary>
   );
 }
