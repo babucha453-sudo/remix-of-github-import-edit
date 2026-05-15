@@ -4,7 +4,7 @@ import {
   TrendingUp, Zap, Search, Building2, Stethoscope, Calendar,
   BadgeCheck, Timer, Globe, Target, Quote, ChevronDown,
   CreditCard, Lock, ArrowUpRight, PhoneCall,
-  Sparkles, Shirt
+  Sparkles, Shirt, Baby
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";

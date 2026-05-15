@@ -37,9 +37,6 @@ const nextConfig = {
   poweredByHeader: false,
   generateEtags: false,
   
-  // Enable SWC minification
-  swcMinify: true,
-  
   // Optimize package imports
   experimental: {
     optimizePackageImports: [
