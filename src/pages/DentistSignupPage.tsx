@@ -90,14 +90,33 @@ export default function DentistSignupPage() {
 
       if (edgeResult.error || edgeResult.data?.error) {
         const edgeErrMsg = (edgeResult.data?.error || edgeResult.error?.message || '').toLowerCase();
+        const edgeErrorMsg = (edgeResult.error?.message || '').toLowerCase();
 
-        // If edge function not found (404) or network error, fall back to standard signup
+        // Non-recoverable: user already exists (409)
+        if (
+          edgeErrMsg.includes('already registered') ||
+          edgeErrMsg.includes('already exists') ||
+          edgeErrMsg.includes('409') ||
+          edgeErrorMsg.includes('already registered') ||
+          edgeErrorMsg.includes('already exists')
+        ) {
+          toast.error('This email is already registered. Please sign in.');
+          setIsSubmitting(false);
+          return;
+        }
+
+        // Recoverable: network failure, service unavailable → use fallback
         const isRecoverableError =
-          edgeResult.error?.message?.includes('fetch') ||
-          edgeResult.error?.message?.includes('Failed to send') ||
-          edgeResult.error?.message?.includes('Network') ||
-          edgeResult.error?.message?.includes('404') ||
+          edgeErrorMsg.includes('fetch') ||
+          edgeErrorMsg.includes('failed to send') ||
+          edgeErrorMsg.includes('network') ||
+          edgeErrorMsg.includes('404') ||
+          edgeErrorMsg.includes('non-2xx') ||
+          edgeErrorMsg.includes('network error') ||
+          edgeErrorMsg.includes('service unavailable') ||
+          edgeErrorMsg.includes('connection') ||
           edgeErrMsg.includes('not found') ||
+          edgeErrMsg.includes('service unavailable') ||
           edgeErrMsg.includes('failed to send');
 
         if (isRecoverableError) {
@@ -140,13 +159,8 @@ export default function DentistSignupPage() {
             return;
           }
         } else {
-          // Non-recoverable edge function error (e.g., user already exists)
-          if (edgeErrMsg.includes('already registered') || edgeErrMsg.includes('already exists') || edgeErrMsg.includes('409')) {
-            toast.error('This email is already registered. Please sign in.');
-            setIsSubmitting(false);
-            return;
-          }
-          toast.error(edgeResult.data?.error || edgeResult.error?.message || 'Signup failed.');
+          // Non-recoverable edge function error
+          toast.error(edgeResult.data?.error || edgeResult.error?.message || 'Signup failed. Please try again.');
           setIsSubmitting(false);
           return;
         }
