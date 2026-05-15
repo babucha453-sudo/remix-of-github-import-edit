@@ -144,9 +144,6 @@ serve(async (req) => {
     } else {
       console.warn("RESEND_API_KEY not configured, skipping welcome email");
     }
-    } else {
-      console.warn("RESEND_API_KEY not configured, skipping welcome email");
-    }
 
     return new Response(
       JSON.stringify({ success: true, userId: newUser.user.id }),

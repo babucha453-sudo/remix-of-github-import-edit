@@ -294,10 +294,3 @@ verify_jwt = false  # Service role: bulk CSV import from storage
 
 [edge_runtime]
 enabled = true
-
-# --------------------------------------------------------------------------
-# CRON SCHEDULES
-# --------------------------------------------------------------------------
-# Run appointment reminder trigger every hour to check for upcoming appointments
-
-[edge_runtime]
