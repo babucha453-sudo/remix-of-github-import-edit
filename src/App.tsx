@@ -51,6 +51,7 @@ const BlogPostPage = lazyRetry(() => import("./pages/BlogPostPage"));
 
 // Business Pages - lazy loaded
 const ClaimProfilePage = lazyRetry(() => import("./pages/ClaimProfilePage"));
+const GarmentsPage = lazyRetry(() => import("./pages/GarmentsPage"));
 const ListYourPracticePage = lazyRetry(() => import("./pages/ListYourPracticePage"));
 const ListYourPracticeSuccessPage = lazyRetry(() => import("./pages/ListYourPracticeSuccessPage"));
 const PricingPage = lazyRetry(() => import("./pages/PricingPage"));
@@ -187,6 +188,7 @@ const App = () => (
 
                   {/* Business */}
                   <Route path="/claim-profile" element={<ClaimProfilePage />} />
+                  <Route path="/garments" element={<GarmentsPage />} />
                   <Route path="/list-your-practice" element={<ListYourPracticePage />} />
                   <Route path="/list-your-practice/success" element={<ListYourPracticeSuccessPage />} />
                   <Route path="/review/:clinicId" element={<ReviewFunnelPage />} />

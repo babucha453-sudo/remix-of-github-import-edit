@@ -1,10 +1,10 @@
 import { useState, useEffect, useRef, useMemo } from "react";
-import { 
-  ArrowRight, Shield, Star, MapPin, 
-  TrendingUp, Zap, Search, Building2, Stethoscope, Calendar, 
-  BadgeCheck, Timer, Globe, Target, Quote, ChevronDown, 
+import {
+  ArrowRight, Shield, Star, MapPin,
+  TrendingUp, Zap, Search, Building2, Stethoscope, Calendar,
+  BadgeCheck, Timer, Globe, Target, Quote, ChevronDown,
   CreditCard, Lock, ArrowUpRight, PhoneCall,
-  Sparkles
+  Sparkles, Shirt
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
@@ -811,7 +811,7 @@ const HomeV2 = () => {
                   </Button>
                 </Link>
               </motion.div>
-              
+
               <div className="grid grid-cols-2 gap-3">
                 {dentistBenefits.map((item, i) => (
                   <motion.div
@@ -825,6 +825,62 @@ const HomeV2 = () => {
                     <item.icon className="h-6 w-6 text-emerald-500 mb-2" />
                     <div className="font-bold text-gray-900 text-sm">{item.title}</div>
                     <div className="text-xs text-gray-500">{item.desc}</div>
+                  </motion.div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* BESPOKE GARMENTS */}
+      <section className="py-16 md:py-24 bg-slate-900 text-white relative overflow-hidden">
+        <div className="absolute inset-0 pointer-events-none">
+          <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-emerald-500/10 rounded-full blur-3xl" />
+        </div>
+        <div className="container mx-auto px-4 relative z-10">
+          <div className="max-w-5xl mx-auto">
+            <div className="grid md:grid-cols-2 gap-10 items-center">
+              <motion.div
+                initial={{ opacity: 0, x: -20 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+              >
+                <div className="inline-flex items-center gap-2 bg-emerald-500/20 text-emerald-400 px-3 py-1.5 rounded-full text-xs font-bold mb-4">
+                  <Shirt className="h-3.5 w-3.5" />
+                  Custom Manufacturing
+                </div>
+                <h2 className="text-2xl md:text-3xl font-black mb-4">
+                  Bespoke Garments for <span className="text-emerald-400">Dental & Professional Teams</span>
+                </h2>
+                <p className="text-slate-300 mb-6">
+                  We manufacture custom dresses, uniforms, and garments tailored for dental practices, nurseries, and professional staff. Premium quality, perfect fit.
+                </p>
+                <Link to="/garments">
+                  <Button className="bg-emerald-500 hover:bg-emerald-600 font-bold rounded-full">
+                    Explore Garments
+                    <ArrowRight className="ml-2 h-4 w-4" />
+                  </Button>
+                </Link>
+              </motion.div>
+              <div className="grid grid-cols-2 gap-3">
+                {[
+                  { icon: Stethoscope, title: "Dental & Medical", desc: "Lab coats & scrubs" },
+                  { icon: Baby, title: "Nursery & Childcare", desc: "Durable, easy-care attire" },
+                  { icon: Building2, title: "Corporate & Admin", desc: "Polished business wear" },
+                  { icon: Shirt, title: "Specialized Roles", desc: "Custom for every role" },
+                ].map((item, i) => (
+                  <motion.div
+                    key={item.title}
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: i * 0.1 }}
+                    className="bg-slate-800/50 backdrop-blur border border-slate-700/50 rounded-xl p-4"
+                  >
+                    <item.icon className="h-6 w-6 text-emerald-400 mb-2" />
+                    <div className="font-bold text-white text-sm">{item.title}</div>
+                    <div className="text-xs text-slate-400">{item.desc}</div>
                   </motion.div>
                 ))}
               </div>
