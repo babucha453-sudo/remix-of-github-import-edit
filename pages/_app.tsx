@@ -7,6 +7,8 @@ import {
   QueryClient,
   QueryClientProvider,
 } from "@tanstack/react-query";
+import { Plus_Jakarta_Sans } from "next/font/google";
+import dynamic from "next/dynamic";
 
 import "@/index.css";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -18,7 +20,13 @@ import { useVisitorTracking } from "@/hooks/useVisitorTracking";
 import { useDynamicFavicon } from "@/hooks/useDynamicFavicon";
 import { usePerformanceMonitor } from "@/hooks/usePerformanceMonitor";
 import { ErrorBoundary } from "@/components/common/ErrorBoundary";
-import dynamic from "next/dynamic";
+
+const plusJakarta = Plus_Jakarta_Sans({ 
+  subsets: ['latin'],
+  weight: ['400', '500', '600', '700', '800'],
+  display: 'swap',
+  variable: '--font-plus-jakarta',
+});
 
 const PandaBot = dynamic(() => import("@/components/PandaBot").then(mod => mod.PandaBot), {
   ssr: false,
@@ -106,30 +114,32 @@ export default function App({ Component, pageProps }: AppProps) {
   const [queryClient] = useState(() => new QueryClient());
 
   return (
-    <HelmetProvider>
-      <ThemeProvider attribute="class" defaultTheme="light" disableTransitionOnChange>
-        <ForceLightTheme />
-        <QueryClientProvider client={queryClient}>
-          <AuthProvider>
-            <TooltipProvider>
-              <AnalyticsProvider>
-                <VisitorTracker />
-                <DynamicFavicon />
-                <PerformanceMonitor />
-                <PandaBot />
-                <ErrorBoundary>
-                  <RouteChangeHandler>
-                    <Component {...pageProps} />
-                  </RouteChangeHandler>
-                </ErrorBoundary>
-              </AnalyticsProvider>
-              <Toaster />
-              <Sonner />
-            </TooltipProvider>
-          </AuthProvider>
-        </QueryClientProvider>
-      </ThemeProvider>
-    </HelmetProvider>
+    <div className={plusJakarta.variable}>
+      <HelmetProvider>
+        <ThemeProvider attribute="class" defaultTheme="light" disableTransitionOnChange>
+          <ForceLightTheme />
+          <QueryClientProvider client={queryClient}>
+            <AuthProvider>
+              <TooltipProvider>
+                <AnalyticsProvider>
+                  <VisitorTracker />
+                  <DynamicFavicon />
+                  <PerformanceMonitor />
+                  <PandaBot />
+                  <ErrorBoundary>
+                    <RouteChangeHandler>
+                      <Component {...pageProps} />
+                    </RouteChangeHandler>
+                  </ErrorBoundary>
+                </AnalyticsProvider>
+                <Toaster />
+                <Sonner />
+              </TooltipProvider>
+            </AuthProvider>
+          </QueryClientProvider>
+        </ThemeProvider>
+      </HelmetProvider>
+    </div>
   );
 }
 

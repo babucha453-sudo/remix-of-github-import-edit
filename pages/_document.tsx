@@ -34,13 +34,7 @@ export default class MyDocument extends Document {
           {/* Geo targeting */}
           <meta name="geo.region" content="US" />
 
-          {/* Font - preconnect and load with display=swap to prevent FOIT */}
-          <link rel="preconnect" href="https://fonts.googleapis.com" />
-          <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-          <link
-            href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
-            rel="stylesheet"
-          />
+          
 
           {/* Organization Schema */}
           <script

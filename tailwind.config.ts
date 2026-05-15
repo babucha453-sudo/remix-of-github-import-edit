@@ -14,8 +14,8 @@ export default {
     },
     extend: {
       fontFamily: {
-        sans: ['"Plus Jakarta Sans"', "system-ui", "sans-serif"],
-        display: ['"Plus Jakarta Sans"', "system-ui", "sans-serif"],
+        sans: ['var(--font-plus-jakarta)', '"Plus Jakarta Sans"', "system-ui", "sans-serif"],
+        display: ['var(--font-plus-jakarta)', '"Plus Jakarta Sans"', "system-ui", "sans-serif"],
       },
       fontWeight: {
         medium: "500",
