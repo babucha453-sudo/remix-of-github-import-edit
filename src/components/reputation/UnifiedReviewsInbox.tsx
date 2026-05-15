@@ -567,7 +567,7 @@ export default function UnifiedReviewsInbox({ clinicId, googlePlaceId, showAISug
                     <Button
                       variant="outline"
                       size="sm"
-                      className="text-coral border-coral"
+                      className="text-coral border-coral hover:bg-coral hover:text-white"
                       onClick={() => updateInternalReview.mutate({ id: selectedReview.id, status: 'flagged_fake' })}
                     >
                       Flag as Fake

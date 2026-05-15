@@ -596,7 +596,7 @@ export default function SeoTab() {
                     {item.status ? (
                       <Badge className="bg-teal/20 text-teal">Complete</Badge>
                     ) : (
-                      <Badge variant="outline" className="text-gold border-gold">Pending</Badge>
+                      <Badge variant="outline" className="bg-gold/10 text-gold border-gold">Pending</Badge>
                     )}
                   </div>
                 ))}
@@ -657,11 +657,11 @@ export default function SeoTab() {
                       <p className="text-sm text-muted-foreground">{schema.pages}</p>
                     </div>
                     <div className="flex items-center gap-2">
-                      {schema.priority === 'high' && <Badge variant="outline" className="text-primary border-primary">High</Badge>}
+                      {schema.priority === 'high' && <Badge variant="outline" className="bg-primary/10 text-primary border-primary">High</Badge>}
                       {schema.status === 'implemented' ? (
                         <Badge className="bg-teal/20 text-teal">Implemented</Badge>
                       ) : (
-                        <Badge variant="outline" className="text-gold border-gold">Pending</Badge>
+<Badge variant="outline" className="bg-gold/10 text-gold border-gold">Pending</Badge>
                       )}
                     </div>
                   </div>

@@ -314,7 +314,7 @@ export default function SeoCopilotTab() {
                   {seoIssues.map(i => i.message).join(' • ')}
                 </p>
               </div>
-              <Button variant="outline" size="sm" className="text-coral border-coral hover:bg-coral hover:text-white">
+              <Button variant="outline" size="sm" className="bg-coral/10 text-coral border-coral hover:bg-coral hover:text-white">
                 View All
               </Button>
             </div>

@@ -745,7 +745,7 @@ export default function LocationEnrichmentSection() {
                           <TableCell>{item.clinicCount}</TableCell>
                         )}
                         <TableCell>
-                          <Badge variant="outline" className="text-coral border-coral">
+                          <Badge variant="outline" className="bg-coral/10 text-coral border-coral">
                             <AlertCircle className="h-3 w-3 mr-1" />
                             No Content
                           </Badge>

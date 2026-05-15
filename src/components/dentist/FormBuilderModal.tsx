@@ -279,7 +279,7 @@ export default function FormBuilderModal({ open, onOpenChange, clinicId }: FormB
                       >
                         <div className="flex items-center gap-2">
                           <GripVertical className="h-4 w-4 text-white/30 cursor-move" />
-                          <Badge variant="outline" className="text-xs border-primary/30 text-primary">
+                          <Badge variant="outline" className="text-xs border-primary/30 bg-primary/10 text-primary">
                             <Icon className="h-3 w-3 mr-1" />
                             {FIELD_TYPES.find(t => t.value === field.type)?.label}
                           </Badge>

@@ -108,7 +108,7 @@ const Search = () => {
           </div>
           
           <div className="max-w-3xl mx-auto text-center">
-            <Badge variant="outline" className="mb-4 rounded-full px-4 py-1.5 font-bold text-xs border-primary/30 text-primary">
+            <Badge variant="outline" className="mb-4 rounded-full px-4 py-1.5 font-bold text-xs border-primary/30 bg-primary/10 text-primary">
               <ShieldCheck className="h-3.5 w-3.5 mr-1.5" />
               {realCounts?.clinics?.toLocaleString() || 0}+ Verified Providers
             </Badge>

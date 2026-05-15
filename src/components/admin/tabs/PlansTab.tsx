@@ -781,7 +781,7 @@ export default function PlansTab() {
             </p>
             <Dialog open={customPlanDialogOpen} onOpenChange={setCustomPlanDialogOpen}>
               <DialogTrigger asChild>
-                <Button variant="outline" className="border-primary text-primary hover:bg-primary/10">
+                <Button variant="outline" className="border-primary text-primary hover:bg-primary/10 hover:text-primary">
                   <Plus className="h-4 w-4 mr-2" />
                   Request Custom Plan
                 </Button>
@@ -1124,7 +1124,7 @@ export default function PlansTab() {
                             );
                           })}
                           <TableCell className="text-center py-3">
-                            <Badge variant="outline" className="text-xs border-primary/30 text-primary font-medium">
+                            <Badge variant="outline" className="text-xs border-primary/30 bg-primary/10 text-primary font-medium">
                               Configurable
                             </Badge>
                           </TableCell>

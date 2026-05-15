@@ -245,7 +245,7 @@ export default function ClinicsTab() {
   const getStatusBadge = (status: string) => {
     switch (status) {
       case 'verified': return <Badge className="bg-primary text-primary-foreground"><CheckCircle className="h-3 w-3 mr-1" />Verified</Badge>;
-      case 'pending': return <Badge variant="outline" className="text-gold border-gold">Pending</Badge>;
+      case 'pending': return <Badge variant="outline" className="bg-gold/10 text-gold border-gold">Pending</Badge>;
       case 'expired': return <Badge variant="destructive">Expired</Badge>;
       default: return <Badge variant="secondary">Unverified</Badge>;
     }

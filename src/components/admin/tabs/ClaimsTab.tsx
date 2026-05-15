@@ -41,7 +41,7 @@ export default function ClaimsTab() {
     switch (status) {
       case 'approved': return <Badge className="bg-primary text-primary-foreground"><CheckCircle className="h-3 w-3 mr-1" />Approved</Badge>;
       case 'rejected': return <Badge variant="destructive"><XCircle className="h-3 w-3 mr-1" />Rejected</Badge>;
-      default: return <Badge variant="outline" className="text-gold border-gold"><Clock className="h-3 w-3 mr-1" />Pending</Badge>;
+      default: return <Badge variant="outline" className="bg-gold/10 text-gold border-gold"><Clock className="h-3 w-3 mr-1" />Pending</Badge>;
     }
   };
 

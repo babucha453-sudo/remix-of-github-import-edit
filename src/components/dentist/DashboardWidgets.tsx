@@ -405,7 +405,7 @@ export default function DashboardWidgets({
             <Button 
               variant="outline" 
               size="sm" 
-              className="w-full justify-start gap-2 text-xs bg-transparent border-teal/30 text-teal hover:bg-teal/10 hover:border-teal/50"
+              className="w-full justify-start gap-2 text-xs bg-teal/10 border-teal/30 text-teal hover:bg-teal/20 hover:border-teal/50"
               onClick={() => onNavigate('my-review-requests')}
             >
               <Send className="h-3.5 w-3.5" />
@@ -414,7 +414,7 @@ export default function DashboardWidgets({
             <Button 
               variant="outline" 
               size="sm" 
-              className="w-full justify-start gap-2 text-xs bg-transparent border-primary/30 text-primary hover:bg-primary/10 hover:border-primary/50"
+              className="w-full justify-start gap-2 text-xs bg-primary/10 border-primary/30 text-primary hover:bg-primary/20 hover:border-primary/50"
               onClick={() => onNavigate('my-reviews')}
             >
               <QrCode className="h-3.5 w-3.5" />
@@ -432,7 +432,7 @@ export default function DashboardWidgets({
             <Button 
               variant="outline" 
               size="sm" 
-              className="w-full justify-start gap-2 text-xs bg-transparent border-gold/30 text-gold hover:bg-gold/10 hover:border-gold/50"
+              className="w-full justify-start gap-2 text-xs bg-gold/10 border-gold/30 text-gold hover:bg-gold/20 hover:border-gold/50"
               onClick={() => onNavigate('my-appointments')}
             >
               <Eye className="h-3.5 w-3.5" />

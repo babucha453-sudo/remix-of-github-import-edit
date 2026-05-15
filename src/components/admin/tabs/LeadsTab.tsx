@@ -113,7 +113,7 @@ export default function LeadsTab() {
       case 'converted': return <Badge className="bg-primary text-primary-foreground"><CheckCircle className="h-3 w-3 mr-1" />Converted</Badge>;
       case 'lost': return <Badge variant="secondary"><XCircle className="h-3 w-3 mr-1" />Lost</Badge>;
       case 'spam': return <Badge variant="destructive"><AlertTriangle className="h-3 w-3 mr-1" />Spam</Badge>;
-      default: return <Badge variant="outline" className="text-gold border-gold"><Clock className="h-3 w-3 mr-1" />New</Badge>;
+      default: return <Badge variant="outline" className="bg-gold/10 text-gold border-gold"><Clock className="h-3 w-3 mr-1" />New</Badge>;
     }
   };
 

@@ -579,7 +579,7 @@ const ClaimProfilePage = () => {
                   <p className="text-sm text-muted-foreground mb-3">
                     If your clinic isn't listed yet, you can add it for free.
                   </p>
-                  <Button asChild variant="outline" className="rounded-xl font-bold border-gold text-gold hover:bg-gold hover:text-white" size="sm">
+                  <Button asChild variant="outline" className="rounded-xl font-bold border-gold text-gold bg-gold/10 hover:bg-gold hover:text-white" size="sm">
                     <Link to="/list-your-practice">
                       List Your Practice
                       <ArrowRight className="ml-2 h-4 w-4" />

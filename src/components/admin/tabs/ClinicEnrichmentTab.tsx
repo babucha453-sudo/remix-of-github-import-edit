@@ -908,7 +908,7 @@ export default function ClinicEnrichmentTab() {
                           )}
                         </TableCell>
                         <TableCell>
-                          <Badge variant="outline" className="text-coral border-coral/50">
+                          <Badge variant="outline" className="bg-coral/10 text-coral border-coral/50">
                             Missing Description
                           </Badge>
                         </TableCell>
@@ -988,7 +988,7 @@ export default function ClinicEnrichmentTab() {
                               Has Description
                             </Badge>
                           ) : (
-                            <Badge variant="outline" className="text-coral border-coral/50">
+                            <Badge variant="outline" className="bg-coral/10 text-coral border-coral/50">
                               Missing
                             </Badge>
                           )}
@@ -1000,7 +1000,7 @@ export default function ClinicEnrichmentTab() {
                               Has Image
                             </Badge>
                           ) : (
-                            <Badge variant="outline" className="text-coral border-coral/50">
+                            <Badge variant="outline" className="bg-coral/10 text-coral border-coral/50">
                               Missing
                             </Badge>
                           )}

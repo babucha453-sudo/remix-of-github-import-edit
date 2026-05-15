@@ -197,7 +197,7 @@ export default function ReputationWidget({
         {onViewDetails && (
           <Button 
             variant="outline" 
-            className="w-full justify-between text-sm font-semibold bg-transparent border-teal/30 text-teal hover:bg-teal/10 hover:border-teal/50"
+            className="w-full justify-between text-sm font-semibold bg-teal/10 border-teal/30 text-teal hover:bg-teal/20 hover:border-teal/50"
             onClick={onViewDetails}
           >
             View Full Analytics
