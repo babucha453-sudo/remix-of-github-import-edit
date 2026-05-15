@@ -163,8 +163,8 @@ export default function DentistSignupPage() {
 
       if (signInError) {
         toast.error('Account created but failed to sign in. Please sign in manually.');
-        navigate('/auth?tab=login', { replace: true });
         setIsSubmitting(false);
+        navigate('/auth?tab=login', { replace: true });
         return;
       }
 
@@ -177,7 +177,11 @@ export default function DentistSignupPage() {
       }
 
       toast.success('Welcome to AppointPanda!');
-      navigate('/onboarding?new=true', { replace: true });
+      setIsSubmitting(false);
+      // Small delay to let toast render before navigation
+      setTimeout(() => {
+        navigate('/onboarding?new=true', { replace: true });
+      }, 100);
     } catch (err: any) {
       console.error('[Signup] Unexpected error:', err);
       toast.error(err?.message || 'An unexpected error occurred. Please try again.');
