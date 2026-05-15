@@ -800,6 +800,22 @@ const ClinicPage = () => {
                 isClaimed={isClaimed}
               />
 
+              {/* Google Maps Embed */}
+              {clinic.address && (
+                <div className="mt-4 rounded-xl overflow-hidden border border-slate-200">
+                  <iframe
+                    src={`https://maps.google.com/maps?q=${encodeURIComponent(`${clinic.name}, ${clinic.address}, ${clinic.city?.name || ''}, ${clinic.city?.state?.abbreviation || ''}`)}&output=embed&width=100%&height=200&style=border:0`}
+                    width="100%"
+                    height="200"
+                    style={{ border: 0 }}
+                    allowFullScreen
+                    loading="lazy"
+                    referrerPolicy="no-referrer-when-downgrade"
+                    title={`${clinic.name} location`}
+                  />
+                </div>
+              )}
+
               {/* Claim CTA in sidebar for unclaimed */}
               {!isClaimed && (
                 <div className="mt-6">

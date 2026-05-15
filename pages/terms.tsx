@@ -1,7 +1,7 @@
 import type { GetStaticProps } from "next";
 import type { DehydratedState } from "@tanstack/react-query";
 import { dehydrate, HydrationBoundary, QueryClient } from "@tanstack/react-query";
-import InsurancePage from "@/pages/InsurancePage";
+import TermsPage from "@/pages/TermsPage";
 
 type Props = {
   dehydratedState: DehydratedState;
@@ -18,10 +18,10 @@ export const getStaticProps: GetStaticProps<Props> = async () => {
   };
 };
 
-export default function InsurancePageWrapper({ dehydratedState }: Props) {
+export default function TermsPageWrapper({ dehydratedState }: Props) {
   return (
     <HydrationBoundary state={dehydratedState}>
-      <InsurancePage />
+      <TermsPage />
     </HydrationBoundary>
   );
 }
