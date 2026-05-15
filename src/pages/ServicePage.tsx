@@ -12,6 +12,7 @@ import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { SEOHead } from "@/components/seo/SEOHead";
 import { StructuredData } from "@/components/seo/StructuredData";
+import { SyncStructuredData } from "@/components/seo/SyncStructuredData";
 import { Breadcrumbs } from "@/components/layout/Breadcrumbs";
 import { useProfiles } from "@/hooks/useProfiles";
 import { useSeoPageContent, parseMarkdownContent, parseFaqFromContent } from "@/hooks/useSeoPageContent";
@@ -207,6 +208,37 @@ const ServicePage = () => {
         url={`/services/${serviceSlug}/`}
         provider="AppointPanda Partner Clinics"
         areaServed="United States"
+      />
+      <SyncStructuredData
+        data={{
+          '@context': 'https://schema.org',
+          '@type': 'HowTo',
+          name: `How to Get ${treatmentName} Treatment`,
+          description: `Step-by-step guide to getting ${treatmentName} treatment from qualified dental professionals. Find providers, compare options, and book appointments.`,
+          step: [
+            {
+              '@type': 'HowToStep',
+              name: 'Search for Providers',
+              text: `Browse our verified directory of ${treatmentName} specialists. Filter by location, experience, and patient ratings to find qualified providers.`,
+            },
+            {
+              '@type': 'HowToStep',
+              name: 'Compare Options',
+              text: 'Review provider qualifications, treatment approaches, pricing, and patient testimonials. Consider location convenience and available appointment times.',
+            },
+            {
+              '@type': 'HowToStep',
+              name: 'Book Consultation',
+              text: 'Schedule an initial consultation with your chosen provider. Use our online booking system for quick, easy appointment scheduling.',
+            },
+            {
+              '@type': 'HowToStep',
+              name: 'Prepare for Treatment',
+              text: 'Follow your provider\'s pre-treatment instructions. Ask questions about the procedure, recovery time, and aftercare during your consultation.',
+            },
+          ],
+        }}
+        id={`howto-${treatmentName}`}
       />
       <StructuredData
         type="faq"

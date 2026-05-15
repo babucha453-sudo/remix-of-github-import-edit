@@ -16,7 +16,7 @@ import { BlogFAQList } from "@/components/blog/BlogFAQList";
 import { EmailCapture } from "@/components/EmailCapture";
 import { 
   Calendar, User, Clock, ArrowLeft, Share2, Facebook, Twitter, Linkedin,
-  MapPin, Search, Phone, Star, Shield, ArrowRight
+  MapPin, Search, Phone, Star, Shield, ArrowRight, RefreshCw
 } from "lucide-react";
 import { format } from "date-fns";
 import { sanitizeHtml } from "@/lib/utils";
@@ -589,6 +589,39 @@ const BlogPostPage = ({ initialPost, initialRelatedPosts }: BlogPostPageProps) =
                   </Button>
                 </div>
               </div>
+
+              {/* Author Bio */}
+              {post.author_name && (
+                <div className="mt-8 pt-8 border-t border-slate-200">
+                  <div className="bg-slate-50 rounded-xl p-6 flex items-start gap-4">
+                    <div className="h-12 w-12 bg-emerald-100 rounded-full flex items-center justify-center flex-shrink-0">
+                      <User className="h-6 w-6 text-emerald-600" />
+                    </div>
+                    <div>
+                      <h4 className="font-bold text-slate-900 mb-1">
+                        {post.author_name || 'AppointPanda Editorial Team'}
+                      </h4>
+                      <p className="text-sm text-slate-600 mb-2">
+                        Dental health content specialist at AppointPanda, dedicated to helping patients make informed decisions about their dental care through comprehensive, accurate information.
+                      </p>
+                      <div className="flex items-center gap-4 text-xs text-slate-500">
+                        {post.published_at && (
+                          <span className="flex items-center gap-1">
+                            <Calendar className="h-3 w-3" />
+                            Published {new Date(post.published_at).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
+                          </span>
+                        )}
+                        {post.updated_at && post.updated_at !== post.published_at && (
+                          <span className="flex items-center gap-1">
+                            <RefreshCw className="h-3 w-3" />
+                            Updated {new Date(post.updated_at).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
 
             {/* Email Capture */}

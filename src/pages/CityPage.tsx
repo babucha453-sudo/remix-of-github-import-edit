@@ -388,6 +388,22 @@ const CityPage = ({ initialState, initialCity }: CityPageProps) => {
               image: p.image,
             })),
           },
+          {
+            '@context': 'https://schema.org',
+            '@type': 'Place',
+            name: `${cityName}, ${stateAbbr}`,
+            geo: {
+              '@type': 'GeoCoordinates',
+              latitude: city?.latitude || 34.0522,
+              longitude: city?.longitude || -118.2437,
+            },
+            address: {
+              '@type': 'PostalAddress',
+              addressLocality: cityName,
+              addressRegion: stateAbbr,
+              addressCountry: 'US',
+            },
+          },
         ]}
         id="city-page-schema"
       />
@@ -622,6 +638,14 @@ const CityPage = ({ initialState, initialCity }: CityPageProps) => {
                     {treatment.name}
                   </a>
                 ))}
+              </div>
+
+              {/* Quick Answer for Featured Snippets */}
+              <div className="mb-6 p-5 bg-emerald-50 border border-emerald-200 rounded-xl">
+                <h3 className="font-bold text-slate-800 mb-2">Quick Answer</h3>
+                <p className="text-slate-600 text-sm leading-relaxed">
+                  Finding quality dental care in {cityName} is simple with our verified dentist directory. Browse verified providers by specialty, compare ratings and reviews, check accepted insurance, and book appointments directly online — all from trusted, vetted dental professionals serving the {cityName} area.
+                </p>
               </div>
               
               {/* TRANSFORMATION: Price Decision Content - SEO Gold */}
