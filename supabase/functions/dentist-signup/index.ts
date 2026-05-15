@@ -1,7 +1,6 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.57.2";
 import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
-import { Resend } from "https://resend.land/v0.1.4";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -14,7 +13,7 @@ const SignupSchema = z.object({
   fullName: z.string().min(1, "Full name required").max(200).trim(),
 });
 
-function generateEmailTemplate(fullName: string, tempPassword: string) {
+function generateEmailTemplate(fullName: string, email: string, tempPassword: string) {
   return `
 <!DOCTYPE html>
 <html>
@@ -115,21 +114,36 @@ serve(async (req) => {
       role: "dentist",
     });
 
-    // Send welcome email with Resend
+// Send welcome email with Resend
     const resendApiKey = Deno.env.get("RESEND_API_KEY");
     if (resendApiKey) {
       try {
-        const resend = new Resend(resendApiKey);
-        const emailHtml = generateEmailTemplate(fullName, password);
-        await resend.sendEmail({
-          from: "AppointPanda <noreply@appointpanda.com>",
-          to: email,
-          subject: `Welcome to AppointPanda, ${fullName}!`,
-          html: emailHtml,
+        const emailHtml = generateEmailTemplate(fullName, email, password);
+        const emailResponse = await fetch("https://api.resend.com/emails", {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${resendApiKey}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            from: "AppointPanda <noreply@appointpanda.com>",
+            to: email,
+            subject: `Welcome to AppointPanda, ${fullName}!`,
+            html: emailHtml,
+          }),
         });
+        if (!emailResponse.ok) {
+          const errBody = await emailResponse.text();
+          console.error("Resend error:", emailResponse.status, errBody);
+        } else {
+          console.log("Welcome email sent to:", email);
+        }
       } catch (emailError) {
         console.error("Failed to send welcome email:", emailError);
       }
+    } else {
+      console.warn("RESEND_API_KEY not configured, skipping welcome email");
+    }
     } else {
       console.warn("RESEND_API_KEY not configured, skipping welcome email");
     }

@@ -6,7 +6,8 @@
     "https://esm.sh/stripe@18.5.0": "npm:stripe@18",
     "https://esm.sh/stripe@14.21.0?target=deno": "npm:stripe@14",
     "https://deno.land/x/zod@v3.22.4/mod.ts": "npm:zod@3",
-    
+    "https://resend.land/v0.1.4": "npm:resend@3",
+
     "https://deno.land/std@0.168.0/http/server.ts": "jsr:@std/http@0/server",
     "https://deno.land/std@0.190.0/http/server.ts": "jsr:@std/http@0/server",
     "https://deno.land/std@0.168.0/crypto/mod.ts": "jsr:@std/crypto@0"
