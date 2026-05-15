@@ -109,24 +109,24 @@ export const SEOContentBlock = ({
 
   const defaultContentVariants = {
     'service-location': [
-      `Looking for quality ${treatmentName?.toLowerCase()} care in ${locationName}? Our directory features verified dental professionals specializing in ${treatmentName?.toLowerCase()} procedures with proven patient satisfaction.`,
-      `${treatmentName} specialists in ${locationName} - browse ratings, compare experience, and book directly with top-rated providers in your area.`,
-      `Find experienced ${treatmentName?.toLowerCase()} dentists near you. Verified credentials, real patient reviews, and easy online booking.`,
+      `Finding the right ${treatmentName?.toLowerCase()} specialist in ${locationName} is essential for your dental health. Our comprehensive directory features verified ${treatmentName?.toLowerCase()} providers with proven track records of patient satisfaction. Browse detailed profiles, compare credentials, read authentic patient reviews, and book your appointment directly online. Each dentist in our network has been vetted for quality standards, ensuring you receive expert care from qualified professionals in your area. Whether you need routine preventive care or specialized treatment, our directory connects you with top-rated ${treatmentName?.toLowerCase()} experts who prioritize patient comfort and excellent outcomes.`,
+      `${treatmentName} specialists in ${locationName} offer comprehensive dental care through our verified network. Our directory makes it easy to research providers, compare treatment options, read patient experiences, and find the perfect match for your dental needs. All listed ${treatmentName?.toLowerCase()} dentists have verified credentials, current licenses, and demonstrated expertise in their field. Booking through our platform is simple, secure, and often available with same-day appointments. Take control of your dental health by choosing from verified ${treatmentName?.toLowerCase()} providers in ${locationName} who are committed to delivering exceptional care.`,
+      `When searching for ${treatmentName?.toLowerCase()} services in ${locationName}, our directory provides the most comprehensive and up-to-date listings of qualified dental professionals. We verify each provider's credentials, licensure status, and patient satisfaction ratings so you can make informed decisions about your dental care. Our platform allows you to compare multiple ${treatmentName?.toLowerCase()} specialists side-by-side, review their experience and specializations, check availability, and book appointments without phone calls. Quality dental care is within reach - our verified network of ${treatmentName?.toLowerCase()} experts in ${locationName} is ready to serve you with compassionate, professional treatment.`,
     ],
     'city': [
-      `Quality dental care starts here in ${locationName}. Browse verified dentists, compare treatment options, and book appointments with confidence.`,
-      `Your smile matters - find trusted dentists in ${locationName} who prioritize patient care. Read reviews, compare services, and book online.`,
-      `Looking for a great dentist in ${locationName}? Our verified directory helps you find the right dental professional for your needs.`,
+      `${locationName} residents have access to exceptional dental care through our verified network of dental professionals. Our directory features comprehensive listings of general dentists, specialists, and multi-specialty practices throughout the ${locationName} area. Each provider has been vetted for licensure, credentials, and patient satisfaction to ensure you receive quality care. Browse by specialty, compare office hours and accepted insurance plans, read verified patient reviews, and book appointments directly online. Our platform makes finding a trusted dentist in ${locationName} simple and convenient, with detailed profiles covering qualifications, services offered, and patient experiences. Your dental health journey starts here - connect with top-rated providers committed to your care.`,
+      `Finding quality dental care in ${locationName} is easier than ever with our comprehensive dentist directory. We feature verified dental professionals offering everything from routine cleanings to advanced cosmetic and restorative procedures. Each listing includes detailed information about provider qualifications, specialties, office locations, accepted insurance plans, and patient ratings. Our platform enables side-by-side comparisons so you can evaluate dentists based on what matters most to you - whether that's experience, proximity, or patient reviews. Book appointments online, read authentic patient testimonials, and discover why ${locationName} is home to some of the most dedicated dental professionals in the region. Your perfect dentist awaits in our verified network.`,
+      `Our dentist directory for ${locationName} connects you with verified dental professionals serving communities throughout the area. Whether you need preventive care, cosmetic treatments, or specialized procedures, our network includes qualified providers for every dental need. Each dentist has been thoroughly vetted for current licensure, professional credentials, and positive patient outcomes. Browse detailed profiles to find providers who match your specific requirements - from general dentistry to oral surgery, orthodontics to periodontics. Our platform provides transparent information about services, pricing, insurance acceptance, and availability, enabling confident decisions about your dental care. Start your search today and discover why ${locationName} residents trust our directory to find exceptional dental providers.`,
     ],
     'service': [
-      `Explore ${treatmentName} options across the United States. Compare qualified providers, read patient experiences, and book consultations.`,
-      `Learn about ${treatmentName} procedures and find experienced dental specialists. Quality care starts with informed decisions.`,
-      `${treatmentName} - find qualified dentists specializing in this treatment. Compare providers and book your appointment today.`,
+      `Our dental service directory provides comprehensive information about ${treatmentName} procedures, helping you understand your treatment options and find qualified providers. Each listing includes details about the procedure, what to expect during treatment, recovery timelines, and cost considerations. We feature verified dentists and specialists with proven expertise in ${treatmentName} techniques, ensuring you receive care from qualified professionals. Our platform allows you to research providers, compare qualifications, read patient experiences, and book consultations with ease. Whether you're exploring ${treatmentName} for the first time or seeking a second opinion, our directory connects you with experts committed to delivering excellent outcomes. Understanding your options is the first step toward making informed decisions about your dental health.`,
+      `Discover qualified dental professionals specializing in ${treatmentName} through our comprehensive provider directory. We feature verified dentists with demonstrated expertise in ${treatmentName} procedures, ensuring you have access to qualified care in your area. Each provider profile includes information about their training, certifications, years of experience, and patient satisfaction ratings. Our platform enables you to research treatment options, understand procedure details, compare provider qualifications, and book appointments directly. Whether you need preventive ${treatmentName} care or more complex procedures, our network of verified specialists is ready to serve you. Take the next step toward optimal dental health by exploring our directory of qualified ${treatmentName} providers.`,
+      `Finding expert ${treatmentName} dental care is straightforward with our verified provider directory. We connect patients with qualified dentists and specialists offering comprehensive ${treatmentName} services backed by proven credentials and positive patient outcomes. Each provider in our network has been thoroughly vetted for licensure, professional standing, and clinical expertise in ${treatmentName} procedures. Our directory provides detailed profiles covering qualifications, treatment approaches, patient reviews, and availability - everything you need to make confident decisions about your dental care. Whether you're seeking routine ${treatmentName} services or specialized treatment, our verified network offers access to top-quality dental professionals. Begin your search today and discover why patients trust our directory to find exceptional ${treatmentName} care.`,
     ],
     'state': [
-      `Quality dental care across ${locationName}. Browse verified dentists, compare services, and find the right provider for your needs.`,
-      `Find trusted dental professionals in ${locationName}. Our directory features verified clinics with real patient reviews and easy booking.`,
-      `Your perfect smile awaits in ${locationName}. Discover top-rated dentists and book your dental care today.`,
+      `${locationName} offers a comprehensive network of verified dental professionals serving communities throughout the state. Our directory features qualified general dentists and specialists providing full-service dental care, from routine preventive treatments to advanced cosmetic and restorative procedures. Each provider in our ${locationName} network has been vetted for licensure, professional credentials, and demonstrated patient satisfaction. Our platform enables you to search by city, specialty, insurance acceptance, and available appointment times - making it simple to find the right dentist for your needs. Browse detailed provider profiles, read verified patient reviews, compare office hours and locations, and book appointments directly online. Quality dental care is accessible throughout ${locationName} - discover why patients trust our directory to connect them with exceptional dental professionals.`,
+      `Finding quality dental care in ${locationName} is streamlined through our comprehensive dentist directory featuring verified providers across the state. Our network includes general dentists, specialists, and multi-specialty practices offering full-service dental care for patients of all ages. Each listing includes detailed information about provider qualifications, specialties, accepted insurance, patient ratings, and appointment availability. We make it easy to compare dentists side-by-side, research treatment options, read authentic patient reviews, and book appointments directly without phone calls. Whether you need preventive care, cosmetic treatments, or specialized procedures, our ${locationName} network connects you with qualified professionals committed to excellent patient outcomes. Start your search today and discover the difference our verified dental network can make in your dental health journey.`,
+      `Our ${locationName} dentist directory provides access to a wide network of verified dental professionals serving communities statewide. From routine cleanings to advanced procedures, our featured providers offer comprehensive dental services tailored to patient needs. Each dentist has been thoroughly vetted for current licensure, professional credentials, and positive treatment outcomes. Our platform enables easy searching by location, specialty, insurance plan, and availability - helping you find the perfect dental match quickly. Browse provider profiles, compare qualifications, read patient testimonials, and book appointments online in just a few clicks. Quality dental care is available throughout ${locationName} through our network of dedicated professionals. Discover trusted dentists committed to delivering exceptional care and building long-term patient relationships.`,
     ],
   };
 
@@ -138,24 +138,24 @@ export const SEOContentBlock = ({
 
   const titleVariants = {
     'service-location': [
-      `About ${treatmentName} in ${locationName}`,
-      `${treatmentName} Specialists in ${locationName}`,
-      `Quality ${treatmentName} Care in ${locationName}`,
+      `Complete Guide to ${treatmentName} in ${locationName}`,
+      `${treatmentName} Dental Care in ${locationName}`,
+      `Find ${treatmentName} Specialists Near You in ${locationName}`,
     ],
     'city': [
-      `Dental Care in ${locationName}`,
-      `Quality Dentistry in ${locationName}`,
-      `Your Smile Experts in ${locationName}`,
+      `Dental Care Services in ${locationName}`,
+      `Find Quality Dentists in ${locationName}`,
+      `Your Complete Dental Directory for ${locationName}`,
     ],
     'service': [
-      `About ${treatmentName}`,
-      `${treatmentName} Information`,
-      `Learn About ${treatmentName}`,
+      `Everything You Need to Know About ${treatmentName}`,
+      `Complete Guide to ${treatmentName} Procedures`,
+      `Understanding ${treatmentName} - Expert Dental Insights`,
     ],
     'state': [
-      `Dental Services in ${locationName}`,
-      `Quality Dental Care in ${locationName}`,
-      `Find Dentists in ${locationName}`,
+      `Dental Care Across ${locationName} - Complete Directory`,
+      `Find the Best Dentists Throughout ${locationName}`,
+      `${locationName} Dental Services - Your Complete Guide`,
     ],
   };
 

@@ -5,10 +5,10 @@ import { MobileHeroBackground, AnimatedHeroHeadlines, FloatingDot, FloatingCross
 import { TypewriterText } from "@/components/TypewriterText";
 import dynamic from "next/dynamic";
 
-const Footer = dynamic(() => import("@/components/Footer").then(mod => mod.Footer), { ssr: false });
-const AIExplainerSection = dynamic(() => import("@/components/ai").then(mod => mod.AIExplainerSection), { ssr: false });
-const ForDentistsAISection = dynamic(() => import("@/components/ai").then(mod => mod.ForDentistsAISection), { ssr: false });
-const AutoScrollCarousel = dynamic(() => import("@/components/AutoScrollCarousel").then(mod => mod.AutoScrollCarousel), { ssr: false });
+const Footer = dynamic(() => import("@/components/Footer").then(mod => mod.Footer));
+const AIExplainerSection = dynamic(() => import("@/components/ai").then(mod => mod.AIExplainerSection));
+const ForDentistsAISection = dynamic(() => import("@/components/ai").then(mod => mod.ForDentistsAISection));
+const AutoScrollCarousel = dynamic(() => import("@/components/AutoScrollCarousel").then(mod => mod.AutoScrollCarousel));
 
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/router";

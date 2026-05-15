@@ -114,7 +114,7 @@ async function getAllCitiesWithClinics(supabase: any): Promise<Array<{id: string
 }
 
 async function generateCounts(supabase: any) {
-  const clinics = await fetchAllRows(supabase, "clinics", "id, city_id, description", { is_active: true, is_duplicate: false });
+  const clinics = await fetchAllRows(supabase, "clinics", "id, slug, description", { is_active: true, is_duplicate: false });
   const states = await fetchAllRows(supabase, "states", "id", { is_active: true });
   const cities = await getAllCitiesWithClinics(supabase);
   const treatments = await fetchAllRows(supabase, "treatments", "id", { is_active: true });
@@ -279,9 +279,10 @@ serve(async (req) => {
     }
 
     if (sitemapType === "profiles" || sitemapType === "clinics") {
-      let urls: SitemapUrl[] = counts.clinics.filter(c => c.id).map(c => {
+      const clinicsData = await fetchAllRows(supabase, "clinics", "id, slug, description", { is_active: true, is_duplicate: false });
+      let urls: SitemapUrl[] = clinicsData.filter(c => c.slug).map(c => {
         const hasContent = c.description && c.description.length >= 50;
-        return { loc: normalizeUrl(`/clinic/${c.id}`), priority: hasContent ? 0.7 : 0.5, changefreq: "weekly" };
+        return { loc: normalizeUrl(`/clinic/${c.slug}`), priority: hasContent ? 0.7 : 0.5, changefreq: "weekly" };
       });
       if (chunk !== null) urls = getChunk(urls, chunk);
       return xmlResponse(generateSitemapXml(urls));

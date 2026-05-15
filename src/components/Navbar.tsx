@@ -227,6 +227,9 @@ export function Navbar() {
                   <DropdownMenuItem asChild className="rounded-lg font-bold text-emerald">
                     <Link to="/search">View All States</Link>
                   </DropdownMenuItem>
+                  <DropdownMenuItem asChild className="rounded-lg text-slate-600">
+                    <Link to="/services">All Services</Link>
+                  </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
 
