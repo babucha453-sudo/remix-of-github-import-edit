@@ -80,6 +80,12 @@ verify_jwt = false  # Custom auth: bearer token + super_admin role
 verify_jwt = false  # Custom auth: bearer token + super_admin role
 
 # --------------------------------------------------------------------------
+# Public Signup (No auth needed - public signup form)
+# --------------------------------------------------------------------------
+[functions.dentist-signup]
+verify_jwt = false  # Public: dentist signup with admin API
+
+# --------------------------------------------------------------------------
 # Payment/Verification (Custom auth or webhook signatures)
 # --------------------------------------------------------------------------
 [functions.create-verification-payment]
@@ -286,9 +292,12 @@ verify_jwt = false  # Service role: data recovery tool
 [functions.import-gz-csv]
 verify_jwt = false  # Service role: bulk CSV import from storage
 
+[edge_runtime]
+enabled = true
+
 # --------------------------------------------------------------------------
 # CRON SCHEDULES
 # --------------------------------------------------------------------------
 # Run appointment reminder trigger every hour to check for upcoming appointments
-[scheduler.appointment-reminder-trigger]
-cron = "0 * * * *"  # Every hour
+
+[edge_runtime]
