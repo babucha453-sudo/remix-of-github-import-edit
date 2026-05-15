@@ -5,10 +5,15 @@ import { supabase } from '@/integrations/supabase/client';
 import { clearGmbProviderToken } from '@/lib/gmbAuth';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { toast } from 'sonner';
+import { z } from 'zod';
 import { Loader2 } from 'lucide-react';
+
+const emailSchema = z.string().email('Please enter a valid email address');
+const passwordSchema = z.string().min(6, 'Password must be at least 6 characters');
 
 export default function Auth() {
   const { user, roles, signIn, isLoading } = useAuth();
