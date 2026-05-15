@@ -1,0 +1,8 @@
+{
+  "root": true,
+  "tasks": {
+    "deploy": "supabase functions deploy test-resend-email --project-ref fnewyocguujowqxyiqsy"
+  },
+  "exclude": ["node_modules", ".git"],
+  "imports": {}
+}

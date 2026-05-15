@@ -292,5 +292,8 @@ verify_jwt = false  # Service role: data recovery tool
 [functions.import-gz-csv]
 verify_jwt = false  # Service role: bulk CSV import from storage
 
+[functions.test-resend-email]
+verify_jwt = false  # Public: test email endpoint
+
 [edge_runtime]
 enabled = true
