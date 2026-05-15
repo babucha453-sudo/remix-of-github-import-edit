@@ -6,13 +6,14 @@ import {
   CreditCard, Lock, ArrowUpRight, PhoneCall,
   Sparkles, Shirt, Baby
 } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { SEOHead } from "@/components/seo/SEOHead";
+import { SyncStructuredData } from "@/components/seo/SyncStructuredData";
 import { useSeoPageContent } from "@/hooks/useSeoPageContent";
 import { useStatesWithClinics } from "@/hooks/useLocations";
 import { useRealCounts } from "@/hooks/useRealCounts";
@@ -149,6 +150,7 @@ function getHardcodedZipCodes(): ZipCodeData[] {
 const HomeV2 = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
+  const shouldReduceMotion = useReducedMotion();
   const { data: states } = useStatesWithClinics();
   const { data: realCounts } = useRealCounts();
   const { data: treatments } = useTreatments();
@@ -310,6 +312,24 @@ const HomeV2 = () => {
         description={seoContent?.meta_description || "AppointPanda helps you find and book appointments with top-rated, verified dentists near you. Compare reviews, check insurance, and book instantly."}
         canonical="/"
       />
+      <SyncStructuredData
+        data={{
+          '@context': 'https://schema.org',
+          '@type': 'WebSite',
+          name: 'AppointPanda',
+          url: 'https://www.appointpanda.com',
+          description: 'Find and book appointments with verified dental professionals. Browse by location, treatment, or insurance.',
+          potentialAction: {
+            '@type': 'SearchAction',
+            target: {
+              '@type': 'EntryPoint',
+              urlTemplate: 'https://www.appointpanda.com/search?q={search_term_string}',
+            },
+            'query-input': 'required name=search_term_string',
+          },
+        }}
+        id="homepage-website-schema"
+      />
       <Navbar />
 
       {/* HERO SECTION */}
@@ -339,8 +359,8 @@ const HomeV2 = () => {
             
             {/* Badge */}
             <motion.div 
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
+              initial={shouldReduceMotion ? {} : { opacity: 0, y: 20 }}
+              animate={shouldReduceMotion ? {} : { opacity: 1, y: 0 }}
               className="flex justify-center mb-8"
             >
               <div className="inline-flex items-center gap-2 bg-emerald-500/20 border border-emerald-500/30 rounded-full px-5 py-2">
@@ -351,9 +371,9 @@ const HomeV2 = () => {
 
             {/* Main Headline */}
             <motion.h1 
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.1 }}
+              initial={shouldReduceMotion ? {} : { opacity: 0, y: 30 }}
+              animate={shouldReduceMotion ? {} : { opacity: 1, y: 0 }}
+              transition={shouldReduceMotion ? {} : { delay: 0.1 }}
               className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-white text-center mb-6 leading-[1.1]"
             >
               Find Your Perfect <br className="hidden sm:block" />
@@ -364,9 +384,9 @@ const HomeV2 = () => {
 
             {/* Subheadline */}
             <motion.p 
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.2 }}
+              initial={shouldReduceMotion ? {} : { opacity: 0, y: 20 }}
+              animate={shouldReduceMotion ? {} : { opacity: 1, y: 0 }}
+              transition={shouldReduceMotion ? {} : { delay: 0.2 }}
               className="text-lg md:text-xl text-slate-300 text-center mb-10 max-w-2xl mx-auto"
             >
               Compare verified dentists, read real reviews, and book your appointment — 
@@ -375,9 +395,9 @@ const HomeV2 = () => {
 
             {/* SEARCH BOX */}
             <motion.div 
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3 }}
+              initial={shouldReduceMotion ? {} : { opacity: 0, y: 20 }}
+              animate={shouldReduceMotion ? {} : { opacity: 1, y: 0 }}
+              transition={shouldReduceMotion ? {} : { delay: 0.3 }}
               className="bg-white rounded-2xl shadow-2xl shadow-black/30 overflow-hidden mb-4"
             >
               <div className="grid md:grid-cols-12">

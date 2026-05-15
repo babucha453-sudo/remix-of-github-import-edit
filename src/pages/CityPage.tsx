@@ -280,58 +280,64 @@ const CityPage = ({ initialState, initialCity }: CityPageProps) => {
 
   const cityFaqSets = [
     [
-      {
-        q: `How do I find a good dentist in ${cityName}?`,
-        a: `Browse our verified list of dentists in ${cityName}. Look for verified badges, patient reviews, and specializations that match your needs.`,
-      },
-      {
-        q: `Are the dentists in ${cityName} verified?`,
-        a: `All dentists on our platform are licensed professionals. Profiles with the "Verified" badge have claimed and completed our verification process.`,
-      },
-      {
-        q: `How much does dental treatment cost in ${cityName}?`,
-        a: `Dental costs vary by treatment. A basic checkup typically ranges from $75-200, while specialized treatments can range from $3,000-6,000.`,
-      },
-      {
-        q: `Can I book emergency dental appointments in ${cityName}?`,
-        a: `Yes, many clinics in ${cityName} offer same-day emergency appointments. Use our search to find clinics with emergency availability.`,
-      },
+      { q: `How do I find a good dentist in ${cityName}?`, a: `Browse our verified list of dentists in ${cityName}. Look for verified badges, patient reviews, and specializations that match your needs.` },
+      { q: `Are the dentists in ${cityName} verified?`, a: `All dentists on our platform are licensed professionals. Profiles with the "Verified" badge have claimed and completed our verification process.` },
+      { q: `How much does dental treatment cost in ${cityName}?`, a: `Dental costs vary by treatment. A basic checkup typically ranges from $75-200, while specialized treatments can range from $3,000-6,000.` },
+      { q: `Can I book emergency dental appointments in ${cityName}?`, a: `Yes, many clinics in ${cityName} offer same-day emergency appointments. Use our search to find clinics with emergency availability.` },
     ],
     [
-      {
-        q: `What dental services are available in ${cityName}?`,
-        a: `${cityName} dental clinics offer comprehensive services including preventive care, cosmetic dentistry, orthodontics, and emergency treatments.`,
-      },
-      {
-        q: `Does dental insurance cover treatments in ${cityName}?`,
-        a: `Most major dental insurance plans are accepted by clinics in ${cityName}. We recommend checking with your provider for specific coverage details.`,
-      },
-      {
-        q: `What is the average cost of a dental cleaning in ${cityName}?`,
-        a: `Professional teeth cleaning in ${cityName} typically costs between $75-150, depending on the clinic and your insurance coverage.`,
-      },
-      {
-        q: `How do I choose the right dentist in ${cityName}?`,
-        a: `Consider factors like verified credentials, patient reviews, services offered, and convenient booking. Our platform makes it easy to compare dentists in ${cityName}.`,
-      },
+      { q: `What dental services are available in ${cityName}?`, a: `${cityName} dental clinics offer comprehensive services including preventive care, cosmetic dentistry, orthodontics, and emergency treatments.` },
+      { q: `Does dental insurance cover treatments in ${cityName}?`, a: `Most major dental insurance plans are accepted by clinics in ${cityName}. We recommend checking with your provider for specific coverage details.` },
+      { q: `What is the average cost of a dental cleaning in ${cityName}?`, a: `Professional teeth cleaning in ${cityName} typically costs between $75-150, depending on the clinic and your insurance coverage.` },
+      { q: `How do I choose the right dentist in ${cityName}?`, a: `Consider factors like verified credentials, patient reviews, services offered, and convenient booking. Our platform makes it easy to compare dentists in ${cityName}.` },
     ],
     [
-      {
-        q: `What should I expect during my first dental visit in ${cityName}?`,
-        a: `Your first visit typically includes an examination, X-rays if needed, and a discussion of your oral health goals with a qualified dentist in ${cityName}.`,
-      },
-      {
-        q: `Are there affordable dental options in ${cityName}?`,
-        a: `Yes, many ${cityName} clinics offer payment plans, accept various insurance plans, and provide options for patients without insurance.`,
-      },
-      {
-        q: `How often should I visit a dentist in ${cityName}?`,
-        a: `The American Dental Association recommends visiting your dentist at least twice a year for preventive care and cleanings.`,
-      },
-      {
-        q: `What makes ${cityName} dentists unique?`,
-        a: `${cityName} dental professionals are known for their commitment to patient care and use of modern dental technology and techniques.`,
-      },
+      { q: `What should I expect during my first dental visit in ${cityName}?`, a: `Your first visit typically includes an examination, X-rays if needed, and a discussion of your oral health goals with a qualified dentist in ${cityName}.` },
+      { q: `Are there affordable dental options in ${cityName}?`, a: `Yes, many ${cityName} clinics offer payment plans, accept various insurance plans, and provide options for patients without insurance.` },
+      { q: `How often should I visit a dentist in ${cityName}?`, a: `The American Dental Association recommends visiting your dentist at least twice a year for preventive care and cleanings.` },
+      { q: `What makes ${cityName} dentists unique?`, a: `${cityName} dental professionals are known for their commitment to patient care and use of modern dental technology and techniques.` },
+    ],
+    [
+      { q: `What's the best way to compare dentists in ${cityName}?`, a: `Use our platform to compare ratings, reviews, services, pricing, and availability. The verified badge ensures the dentist's credentials are confirmed.` },
+      { q: `Do dentists in ${cityName} offer Saturday appointments?`, a: `Some dental offices in ${cityName} offer weekend hours. Search for "available weekends" or call clinics directly to check their hours.` },
+      { q: `How do I find a dentist who accepts my insurance in ${cityName}?`, a: `Use our insurance filter to see in-network dentists, or contact your insurance provider for a list of participating dental offices in ${cityName}.` },
+      { q: `What are the most popular dental treatments in ${cityName}?`, a: `Common treatments in ${cityName} include teeth cleaning, whitening, fillings, crowns, braces, and dental implants.` },
+    ],
+    [
+      { q: `Can I get a second opinion from another dentist in ${cityName}?`, a: `Absolutely. Browse multiple dentist profiles and schedule consultations to compare diagnoses and treatment recommendations in ${cityName}.` },
+      { q: `What's the average wait time for dental appointments in ${cityName}?`, a: `Wait times vary by clinic and procedure. Routine checkups may be available within a few days, while specialists may have 2-4 week waits.` },
+      { q: `Are there dental schools in ${cityName} that offer affordable care?`, a: `${cityName} may have dental schools that provide treatment at reduced costs by supervised students. Contact local dental schools for options.` },
+      { q: `How do I find a pediatric dentist for my child in ${cityName}?`, a: `Search for dentists with pediatric specialization or family dentistry. Look for those who create a comfortable environment for children.` },
+    ],
+    [
+      { q: `Do dental offices in ${cityName} offer payment plans?`, a: `Many ${cityName} dental offices offer flexible payment plans or partner with financing companies like CareCredit.` },
+      { q: `What's the process for booking a dental appointment in ${cityName}?`, a: `Simply browse dentist profiles, read reviews, select a time slot that works for you, and confirm your booking - all online.` },
+      { q: `Are there emergency dental clinics in ${cityName}?`, a: `Yes, ${cityName} has emergency dental clinics and many regular dental offices that accept emergency cases.` },
+      { q: `How do I know if a dentist in ${cityName} is experienced?`, a: `Check their years of practice, patient reviews, before/after photos for cosmetic procedures, and any specialized certifications.` },
+    ],
+    [
+      { q: `Can I find cosmetic dentists in ${cityName}?`, a: `Yes, many ${cityName} dental offices specialize in cosmetic procedures like veneers, whitening, and smile makeovers.` },
+      { q: `What's the cost of dental implants in ${cityName}?`, a: `Dental implants in ${cityName} typically cost $3,000-6,000 per implant, depending on the clinic and specific requirements.` },
+      { q: `Do orthodontists in ${cityName} offer Invisalign?`, a: `Many orthodontists and dentists in ${cityName} provide Invisalign and other clear aligner treatments.` },
+      { q: `How do I find a dentist who specializes in sedation dentistry in ${cityName}?`, a: `Search for "sedation dentist" or call dental offices to ask about their anxiety management options.` },
+    ],
+    [
+      { q: `What should I look for in reviews of dentists in ${cityName}?`, a: `Focus on comments about staff friendliness, wait times, treatment outcomes, pricing transparency, and overall experience.` },
+      { q: `Are there multilingual dentists in ${cityName}?`, a: `Some ${cityName} dental offices have multilingual staff. Use our search or call clinics to check language capabilities.` },
+      { q: `How do I schedule a consultation in ${cityName}?`, a: `Most dentists in ${cityName} offer free initial consultations. Use our platform to book one online or call the office directly.` },
+      { q: `What questions should I ask during my dental consultation in ${cityName}?`, a: `Ask about their experience with your specific needs, treatment options, costs, payment plans, and expected outcomes.` },
+    ],
+    [
+      { q: `Can I get my teeth whitened at any dental office in ${cityName}?`, a: `Most ${cityName} dental offices offer professional whitening services. In-office treatment provides faster results than at-home kits.` },
+      { q: `How do I find an oral surgeon in ${cityName}?`, a: `Search for oral surgeons or use our filter to find dental specialists. Your general dentist can also provide a referral.` },
+      { q: `What's the difference between a dentist and orthodontist in ${cityName}?`, a: `Dentists handle general and cosmetic care. Orthodontists specialize in teeth alignment and bite correction, including braces and aligners.` },
+      { q: `Do dental offices in ${cityName} use modern technology?`, a: `Many ${cityName} dental offices use digital X-rays, 3D imaging, laser dentistry, and same-day crown technology.` },
+    ],
+    [
+      { q: `How do I handle dental anxiety when visiting a dentist in ${cityName}?`, a: `Look for dentists who offer sedation options, bring music or a friend, schedule morning appointments, and communicate your fears upfront.` },
+      { q: `Can I get a dental cleaning without insurance in ${cityName}?`, a: `Yes, many ${cityName} dental offices offer affordable cleaning for uninsured patients, with some offering membership plans.` },
+      { q: `What's the best way to maintain my dental health between visits to ${cityName}?`, a: `Brush twice daily, floss daily, limit sugary foods, avoid tobacco, and follow any specific care instructions from your ${cityName} dentist.` },
+      { q: `How do I know if I need to see a dentist urgently in ${cityName}?`, a: `Seek immediate care for severe pain, bleeding, swelling, knocked-out teeth, or signs of infection. Otherwise, schedule a regular visit.` },
     ],
   ];
   const faqSetIndex = Math.abs((citySlug?.length || 0) * 13 + (normalizedStateSlug?.length || 0) * 7) % cityFaqSets.length;
@@ -878,6 +884,14 @@ const CityPage = ({ initialState, initialCity }: CityPageProps) => {
             </h2>
             <p className="text-slate-400 max-w-xl mx-auto">
               Find answers about finding and booking dental appointments in {cityName}
+            </p>
+          </div>
+
+          {/* Quick Answer for Featured Snippets */}
+          <div className="mb-6 p-4 bg-emerald-50 border border-emerald-200 rounded-xl">
+            <h3 className="font-bold text-slate-800 mb-2">Quick Answer</h3>
+            <p className="text-slate-600 text-sm leading-relaxed">
+              Finding quality dental care in {cityName} is simple with our verified dentist directory. Browse verified providers, compare treatments and pricing, read patient reviews, and book appointments online.
             </p>
           </div>
 

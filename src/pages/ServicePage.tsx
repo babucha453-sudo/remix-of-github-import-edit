@@ -112,58 +112,70 @@ const ServicePage = () => {
 
   const serviceFaqSets = [
     [
-      {
-        q: `What is ${treatmentName}?`,
-        a: treatment?.description || `${treatmentName} is a professional dental procedure designed to improve your oral health and smile. Our qualified dentists use the latest techniques.`,
-      },
-      {
-        q: `How long does ${treatmentName} take?`,
-        a: `Duration varies depending on individual needs. A typical ${treatmentName.toLowerCase()} session can take 30 minutes to 2 hours. Your dentist will provide an accurate estimate.`,
-      },
-      {
-        q: `Is ${treatmentName} painful?`,
-        a: `Modern dental techniques and anesthesia make most procedures comfortable. Your dentist will discuss pain management options.`,
-      },
-      {
-        q: `How much does ${treatmentName} cost?`,
-        a: `Costs vary by clinic and treatment needs. We recommend booking a consultation. Many clinics accept insurance and offer payment plans.`,
-      },
+      { q: `What is ${treatmentName}?`, a: treatment?.description || `${treatmentName} is a professional dental procedure designed to improve your oral health and smile. Our qualified dentists use the latest techniques.` },
+      { q: `How long does ${treatmentName} take?`, a: `Duration varies depending on individual needs. A typical ${treatmentName.toLowerCase()} session can take 30 minutes to 2 hours. Your dentist will provide an accurate estimate.` },
+      { q: `Is ${treatmentName} painful?`, a: `Modern dental techniques and anesthesia make most procedures comfortable. Your dentist will discuss pain management options.` },
+      { q: `How much does ${treatmentName} cost?`, a: `Costs vary by clinic and treatment needs. We recommend booking a consultation. Many clinics accept insurance and offer payment plans.` },
     ],
     [
-      {
-        q: `Who is a good candidate for ${treatmentName}?`,
-        a: `${treatmentName} is suitable for patients seeking to improve their dental health and appearance. A consultation with a qualified dentist will determine if this treatment is right for you.`,
-      },
-      {
-        q: `How long do results from ${treatmentName} last?`,
-        a: `With proper care and maintenance, results from ${treatmentName.toLowerCase()} can last for many years. Your dentist will provide specific aftercare instructions.`,
-      },
-      {
-        q: `What is the recovery time for ${treatmentName}?`,
-        a: `Recovery time varies by individual and treatment complexity. Most patients can return to normal activities within a few days to a week after the procedure.`,
-      },
-      {
-        q: `Are there alternatives to ${treatmentName}?`,
-        a: `Yes, there may be alternative treatments available depending on your specific dental needs. Discuss all options with your dentist during your consultation.`,
-      },
+      { q: `Who is a good candidate for ${treatmentName}?`, a: `${treatmentName} is suitable for patients seeking to improve their dental health and appearance. A consultation with a qualified dentist will determine if this treatment is right for you.` },
+      { q: `How long do results from ${treatmentName} last?`, a: `With proper care and maintenance, results from ${treatmentName.toLowerCase()} can last for many years. Your dentist will provide specific aftercare instructions.` },
+      { q: `What is the recovery time for ${treatmentName}?`, a: `Recovery time varies by individual and treatment complexity. Most patients can return to normal activities within a few days to a week after the procedure.` },
+      { q: `Are there alternatives to ${treatmentName}?`, a: `Yes, there may be alternative treatments available depending on your specific dental needs. Discuss all options with your dentist during your consultation.` },
     ],
     [
-      {
-        q: `What happens during a ${treatmentName} procedure?`,
-        a: `During the ${treatmentName.toLowerCase()} procedure, your dentist will evaluate your needs, prepare the treatment area, and perform the procedure using modern dental techniques.`,
-      },
-      {
-        q: `How do I prepare for ${treatmentName}?`,
-        a: `Your dentist will provide specific pre-treatment instructions. This may include avoiding certain foods, medications, or arrangements for transportation.`,
-      },
-      {
-        q: `What aftercare is needed for ${treatmentName}?`,
-        a: `After ${treatmentName.toLowerCase()}, follow your dentist's aftercare instructions which may include avoiding certain foods, maintaining oral hygiene, and scheduling follow-up visits.`,
-      },
-      {
-        q: `Does insurance cover ${treatmentName}?`,
-        a: `Many dental insurance plans provide coverage for ${treatmentName.toLowerCase()}. Contact your insurance provider to understand your specific benefits and coverage.`,
-      },
+      { q: `What happens during a ${treatmentName} procedure?`, a: `During the ${treatmentName.toLowerCase()} procedure, your dentist will evaluate your needs, prepare the treatment area, and perform the procedure using modern dental techniques.` },
+      { q: `How do I prepare for ${treatmentName}?`, a: `Your dentist will provide specific pre-treatment instructions. This may include avoiding certain foods, medications, or arrangements for transportation.` },
+      { q: `What aftercare is needed for ${treatmentName}?`, a: `After ${treatmentName.toLowerCase()}, follow your dentist's aftercare instructions which may include avoiding certain foods, maintaining oral hygiene, and scheduling follow-up visits.` },
+      { q: `Does insurance cover ${treatmentName}?`, a: `Many dental insurance plans provide coverage for ${treatmentName.toLowerCase()}. Contact your insurance provider to understand your specific benefits and coverage.` },
+    ],
+    [
+      { q: `Where can I get ${treatmentName} done?`, a: `Use our directory to find qualified dental professionals offering ${treatmentName.toLowerCase()} in your area. Browse profiles, read reviews, and book online.` },
+      { q: `How do I find the best ${treatmentName} specialist?`, a: `Look for specialists with extensive experience, positive patient reviews, before/after photos, and appropriate certifications in ${treatmentName.toLowerCase()}.` },
+      { q: `What questions should I ask about ${treatmentName}?`, a: `Ask about the dentist's experience, success rates, potential risks, recovery time, and post-treatment care requirements for ${treatmentName.toLowerCase()}.` },
+      { q: `Is ${treatmentName} safe?`, a: `When performed by a qualified dentist, ${treatmentName.toLowerCase()} is generally safe. Modern techniques and safety protocols minimize risks.` },
+    ],
+    [
+      { q: `How do I know if I need ${treatmentName}?`, a: `During your dental examination, your dentist will evaluate your oral health and recommend ${treatmentName.toLowerCase()} if it's appropriate for your needs.` },
+      { q: `What's the success rate of ${treatmentName}?`, a: `Success rates vary by procedure and individual circumstances. Your dentist can provide specific success rate information during your consultation.` },
+      { q: `Can I get ${treatmentName} without a referral?`, a: `Most ${treatmentName.toLowerCase()} providers accept direct patient inquiries. You can browse our directory and book appointments without a referral.` },
+      { q: `What's the first step for getting ${treatmentName}?`, a: `Schedule a consultation with a qualified dentist who offers ${treatmentName.toLowerCase()}. They will assess your needs and create a treatment plan.` },
+    ],
+    [
+      { q: `Does ${treatmentName} require multiple visits?`, a: `Some ${treatmentName.toLowerCase()} procedures can be completed in one visit, while others require multiple appointments. Your dentist will outline the timeline.` },
+      { q: `How long is the consultation for ${treatmentName}?`, a: `Initial consultations for ${treatmentName.toLowerCase()} typically last 30-60 minutes, allowing time for examination and treatment planning.` },
+      { q: `What's the difference between ${treatmentName} options?`, a: `Different ${treatmentName.toLowerCase()} approaches vary in cost, duration, and results. Your dentist will explain the pros and cons of each option.` },
+      { q: `Can I see before/after photos of ${treatmentName}?`, a: `Most dentists maintain portfolios of previous ${treatmentName.toLowerCase()} cases. Ask to see examples during your consultation.` },
+    ],
+    [
+      { q: `What technology is used for ${treatmentName}?`, a: `Modern dental technology like digital imaging, lasers, and 3D scanning may be used for ${treatmentName.toLowerCase()} to improve precision and outcomes.` },
+      { q: `How does ${treatmentName} improve oral health?`, a: `${treatmentName} addresses specific dental issues, improves function, and can enhance overall oral health when performed by qualified professionals.` },
+      { q: `What's the ideal age for ${treatmentName}?`, a: `Suitability for ${treatmentName.toLowerCase()} depends on individual factors, not just age. Consult with a dentist to determine if it's appropriate for you.` },
+      { q: `Can ${treatmentName} fix my dental issue completely?`, a: `Many patients achieve complete resolution of their dental issues through ${treatmentName.toLowerCase()}. Results vary based on individual conditions.` },
+    ],
+    [
+      { q: `What's the recovery process like after ${treatmentName}?`, a: `Recovery varies by procedure but typically includes rest, medication if needed, and following specific aftercare instructions from your dentist.` },
+      { q: `How soon can I eat normally after ${treatmentName}?`, a: `Your dentist will provide specific eating guidelines. Some ${treatmentName.toLowerCase()} procedures allow immediate eating, while others require a modified diet temporarily.` },
+      { q: `Will I need someone to drive me home after ${treatmentName}?`, a: `If sedation is used during ${treatmentName.toLowerCase()}, you'll need transportation. Discuss this with your dentist before the procedure.` },
+      { q: `How do I manage discomfort after ${treatmentName}?`, a: `Your dentist may recommend over-the-counter pain relievers or prescribe medication. Follow their instructions for managing any post-procedure discomfort.` },
+    ],
+    [
+      { q: `What happens if I delay ${treatmentName}?`, a: `Delaying ${treatmentName.toLowerCase()} may allow dental issues to worsen. Consult with your dentist to understand the implications of postponing treatment.` },
+      { q: `Can I combine ${treatmentName} with other procedures?`, a: `Many patients combine ${treatmentName.toLowerCase()} with other dental procedures. Your dentist can create a comprehensive treatment plan.` },
+      { q: `How do I maintain results after ${treatmentName}?`, a: `Follow your dentist's aftercare instructions, maintain good oral hygiene, and attend regular checkups to preserve your ${treatmentName.toLowerCase()} results.` },
+      { q: `Is ${treatmentName} reversible?`, a: `Some ${treatmentName.toLowerCase()} procedures are reversible while others are permanent. Discuss this with your dentist to understand your options.` },
+    ],
+    [
+      { q: `What are the risks of ${treatmentName}?`, a: `Risks vary by procedure type. Your dentist will explain potential risks and how they are minimized during ${treatmentName.toLowerCase()}.` },
+      { q: `How do I choose the right dentist for ${treatmentName}?`, a: `Consider their experience, credentials, patient reviews, before/after work, and your comfort level during the consultation.` },
+      { q: `What's included in the ${treatmentName} cost?`, a: `Costs typically include consultation, procedure, and follow-up visits. Ask for a detailed breakdown before proceeding with ${treatmentName.toLowerCase()}.` },
+      { q: `Can I get financing for ${treatmentName}?`, a: `Many dental offices offer payment plans or work with financing companies. Inquire about options when discussing your ${treatmentName.toLowerCase()} treatment.` },
+    ],
+    [
+      { q: `How do I know if ${treatmentName} is right for me?`, a: `A qualified dentist will evaluate your specific situation and recommend ${treatmentName.toLowerCase()} if it aligns with your dental goals and health needs.` },
+      { q: `What's the consultation process for ${treatmentName}?`, a: `The consultation includes examination, discussion of goals, explanation of options, and creation of a personalized treatment plan for ${treatmentName.toLowerCase()}.` },
+      { q: `Will ${treatmentName} improve my smile?`, a: `Many ${treatmentName.toLowerCase()} procedures enhance the appearance of your smile. Ask to see examples of similar cases during your consultation.` },
+      { q: `How do I schedule ${treatmentName}?`, a: `Browse our directory of qualified dentists offering ${treatmentName.toLowerCase()}, read reviews, and book your appointment online.` },
     ],
   ];
   const faqSetIndex = Math.abs((serviceSlug?.length || 0) * 11 + (treatmentName?.length || 0) * 3) % serviceFaqSets.length;
@@ -363,6 +375,14 @@ const ServicePage = () => {
             <h2 className="text-2xl md:text-3xl font-black text-foreground">
               Frequently Asked <span className="text-primary">Questions</span>
             </h2>
+          </div>
+
+          {/* Quick Answer for Featured Snippets */}
+          <div className="mb-6 p-4 bg-emerald-50 border border-emerald-200 rounded-xl">
+            <h3 className="font-bold text-slate-800 mb-2">Quick Answer</h3>
+            <p className="text-slate-600 text-sm leading-relaxed">
+              {treatmentName} procedures are available from verified dental specialists. Browse providers by location, compare experience, read patient reviews, and book consultations online.
+            </p>
           </div>
           
           <Accordion type="single" collapsible className="space-y-3">

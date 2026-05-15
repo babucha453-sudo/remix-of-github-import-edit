@@ -13,6 +13,7 @@ const PandaBot = lazyRetry(() => import("@/components/PandaBot").then(mod => ({ 
 import { PerformanceMonitor } from "@/hooks/useWebVitals";
 import { TrailingSlashRedirect } from "@/components/TrailingSlashRedirect";
 import { AnalyticsProvider } from "@/components/analytics/AnalyticsProvider";
+import { SyncStructuredData } from "@/components/seo/SyncStructuredData";
 
 // Critical pages - load immediately for fast FCP
 import Index from "./pages/Index";
@@ -115,6 +116,44 @@ const App = () => (
           <BrowserRouter>
             {/* Google Analytics 4 tracking - must be inside Router for useLocation */}
             <AnalyticsProvider>
+              <SyncStructuredData
+                data={[
+                  {
+                    '@context': 'https://schema.org',
+                    '@type': 'Organization',
+                    name: 'AppointPanda',
+                    url: 'https://www.appointpanda.com',
+                    logo: 'https://www.appointpanda.com/logo.png',
+                    description: 'Find and book appointments with top-rated dental professionals in California, Massachusetts, Connecticut, and New Jersey.',
+                    sameAs: [
+                      'https://www.facebook.com/appointpanda',
+                      'https://www.twitter.com/appointpanda',
+                      'https://www.linkedin.com/company/appointpanda'
+                    ],
+                    contactPoint: {
+                      '@type': 'ContactPoint',
+                      telephone: '+1-800-DENTIST',
+                      contactType: 'customer service',
+                      availableLanguage: 'English',
+                    },
+                  },
+                  {
+                    '@context': 'https://schema.org',
+                    '@type': 'WebSite',
+                    name: 'AppointPanda',
+                    url: 'https://www.appointpanda.com',
+                    potentialAction: {
+                      '@type': 'SearchAction',
+                      target: {
+                        '@type': 'EntryPoint',
+                        urlTemplate: 'https://www.appointpanda.com/search?q={search_term_string}',
+                      },
+                      'query-input': 'required name=search_term_string',
+                    },
+                  },
+                ]}
+                id="global-org-website-schema"
+              />
               <ScrollToTop />
               <TrailingSlashRedirect />
               <VisitorTracker />
