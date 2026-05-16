@@ -1321,11 +1321,11 @@
 
 /* Font loading optimization */
 .font-loading-fallback {
-  font-family: 'Plus Jakarta Sans Fallback', system-ui, -apple-system, sans-serif;
+  font-family: 'Figtree Fallback', system-ui, -apple-system, sans-serif;
 }
 
 .font-loaded {
-  font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  font-family: 'Figtree', system-ui, -apple-system, sans-serif;
 }
 
 /* Reduce motion for accessibility */
