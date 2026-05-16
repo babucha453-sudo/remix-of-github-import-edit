@@ -52,7 +52,7 @@
     --secondary-foreground: 222 55% 11%;
 
     --muted: 220 18% 92%;
-    --muted-foreground: 215 20% 47%;
+    --muted-foreground: 215 25% 35%;
 
     --accent: 166 85% 97%;
     --accent-foreground: 173 85% 26%;
@@ -177,7 +177,7 @@
     --secondary: 215 25% 20%;
     --secondary-foreground: 210 40% 98%;
     --muted: 215 25% 18%;
-    --muted-foreground: 215 20% 65%;
+    --muted-foreground: 215 20% 75%;
     --accent: 215 25% 20%;
     --accent-foreground: 210 40% 98%;
     --destructive: 0 63% 31%;
@@ -204,7 +204,7 @@
   body {
     @apply bg-background text-foreground antialiased;
     font-family: var(--font-plus-jakarta), 'Plus Jakarta Sans', system-ui, sans-serif;
-    font-weight: 500;
+    font-weight: 600;
     overflow-x: hidden;
   }
 
@@ -256,7 +256,7 @@
   /* Body Content */
   .text-body {
     font-family: var(--font-plus-jakarta), 'Plus Jakarta Sans', system-ui, sans-serif;
-    @apply font-medium leading-relaxed;
+    @apply font-semibold leading-relaxed;
   }
 
   /* ========================================

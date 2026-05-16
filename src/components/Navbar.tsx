@@ -155,7 +155,7 @@ export function Navbar() {
                     <span className="text-sm font-black">AP</span>
                   </div>
                   <div className="flex flex-col">
-                    <span className="text-base font-black tracking-tight text-slate-900 leading-none">
+                    <span className="text-base font-semibold tracking-tight text-slate-900 leading-none">
                       Appoint<span className="text-emerald-600">Panda</span>
                     </span>
                     <span className="text-[9px] text-slate-500 font-semibold uppercase tracking-wider">
