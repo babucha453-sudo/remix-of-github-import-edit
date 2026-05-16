@@ -10,7 +10,7 @@ import { AuthProvider } from "@/hooks/useAuth";
 import { useVisitorTracking } from "@/hooks/useVisitorTracking";
 import { useDynamicFavicon } from "@/hooks/useDynamicFavicon";
 import { HelmetProvider } from "react-helmet-async";
-import { Plus_Jakarta_Sans } from "next/font/google";
+import { Figtree } from "next/font/google";
 import { AnalyticsProvider } from "@/components/analytics/AnalyticsProvider";
 import { SyncStructuredData } from "@/components/seo/SyncStructuredData";
 import { PerformanceMonitor } from "@/hooks/useWebVitals";
@@ -18,11 +18,11 @@ import { TrailingSlashRedirect } from "@/components/TrailingSlashRedirect";
 
 const PandaBot = lazyRetry(() => import("@/components/PandaBot").then(mod => ({ default: mod.PandaBot })));
 
-const plusJakarta = Plus_Jakarta_Sans({
+const figtree = Figtree({
   subsets: ['latin'],
-  weight: ['400', '500', '600', '700', '800'],
+  weight: ['300', '400', '500', '600', '700', '800', '900'],
   display: 'swap',
-  variable: '--font-plus-jakarta',
+  variable: '--font-figtree',
 });
 
 // Critical pages - load immediately for fast FCP
@@ -116,7 +116,7 @@ const PageLoader = () => (
 );
 
 const App = () => (
-  <div className={plusJakarta.variable}>
+  <div className={figtree.variable}>
     <HelmetProvider>
       <QueryClientProvider client={queryClient}>
         <AuthProvider>
