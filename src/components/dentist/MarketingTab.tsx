@@ -82,43 +82,81 @@ const StatCard = ({
 export default function MarketingTab() {
   const { user } = useAuth();
 
-  // Fetch clinic
-  const { data: clinic } = useQuery({
-    queryKey: ['marketing-clinic', user?.id],
-    queryFn: async () => {
-      const { data } = await supabase
-        .from('clinics')
-        .select('*')
-        .eq('claimed_by', user?.id)
-        .limit(1)
-        .single();
-      return data;
-    },
-    enabled: !!user?.id,
-  });
+  const clinicId = user?.id;
 
   const [activeCampaign, setActiveCampaign] = useState<string>('all');
   const [showCreateModal, setShowCreateModal] = useState(false);
 
-  const campaigns = [
-    { id: 1, name: 'Spring Cleaning Special', status: 'active', sent: 1250, opens: 687, clicks: 124, conversions: 18, budget: 500 },
-    { id: 2, name: 'New Patient Welcome', status: 'active', sent: 89, opens: 67, clicks: 23, conversions: 12, budget: 0 },
-    { id: 3, name: 'Recall - 6 Month Checkup', status: 'scheduled', sent: 0, opens: 0, clicks: 0, conversions: 0, budget: 250 },
-    { id: 4, name: 'Teeth Whitening Promo', status: 'completed', sent: 2500, opens: 1125, clicks: 312, conversions: 45, budget: 750 },
-  ];
+  const { data: clinic } = useQuery({
+    queryKey: ['marketing-clinic', clinicId],
+    queryFn: async () => {
+      const { data } = await supabase
+        .from('clinics')
+        .select('*')
+        .eq('claimed_by', clinicId)
+        .limit(1)
+        .single();
+      return data;
+    },
+    enabled: !!clinicId,
+  });
 
-  const topPromotions = [
-    { id: 1, name: 'New Patient Exam', code: 'NEW25', uses: 34, redemptionRate: 68 },
-    { id: 2, name: 'Teeth Whitening', code: 'WHITE100', uses: 28, redemptionRate: 56 },
-    { id: 3, name: 'Referral Bonus', code: 'REFER50', uses: 15, redemptionRate: 100 },
-    { id: 4, name: 'Family Discount', code: 'FAMILY20', uses: 22, redemptionRate: 45 },
-  ];
+  const { data: leadRequests } = useQuery({
+    queryKey: ['clinic-lead-requests', clinic?.id],
+    queryFn: async () => {
+      const { data } = await supabase
+        .from('clinic_lead_requests')
+        .select('*')
+        .eq('clinic_id', clinic?.id);
+      return data || [];
+    },
+    enabled: !!clinic?.id,
+  });
 
-  const channels = [
-    { name: 'Email', sent: 3839, delivered: 3756, opens: 1879, clicks: 459, conversions: 75, cost: 0 },
-    { name: 'SMS', sent: 1245, delivered: 1198, opens: 892, clicks: 234, conversions: 45, cost: 125 },
-    { name: 'Social', impressions: 45000, engagement: 2340, clicks: 567, conversions: 34, cost: 350 },
-  ];
+  const { data: appointments } = useQuery({
+    queryKey: ['clinic-appointments', clinic?.id],
+    queryFn: async () => {
+      const { data } = await supabase
+        .from('appointments')
+        .select('*')
+        .eq('clinic_id', clinic?.id);
+      return data || [];
+    },
+    enabled: !!clinic?.id,
+  });
+
+  const { data: promoCodes } = useQuery({
+    queryKey: ['promo-codes', clinic?.id],
+    queryFn: async () => {
+      const { data } = await supabase
+        .from('promo_codes')
+        .select('*')
+        .eq('clinic_id', clinic?.id);
+      return data || [];
+    },
+    enabled: !!clinic?.id,
+  });
+
+  const { data: clinicImages } = useQuery({
+    queryKey: ['clinic-images', clinic?.id],
+    queryFn: async () => {
+      const { data } = await supabase
+        .from('clinic_images')
+        .select('*')
+        .eq('clinic_id', clinic?.id);
+      return data || [];
+    },
+    enabled: !!clinic?.id,
+  });
+
+  const totalLeads = leadRequests?.length || 0;
+  const totalAppointments = appointments?.length || 0;
+  const completedAppointments = appointments?.filter(a => a.status === 'completed').length || 0;
+  const thisMonthLeads = leadRequests?.filter(l => {
+    const created = new Date(l.created_at);
+    const now = new Date();
+    return created.getMonth() === now.getMonth() && created.getFullYear() === now.getFullYear();
+  }).length || 0;
 
   if (!clinic) {
     return (
@@ -148,86 +186,50 @@ export default function MarketingTab() {
       {/* Key Metrics */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <StatCard
-          title="Emails Sent"
-          value="3,839"
-          change={15}
-          changeType="positive"
-          icon={Mail}
-          description="This month"
+          title="Total Leads"
+          value={totalLeads}
+          change={thisMonthLeads > 0 ? Math.round((thisMonthLeads / Math.max(totalLeads - thisMonthLeads, 1)) * 100) : undefined}
+          changeType="neutral"
+          icon={Users}
+          description="All time lead requests"
         />
         <StatCard
-          title="Open Rate"
-          value="50%"
-          change={3}
-          changeType="positive"
+          title="Appointments"
+          value={totalAppointments}
+          change={completedAppointments}
+          changeType="neutral"
+          icon={Calendar}
+          description={`${completedAppointments} completed`}
+        />
+        <StatCard
+          title="Profile Views"
+          value={clinic?.profile_views || 0}
+          change={undefined}
+          changeType="neutral"
           icon={Eye}
-          description="Industry avg: 21%"
+          description="Total profile views"
         />
         <StatCard
-          title="Conversions"
-          value="154"
-          change={-8}
-          changeType="negative"
-          icon={Target}
-          description="From campaigns"
-        />
-        <StatCard
-          title="Revenue"
-          value="$12,450"
-          change={22}
-          changeType="positive"
-          icon={DollarSign}
-          description="Attributed revenue"
+          title="Photos"
+          value={clinicImages?.length || 0}
+          change={undefined}
+          changeType="neutral"
+          icon={Image}
+          description="Clinic photos"
         />
       </div>
 
       {/* Campaigns */}
       <Card className="bg-white border-gray-200">
         <CardHeader>
-          <CardTitle className="text-lg font-semibold">Active Campaigns</CardTitle>
+          <CardTitle className="text-lg font-semibold">Marketing Campaigns</CardTitle>
           <CardDescription>Track your marketing efforts</CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="space-y-4">
-            {campaigns.map((campaign) => (
-              <div key={campaign.id} className="p-4 bg-gray-50 rounded-lg">
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-3">
-                  <div>
-                    <h3 className="font-medium text-gray-900">{campaign.name}</h3>
-                    <Badge className={`mt-1 ${
-                      campaign.status === 'active' ? 'bg-emerald-100 text-emerald-700' :
-                      campaign.status === 'scheduled' ? 'bg-amber-100 text-amber-700' :
-                      'bg-gray-100 text-gray-700'
-                    }`}>
-                      {campaign.status}
-                    </Badge>
-                  </div>
-                  <div className="flex gap-4 text-sm">
-                    <div className="text-center">
-                      <p className="font-bold text-gray-900">{campaign.sent}</p>
-                      <p className="text-gray-500">Sent</p>
-                    </div>
-                    <div className="text-center">
-                      <p className="font-bold text-gray-900">{campaign.opens}</p>
-                      <p className="text-gray-500">Opens</p>
-                    </div>
-                    <div className="text-center">
-                      <p className="font-bold text-gray-900">{campaign.clicks}</p>
-                      <p className="text-gray-500">Clicks</p>
-                    </div>
-                    <div className="text-center">
-                      <p className="font-bold text-emerald-600">{campaign.conversions}</p>
-                      <p className="text-gray-500">Booked</p>
-                    </div>
-                  </div>
-                </div>
-                <div className="flex items-center gap-4 text-sm text-gray-500">
-                  <span>Open rate: {campaign.sent > 0 ? Math.round((campaign.opens / campaign.sent) * 100) : 0}%</span>
-                  <span>Click rate: {campaign.sent > 0 ? Math.round((campaign.clicks / campaign.sent) * 100) : 0}%</span>
-                  {campaign.budget > 0 && <span>Budget: ${campaign.budget}</span>}
-                </div>
-              </div>
-            ))}
+          <div className="text-center py-8">
+            <Target className="h-12 w-12 text-gray-300 mx-auto mb-3" />
+            <p className="text-gray-500">No campaigns yet</p>
+            <p className="text-sm text-gray-400 mt-1">Create your first marketing campaign to reach patients</p>
           </div>
         </CardContent>
       </Card>
@@ -241,45 +243,63 @@ export default function MarketingTab() {
             <CardDescription>Track your special offers</CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="space-y-3">
-              {topPromotions.map((promo) => (
-                <div key={promo.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-                  <div>
-                    <p className="font-medium text-gray-900">{promo.name}</p>
-                    <code className="text-sm text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded">{promo.code}</code>
+            {promoCodes && promoCodes.length > 0 ? (
+              <div className="space-y-3">
+                {promoCodes.map((promo) => (
+                  <div key={promo.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                    <div>
+                      <p className="font-medium text-gray-900">{promo.code}</p>
+                      <p className="text-sm text-gray-500">{promo.discount_type === 'percentage' ? `${promo.discount_value}% off` : `$${promo.discount_value} off`}</p>
+                    </div>
+                    <div className="text-right">
+                      <p className="font-medium text-gray-900">{promo.uses_count || 0} uses</p>
+                      <Badge className={promo.is_active ? 'bg-emerald-100 text-emerald-700' : 'bg-gray-100 text-gray-500'}>
+                        {promo.is_active ? 'Active' : 'Inactive'}
+                      </Badge>
+                    </div>
                   </div>
-                  <div className="text-right">
-                    <p className="font-medium text-gray-900">{promo.uses} uses</p>
-                    <p className="text-sm text-gray-500">{promo.redemptionRate}% redeemed</p>
-                  </div>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            ) : (
+              <div className="text-center py-8">
+                <Gift className="h-10 w-10 text-gray-300 mx-auto mb-3" />
+                <p className="text-gray-500">No promo codes yet</p>
+                <p className="text-sm text-gray-400 mt-1">Create promo codes to attract new patients</p>
+              </div>
+            )}
           </CardContent>
         </Card>
 
         {/* Channels Performance */}
         <Card className="bg-white border-gray-200">
           <CardHeader>
-            <CardTitle className="text-lg font-semibold">Channel Performance</CardTitle>
-            <CardDescription>Compare marketing channels</CardDescription>
+            <CardTitle className="text-lg font-semibold">Clinic Profile</CardTitle>
+            <CardDescription>Your listing status</CardDescription>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
-              {channels.map((channel, idx) => (
-                <div key={idx} className="p-3 bg-gray-50 rounded-lg">
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="font-medium text-gray-900">{channel.name}</span>
-                    <span className="text-sm text-emerald-600">${channel.cost}</span>
-                  </div>
-                  <div className="flex gap-4 text-sm">
-                    {channel.sent !== undefined && <span>{channel.sent} sent</span>}
-                    {channel.impressions !== undefined && <span>{channel.impressions.toLocaleString()} impressions</span>}
-                    <span className="text-gray-500">{channel.clicks} clicks</span>
-                    <span className="text-emerald-600">{channel.conversions} conversions</span>
-                  </div>
+              <div className="p-3 bg-gray-50 rounded-lg">
+                <div className="flex items-center justify-between mb-2">
+                  <span className="font-medium text-gray-900">Profile Status</span>
+                  <Badge className={clinic?.is_published ? 'bg-emerald-100 text-emerald-700' : 'bg-amber-100 text-amber-700'}>
+                    {clinic?.is_published ? 'Published' : 'Draft'}
+                  </Badge>
                 </div>
-              ))}
+                <div className="flex gap-4 text-sm text-gray-500">
+                  <span>{totalLeads} leads</span>
+                  <span>{totalAppointments} appointments</span>
+                </div>
+              </div>
+              <div className="p-3 bg-gray-50 rounded-lg">
+                <div className="flex items-center justify-between mb-2">
+                  <span className="font-medium text-gray-900">Profile Completion</span>
+                </div>
+                <div className="flex gap-4 text-sm text-gray-500">
+                  <span>{clinicImages?.length || 0} photos</span>
+                  <span>{clinic?.name ? 'Name set' : 'No name'}</span>
+                  <span>{clinic?.description ? 'Description set' : 'No description'}</span>
+                </div>
+              </div>
             </div>
           </CardContent>
         </Card>

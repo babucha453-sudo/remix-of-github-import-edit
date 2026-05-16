@@ -1302,7 +1302,7 @@ export default function ProfileEditorTab() {
                       className="h-7 text-xs"
                       onClick={() => {
                         setFormData({ ...formData, cover_image_url: img.image_url });
-                        saveMutation.mutate();
+                        saveProfile.mutate();
                         toast.success('Set as profile image');
                       }}
                     >

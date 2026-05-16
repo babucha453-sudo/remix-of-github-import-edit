@@ -136,8 +136,21 @@ export default function AvailabilityManagementTab() {
         if (error) throw error;
       }
     },
-    onSuccess: () => {
+    onSuccess: async (data, variables) => {
       queryClient.invalidateQueries({ queryKey: ['availability-rules', clinic?.id] });
+
+      if (clinic?.id && variables.day_of_week !== undefined) {
+        await supabase.from('clinic_hours').upsert({
+          clinic_id: clinic.id,
+          day_of_week: variables.day_of_week,
+          open_time: variables.start_time,
+          close_time: variables.end_time,
+          is_closed: !variables.is_active,
+        }, {
+          onConflict: 'clinic_id,day_of_week',
+        });
+      }
+
       toast.success('Schedule updated');
     },
     onError: (error: any) => toast.error(error.message || 'Failed to update'),
@@ -173,8 +186,22 @@ export default function AvailabilityManagementTab() {
       const { error } = await supabase.from('availability_blocks').insert(blocks);
       if (error) throw error;
     },
-    onSuccess: () => {
+    onSuccess: async () => {
       queryClient.invalidateQueries({ queryKey: ['availability-blocks', clinic?.id] });
+
+      if (clinic?.id && selectedDates.length > 0) {
+        for (const date of selectedDates) {
+          const dayOfWeek = date.getDay();
+          await supabase.from('clinic_hours').upsert({
+            clinic_id: clinic.id,
+            day_of_week: dayOfWeek,
+            is_closed: true,
+          }, {
+            onConflict: 'clinic_id,day_of_week',
+          });
+        }
+      }
+
       setSelectedDates([]);
       setBlockReason('');
       setShowBlockDialog(false);

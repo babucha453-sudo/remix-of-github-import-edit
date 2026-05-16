@@ -70,7 +70,7 @@ Deno.serve(async (req) => {
       .from('appointments')
       .select('id, clinic_id, completed_at')
       .eq('status', 'completed')
-      .gte('completed_at', now.toISOString())
+      .lte('completed_at', now.toISOString())
       .is('review_requested', null);
 
     if (day0Appointments.data && day0Appointments.data.length > 0) {

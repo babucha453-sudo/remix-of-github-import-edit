@@ -56,7 +56,6 @@ const SEOItem = ({
 export default function SEOTab() {
   const { user } = useAuth();
 
-  // Fetch clinic
   const { data: clinic } = useQuery({
     queryKey: ['seo-clinic', user?.id],
     queryFn: async () => {
@@ -71,30 +70,64 @@ export default function SEOTab() {
     enabled: !!user?.id,
   });
 
+  const { data: clinicHours } = useQuery({
+    queryKey: ['clinic-hours', clinic?.id],
+    queryFn: async () => {
+      const { data } = await supabase
+        .from('clinic_hours')
+        .select('*')
+        .eq('clinic_id', clinic?.id);
+      return data || [];
+    },
+    enabled: !!clinic?.id,
+  });
+
+  const { data: clinicImages } = useQuery({
+    queryKey: ['clinic-images-seo', clinic?.id],
+    queryFn: async () => {
+      const { data } = await supabase
+        .from('clinic_images')
+        .select('*')
+        .eq('clinic_id', clinic?.id);
+      return data || [];
+    },
+    enabled: !!clinic?.id,
+  });
+
+  const { data: clinicTreatments } = useQuery({
+    queryKey: ['clinic-treatments', clinic?.id],
+    queryFn: async () => {
+      const { data } = await supabase
+        .from('clinic_treatments')
+        .select('*')
+        .eq('clinic_id', clinic?.id);
+      return data || [];
+    },
+    enabled: !!clinic?.id,
+  });
+
+  const descriptionLength = clinic?.description?.length || 0;
+  const hasCompleteHours = clinicHours && clinicHours.filter(h => !h.is_closed).length >= 5;
+  const hasServices = clinicTreatments && clinicTreatments.length >= 3;
+  const hasPhotos = clinicImages && clinicImages.length >= 5;
+
   const seoChecklist = [
-    { id: 1, label: 'Business Name', value: clinic?.name || 'Not set', status: clinic?.name ? 'good' as const : 'error' as const, description: 'Name matches GMB listing' },
+    { id: 1, label: 'Profile Name', value: clinic?.name || 'Not set', status: clinic?.name ? 'good' as const : 'error' as const, description: 'Clinic name is set' },
     { id: 2, label: 'Address', value: clinic?.address ? 'Complete' : 'Missing', status: clinic?.address ? 'good' as const : 'error' as const, description: 'Full street address' },
     { id: 3, label: 'Phone Number', value: clinic?.phone ? 'Listed' : 'Missing', status: clinic?.phone ? 'good' as const : 'error' as const, description: 'Primary phone number' },
     { id: 4, label: 'Website', value: clinic?.website ? 'Linked' : 'Missing', status: clinic?.website ? 'good' as const : 'error' as const, description: 'Link to your website' },
-    { id: 5, label: 'Hours', value: clinic?.hours ? 'Complete' : 'Incomplete', status: clinic?.hours ? 'good' as const : 'warning' as const, description: 'Business hours' },
-    { id: 6, label: 'Services', value: clinic?.services?.length || 0, status: (clinic?.services?.length || 0) > 3 ? 'good' as const : 'warning' as const, description: 'Services listed' },
-    { id: 7, label: 'Photos', value: clinic?.photos?.length || 0, status: (clinic?.photos?.length || 0) > 5 ? 'good' as const : 'warning' as const, description: 'Profile photos' },
-    { id: 8, label: 'Description', value: clinic?.description ? 'Complete' : 'Missing', status: clinic?.description ? 'good' as const : 'error' as const, description: 'Business description' },
+    { id: 5, label: 'Business Hours', value: hasCompleteHours ? 'Complete' : 'Incomplete', status: hasCompleteHours ? 'good' as const : 'warning' as const, description: 'Hours set for weekdays' },
+    { id: 6, label: 'Services', value: clinicTreatments?.length || 0, status: hasServices ? 'good' as const : 'warning' as const, description: 'At least 3 services listed' },
+    { id: 7, label: 'Photos', value: clinicImages?.length || 0, status: hasPhotos ? 'good' as const : 'warning' as const, description: 'At least 5 photos' },
+    { id: 8, label: 'Description', value: descriptionLength > 50 ? `${descriptionLength} chars` : 'Too short', status: descriptionLength > 50 ? 'good' as const : 'error' as const, description: 'At least 50 characters' },
+    { id: 9, label: 'Google Business', value: clinic?.google_place_id ? 'Connected' : 'Not connected', status: clinic?.google_place_id ? 'good' as const : 'warning' as const, description: 'Google Business Profile linked' },
   ];
 
-  const keywords = [
-    { term: 'dentist near me', volume: 74000, difficulty: 'hard', position: 4 },
-    { term: 'dental cleaning', volume: 22000, difficulty: 'medium', position: 8 },
-    { term: 'teeth whitening', volume: 18000, difficulty: 'medium', position: 12 },
-    { term: 'invisalign', volume: 14000, difficulty: 'hard', position: 15 },
-    { term: 'emergency dentist', volume: 9000, difficulty: 'easy', position: 3 },
-  ];
-
-  const competitors = [
-    { name: 'Downtown Dental', rating: 4.8, reviews: 245, position: 1 },
-    { name: 'Smile City', rating: 4.6, reviews: 189, position: 2 },
-    { name: 'Family Dentistry', rating: 4.5, reviews: 156, position: 3 },
-  ];
+  const keywords = clinic?.id ? [
+    { term: 'dentist in ' + (clinic.city || 'area'), volume: 'N/A', difficulty: 'medium', position: 'N/A' },
+    { term: 'dental clinic near me', volume: 'N/A', difficulty: 'medium', position: 'N/A' },
+    { term: 'emergency dentist', volume: 'N/A', difficulty: 'easy', position: 'N/A' },
+  ] : [];
 
   const score = seoChecklist.filter(s => s.status === 'good').length;
   const maxScore = seoChecklist.length;
@@ -205,18 +238,23 @@ export default function SEOTab() {
         </CardHeader>
         <CardContent>
           <div className="space-y-3">
-            {keywords.map((kw, idx) => (
+            {keywords.length > 0 ? keywords.map((kw: any, idx: number) => (
               <div key={idx} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
                 <div>
                   <p className="font-medium text-gray-900">{kw.term}</p>
-                  <p className="text-sm text-gray-500">{kw.volume.toLocaleString()} monthly searches</p>
+                  <p className="text-sm text-gray-500">{kw.volume} monthly searches</p>
                 </div>
                 <div className="flex items-center gap-4">
                   <Badge variant="outline" className="bg-gray-100">{kw.difficulty}</Badge>
                   <span className="font-bold text-gray-900">#{kw.position}</span>
                 </div>
               </div>
-            ))}
+            )) : (
+              <div className="text-center py-6 text-gray-500">
+                <TrendingUp className="h-8 w-8 mx-auto mb-2 text-gray-300" />
+                <p>Keyword tracking coming soon</p>
+              </div>
+            )}
           </div>
         </CardContent>
       </Card>

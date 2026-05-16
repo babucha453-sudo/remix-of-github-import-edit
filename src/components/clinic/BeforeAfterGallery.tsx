@@ -26,14 +26,22 @@ export function BeforeAfterGallery({ clinicId, isClaimed }: BeforeAfterGalleryPr
   const [selectedCase, setSelectedCase] = useState<BeforeAfterCase | null>(null);
   const [selectedTreatment, setSelectedTreatment] = useState<string | null>(null);
 
-  // For now, we'll use a mock query since the table doesn't exist yet
-  // This can be connected to a real table when created
   const { data: cases, isLoading } = useQuery({
     queryKey: ['before-after-cases', clinicId],
     queryFn: async () => {
-      // Placeholder - will return empty array for unclaimed clinics
-      // Once the before_after_cases table is created, this will fetch real data
-      return [] as BeforeAfterCase[];
+      const { data, error } = await supabase
+        .from('clinic_before_after')
+        .select('id, treatment_name, before_image_url, after_image_url, description, display_order')
+        .eq('clinic_id', clinicId)
+        .eq('is_active', true)
+        .order('display_order', { ascending: true });
+
+      if (error) {
+        console.error('Error fetching before/after cases:', error);
+        return [] as BeforeAfterCase[];
+      }
+
+      return (data || []) as BeforeAfterCase[];
     },
     enabled: !!clinicId && isClaimed,
   });

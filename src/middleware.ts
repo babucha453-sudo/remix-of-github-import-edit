@@ -71,6 +71,7 @@ const AUTH_REQUIRED_PATHS = [
   '/admin',
   '/appointment/manage',
   '/profile/edit',
+  '/onboarding',
 ];
 
 const STATIC_EXTENSIONS = [
