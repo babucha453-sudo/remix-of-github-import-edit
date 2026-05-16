@@ -172,7 +172,7 @@ const Index = () => {
 
             <h1
               className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-white tracking-tight leading-[1.05] mb-2"
-              style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}
+              style={{ fontFamily: "'Figtree', sans-serif" }}
             >
               Find Your Perfect <br className="hidden sm:block" />
               <span className="text-primary tracking-tight">Dentist</span> in Seconds

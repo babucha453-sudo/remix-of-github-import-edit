@@ -30,8 +30,8 @@ export const CriticalCSS = () => (
         body {
           margin: 0;
           line-height: inherit;
-          font-family: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-          font-weight: 500;
+          font-family: 'Figtree', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+          font-weight: 600;
           -webkit-font-smoothing: antialiased;
           -moz-osx-font-smoothing: grayscale;
           background-color: hsl(220 25% 97%);
@@ -47,7 +47,7 @@ export const CriticalCSS = () => (
         
         /* Font loading fallback - prevent FOIT */
         @font-face {
-          font-family: 'Plus Jakarta Sans Fallback';
+          font-family: 'Figtree Fallback';
           src: local('Arial');
           size-adjust: 104%;
           ascent-override: 97%;

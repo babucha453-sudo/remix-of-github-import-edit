@@ -74,7 +74,7 @@ export const PageIntroSection = ({
                 <div className="flex-1 space-y-3">
                   <h2 
                     className="text-lg md:text-xl lg:text-2xl font-bold text-slate-900"
-                    style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}
+                    style={{ fontFamily: "'Figtree', sans-serif" }}
                   >
                     {defaultTitle}
                   </h2>
@@ -110,7 +110,7 @@ export const PageIntroSection = ({
                 {title && (
                   <h2 
                     className="text-lg md:text-xl lg:text-2xl font-bold text-slate-900"
-                    style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}
+                    style={{ fontFamily: "'Figtree', sans-serif" }}
                   >
                     {stripMarkdown(title)}
                   </h2>
