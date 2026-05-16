@@ -1,3 +1,4 @@
+import "@/index.css";
 import { useEffect, Suspense } from "react";
 import { lazyRetry } from "@/utils/lazyRetry";
 import { Toaster } from "@/components/ui/toaster";
