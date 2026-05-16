@@ -10,11 +10,20 @@ import { AuthProvider } from "@/hooks/useAuth";
 import { useVisitorTracking } from "@/hooks/useVisitorTracking";
 import { useDynamicFavicon } from "@/hooks/useDynamicFavicon";
 import { HelmetProvider } from "react-helmet-async";
-const PandaBot = lazyRetry(() => import("@/components/PandaBot").then(mod => ({ default: mod.PandaBot })));
-import { PerformanceMonitor } from "@/hooks/useWebVitals";
-import { TrailingSlashRedirect } from "@/components/TrailingSlashRedirect";
+import { Plus_Jakarta_Sans } from "next/font/google";
 import { AnalyticsProvider } from "@/components/analytics/AnalyticsProvider";
 import { SyncStructuredData } from "@/components/seo/SyncStructuredData";
+import { PerformanceMonitor } from "@/hooks/useWebVitals";
+import { TrailingSlashRedirect } from "@/components/TrailingSlashRedirect";
+
+const PandaBot = lazyRetry(() => import("@/components/PandaBot").then(mod => ({ default: mod.PandaBot })));
+
+const plusJakarta = Plus_Jakarta_Sans({
+  subsets: ['latin'],
+  weight: ['400', '500', '600', '700', '800'],
+  display: 'swap',
+  variable: '--font-plus-jakarta',
+});
 
 // Critical pages - load immediately for fast FCP
 import Index from "./pages/Index";
@@ -107,153 +116,155 @@ const PageLoader = () => (
 );
 
 const App = () => (
-  <HelmetProvider>
-    <QueryClientProvider client={queryClient}>
-      <AuthProvider>
-        <TooltipProvider>
-          {/* Performance monitoring in development */}
-          {process.env.NODE_ENV === 'development' && <PerformanceMonitor debug />}
-          <Toaster />
-          <Sonner />
-          <BrowserRouter>
-            {/* Google Analytics 4 tracking - must be inside Router for useLocation */}
-            <AnalyticsProvider>
-              <SyncStructuredData
-                data={[
-                  {
-                    '@context': 'https://schema.org',
-                    '@type': 'Organization',
-                    name: 'AppointPanda',
-                    url: 'https://www.appointpanda.com',
-                    logo: 'https://www.appointpanda.com/logo.png',
-                    description: 'Find and book appointments with top-rated dental professionals in California, Massachusetts, Connecticut, and New Jersey.',
-                    sameAs: [
-                      'https://www.facebook.com/appointpanda',
-                      'https://www.twitter.com/appointpanda',
-                      'https://www.linkedin.com/company/appointpanda'
-                    ],
-                    contactPoint: {
-                      '@type': 'ContactPoint',
-                      telephone: '+1-800-DENTIST',
-                      contactType: 'customer service',
-                      availableLanguage: 'English',
-                    },
-                  },
-                  {
-                    '@context': 'https://schema.org',
-                    '@type': 'WebSite',
-                    name: 'AppointPanda',
-                    url: 'https://www.appointpanda.com',
-                    potentialAction: {
-                      '@type': 'SearchAction',
-                      target: {
-                        '@type': 'EntryPoint',
-                        urlTemplate: 'https://www.appointpanda.com/search?q={search_term_string}',
+  <div className={plusJakarta.variable}>
+    <HelmetProvider>
+      <QueryClientProvider client={queryClient}>
+        <AuthProvider>
+          <TooltipProvider>
+            {/* Performance monitoring in development */}
+            {process.env.NODE_ENV === 'development' && <PerformanceMonitor debug />}
+            <Toaster />
+            <Sonner />
+            <BrowserRouter>
+              {/* Google Analytics 4 tracking - must be inside Router for useLocation */}
+              <AnalyticsProvider>
+                <SyncStructuredData
+                  data={[
+                    {
+                      '@context': 'https://schema.org',
+                      '@type': 'Organization',
+                      name: 'AppointPanda',
+                      url: 'https://www.appointpanda.com',
+                      logo: 'https://www.appointpanda.com/logo.png',
+                      description: 'Find and book appointments with top-rated dental professionals in California, Massachusetts, Connecticut, and New Jersey.',
+                      sameAs: [
+                        'https://www.facebook.com/appointpanda',
+                        'https://www.twitter.com/appointpanda',
+                        'https://www.linkedin.com/company/appointpanda'
+                      ],
+                      contactPoint: {
+                        '@type': 'ContactPoint',
+                        telephone: '+1-800-DENTIST',
+                        contactType: 'customer service',
+                        availableLanguage: 'English',
                       },
-                      'query-input': 'required name=search_term_string',
                     },
-                  },
-                ]}
-                id="global-org-website-schema"
-              />
-              <ScrollToTop />
-              <TrailingSlashRedirect />
-              <VisitorTracker />
-              <DynamicFavicon />
-              <PandaBot />
-              <Suspense fallback={<PageLoader />}>
-                <Routes>
-                  {/* Homepage - New V2 Design (Default) */}
-                  <Route path="/" element={<HomeV2 />} />
+                    {
+                      '@context': 'https://schema.org',
+                      '@type': 'WebSite',
+                      name: 'AppointPanda',
+                      url: 'https://www.appointpanda.com',
+                      potentialAction: {
+                        '@type': 'SearchAction',
+                        target: {
+                          '@type': 'EntryPoint',
+                          urlTemplate: 'https://www.appointpanda.com/search?q={search_term_string}',
+                        },
+                        'query-input': 'required name=search_term_string',
+                      },
+                    },
+                  ]}
+                  id="global-org-website-schema"
+                />
+                <ScrollToTop />
+                <TrailingSlashRedirect />
+                <VisitorTracker />
+                <DynamicFavicon />
+                <PandaBot />
+                <Suspense fallback={<PageLoader />}>
+                  <Routes>
+                    {/* Homepage - New V2 Design (Default) */}
+                    <Route path="/" element={<HomeV2 />} />
 
-                  {/* Old Homepage - Preserved for reference */}
-                  <Route path="/home-old" element={<Index />} />
+                    {/* Old Homepage - Preserved for reference */}
+                    <Route path="/home-old" element={<Index />} />
 
-                  {/* AI Search */}
-                  <Route path="/search" element={<AISearchPage />} />
-                  <Route path="/find-dentist" element={<AISearchPage />} />
+                    {/* AI Search */}
+                    <Route path="/search" element={<AISearchPage />} />
+                    <Route path="/find-dentist" element={<AISearchPage />} />
 
-                  {/* Directory - Services */}
-                  <Route path="/services" element={<ServicesPage />} />
-                  <Route path="/services/:serviceSlug" element={<ServicePage />} />
+                    {/* Directory - Services */}
+                    <Route path="/services" element={<ServicesPage />} />
+                    <Route path="/services/:serviceSlug" element={<ServicePage />} />
 
-                  {/* Directory - Profiles - Exact slug match only, extra paths = 404 */}
-                  <Route path="/clinic/:clinicSlug" element={<ClinicPage />} />
-                  <Route path="/clinic/:clinicSlug/*" element={<NotFound />} />
-                  <Route path="/dentist/:dentistSlug" element={<DentistPage />} />
-                  <Route path="/dentist/:dentistSlug/*" element={<NotFound />} />
+                    {/* Directory - Profiles - Exact slug match only, extra paths = 404 */}
+                    <Route path="/clinic/:clinicSlug" element={<ClinicPage />} />
+                    <Route path="/clinic/:clinicSlug/*" element={<NotFound />} />
+                    <Route path="/dentist/:dentistSlug" element={<DentistPage />} />
+                    <Route path="/dentist/:dentistSlug/*" element={<NotFound />} />
 
-                  {/* Directory - State Pages (e.g., /ca, /ma) */}
-                  <Route path="/:stateSlug" element={<StatePage />} />
+                    {/* Directory - State Pages (e.g., /ca, /ma) */}
+                    <Route path="/:stateSlug" element={<StatePage />} />
 
-                  {/* Insurance + City pages - MUST be BEFORE city to take precedence */}
-                  <Route path="/:stateSlug/:citySlug/:insuranceSlug-dentists" element={<InsuranceLocationPage />} />
+                    {/* Insurance + City pages - MUST be BEFORE city to take precedence */}
+                    <Route path="/:stateSlug/:citySlug/:insuranceSlug-dentists" element={<InsuranceLocationPage />} />
 
-                  {/* Directory - City Pages (e.g., /ca/los-angeles) */}
-                  <Route path="/:stateSlug/:citySlug" element={<CityPage />} />
+                    {/* Directory - City Pages (e.g., /ca/los-angeles) */}
+                    <Route path="/:stateSlug/:citySlug" element={<CityPage />} />
 
-                  {/* Directory - Service + City combination (e.g., /ca/los-angeles/cosmetic-dentist) */}
-                  <Route path="/:stateSlug/:citySlug/:serviceSlug" element={<ServiceLocationPage />} />
+                    {/* Directory - Service + City combination (e.g., /ca/los-angeles/cosmetic-dentist) */}
+                    <Route path="/:stateSlug/:citySlug/:serviceSlug" element={<ServiceLocationPage />} />
 
-                  {/* Blog */}
-                  <Route path="/blog" element={<BlogPage />} />
-                  <Route path="/blog/:postSlug" element={<BlogPostPage />} />
+                    {/* Blog */}
+                    <Route path="/blog" element={<BlogPage />} />
+                    <Route path="/blog/:postSlug" element={<BlogPostPage />} />
 
-                  {/* Auth */}
-                  <Route path="/auth" element={<Auth />} />
-                  <Route path="/auth/callback" element={<AuthCallback />} />
-                  <Route path="/signup/dentist" element={<DentistSignupPage />} />
-                  <Route path="/onboarding" element={<GMBOnboarding />} />
-                  <Route path="/gmb-select" element={<GMBBusinessSelection />} />
-                  <Route path="/team-invite/:token" element={<TeamInvitePage />} />
+                    {/* Auth */}
+                    <Route path="/auth" element={<Auth />} />
+                    <Route path="/auth/callback" element={<AuthCallback />} />
+                    <Route path="/signup/dentist" element={<DentistSignupPage />} />
+                    <Route path="/onboarding" element={<GMBOnboarding />} />
+                    <Route path="/gmb-select" element={<GMBBusinessSelection />} />
+                    <Route path="/team-invite/:token" element={<TeamInvitePage />} />
 
-                  {/* Dashboards */}
-                  <Route path="/admin" element={<AdminDashboard />} />
-                  <Route path="/dashboard" element={<DentistDashboardV2 />} />
-                  <Route path="/dashboard-v2" element={<DentistDashboardV2 />} />
+                    {/* Dashboards */}
+                    <Route path="/admin" element={<AdminDashboard />} />
+                    <Route path="/dashboard" element={<DentistDashboardV2 />} />
+                    <Route path="/dashboard-v2" element={<DentistDashboardV2 />} />
 
-                  {/* Static Pages */}
-                  <Route path="/about" element={<AboutPage />} />
-                  <Route path="/contact" element={<ContactPage />} />
-                  <Route path="/faq" element={<FAQPage />} />
-                  <Route path="/how-it-works" element={<HowItWorksPage />} />
-                  <Route path="/privacy" element={<PrivacyPage />} />
-                  <Route path="/terms" element={<TermsPage />} />
-                  <Route path="/sitemap" element={<SitemapPage />} />
+                    {/* Static Pages */}
+                    <Route path="/about" element={<AboutPage />} />
+                    <Route path="/contact" element={<ContactPage />} />
+                    <Route path="/faq" element={<FAQPage />} />
+                    <Route path="/how-it-works" element={<HowItWorksPage />} />
+                    <Route path="/privacy" element={<PrivacyPage />} />
+                    <Route path="/terms" element={<TermsPage />} />
+                    <Route path="/sitemap" element={<SitemapPage />} />
 
-                  {/* Pricing */}
-                  <Route path="/pricing" element={<PricingPage />} />
+                    {/* Pricing */}
+                    <Route path="/pricing" element={<PricingPage />} />
 
-                  {/* Insurance */}
-                  <Route path="/insurance" element={<InsurancePage />} />
-                  <Route path="/insurance/:insuranceSlug" element={<InsuranceDetailPage />} />
+                    {/* Insurance */}
+                    <Route path="/insurance" element={<InsurancePage />} />
+                    <Route path="/insurance/:insuranceSlug" element={<InsuranceDetailPage />} />
 
-                  {/* Business */}
-                  <Route path="/claim-profile" element={<ClaimProfilePage />} />
-                  <Route path="/garments" element={<GarmentsPage />} />
-                  <Route path="/list-your-practice" element={<ListYourPracticePage />} />
-                  <Route path="/list-your-practice/success" element={<ListYourPracticeSuccessPage />} />
-                  <Route path="/review/:clinicId" element={<ReviewFunnelPage />} />
-                  <Route path="/rq/:requestCode" element={<ReviewRequestPage />} />
-                  <Route path="/appointment/:token" element={<AppointmentManagePage />} />
-                  <Route path="/form/:submissionId" element={<PatientFormPage />} />
-                  <Route path="/book/:clinicId" element={<BookDirectPage />} />
+                    {/* Business */}
+                    <Route path="/claim-profile" element={<ClaimProfilePage />} />
+                    <Route path="/garments" element={<GarmentsPage />} />
+                    <Route path="/list-your-practice" element={<ListYourPracticePage />} />
+                    <Route path="/list-your-practice/success" element={<ListYourPracticeSuccessPage />} />
+                    <Route path="/review/:clinicId" element={<ReviewFunnelPage />} />
+                    <Route path="/rq/:requestCode" element={<ReviewRequestPage />} />
+                    <Route path="/appointment/:token" element={<AppointmentManagePage />} />
+                    <Route path="/form/:submissionId" element={<PatientFormPage />} />
+                    <Route path="/book/:clinicId" element={<BookDirectPage />} />
 
-                  {/* Free Tools - Phase 3 */}
-                  <Route path="/tools/dental-cost-calculator" element={<DentalCostCalculator />} />
-                  <Route path="/tools/insurance-checker" element={<InsuranceChecker />} />
-                  <Route path="/emergency-dentist" element={<EmergencyDentist />} />
+                    {/* Free Tools - Phase 3 */}
+                    <Route path="/tools/dental-cost-calculator" element={<DentalCostCalculator />} />
+                    <Route path="/tools/insurance-checker" element={<InsuranceChecker />} />
+                    <Route path="/emergency-dentist" element={<EmergencyDentist />} />
 
-                  {/* Catch-all */}
-                  <Route path="*" element={<NotFound />} />
-                </Routes>
-              </Suspense>
-            </AnalyticsProvider>
-          </BrowserRouter>
-        </TooltipProvider>
-      </AuthProvider>
-    </QueryClientProvider>
-  </HelmetProvider>
+                    {/* Catch-all */}
+                    <Route path="*" element={<NotFound />} />
+                  </Routes>
+                </Suspense>
+              </AnalyticsProvider>
+            </BrowserRouter>
+          </TooltipProvider>
+        </AuthProvider>
+      </QueryClientProvider>
+    </HelmetProvider>
+  </div>
 );
 
 export default App;
