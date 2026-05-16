@@ -448,7 +448,7 @@ const CityPage = ({ initialState, initialCity }: CityPageProps) => {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.1 }}
-              className="text-4xl sm:text-5xl md:text-6xl font-black text-white mb-4 tracking-tight"
+              className="text-4xl sm:text-5xl md:text-6xl font-bold text-white mb-4 tracking-tight"
             >
               Find the Best Dentists in <br className="sm:hidden" />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-teal-300 to-emerald-400">{cityName}</span>, {stateAbbr}
@@ -903,7 +903,7 @@ const CityPage = ({ initialState, initialCity }: CityPageProps) => {
               <Stethoscope className="h-4 w-4 text-emerald-400" />
               <span className="text-sm font-semibold text-emerald-300">Need Help?</span>
             </div>
-            <h2 className="text-3xl md:text-4xl font-black text-white mb-4">
+            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
               Frequently Asked <span className="text-emerald-400">Questions</span>
             </h2>
             <p className="text-slate-400 max-w-xl mx-auto">

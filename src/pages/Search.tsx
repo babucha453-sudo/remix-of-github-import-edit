@@ -113,7 +113,7 @@ const Search = () => {
               {realCounts?.clinics?.toLocaleString() || 0}+ Verified Providers
             </Badge>
             
-            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black text-foreground tracking-tight mb-3">
+            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-foreground tracking-tight mb-3">
               US Dental <span className="text-primary">Directory</span>
             </h1>
             <p className="text-sm md:text-base text-muted-foreground mb-6 max-w-xl mx-auto">
@@ -198,7 +198,7 @@ const Search = () => {
           <div className="container px-4">
             <div className="flex items-center justify-between mb-6">
               <div>
-                <h2 className="text-lg md:text-2xl font-black text-foreground">
+                <h2 className="text-lg md:text-2xl font-bold text-foreground">
                   Browse by <span className="text-primary">State</span>
                 </h2>
                 <p className="text-sm text-muted-foreground mt-0.5">Select a state to see all cities</p>
@@ -242,7 +242,7 @@ const Search = () => {
         <div className="container px-4">
           <div className="flex items-center justify-between mb-6">
             <div>
-              <h2 className="text-lg md:text-2xl font-black text-foreground">
+              <h2 className="text-lg md:text-2xl font-bold text-foreground">
                 {selectedState ? (
                   <>Dentists in <span className="text-primary">{selectedStateName}</span></>
                 ) : (
@@ -327,7 +327,7 @@ const Search = () => {
       <section className="py-8 md:py-12 border-t border-border">
         <div className="container px-4">
           <div className="text-center mb-6">
-            <h2 className="text-lg md:text-2xl font-black text-foreground">
+            <h2 className="text-lg md:text-2xl font-bold text-foreground">
               Browse by <span className="text-primary">Treatment</span>
             </h2>
             <p className="text-sm text-muted-foreground mt-0.5">Find specialists for specific dental services</p>
@@ -359,7 +359,7 @@ const Search = () => {
       <section className="py-8 md:py-12 border-t border-border">
         <div className="container px-4">
           <div className="text-center mb-6">
-            <h2 className="text-lg md:text-2xl font-black text-foreground">
+            <h2 className="text-lg md:text-2xl font-bold text-foreground">
               Free Dental <span className="text-primary">Tools</span>
             </h2>
             <p className="text-sm text-muted-foreground mt-0.5">Compare costs, check insurance, and find emergency care</p>

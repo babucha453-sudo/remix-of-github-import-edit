@@ -149,7 +149,7 @@ export const Footer = forwardRef<HTMLElement, React.HTMLAttributes<HTMLElement>>
                   placeholder="Enter your email"
                   className="w-full md:w-64 px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder:text-slate-400 focus:outline-none focus:border-emerald-500"
                 />
-                <button type="submit" className="px-6 py-3 bg-emerald-500 hover:bg-emerald-600 text-white font-bold rounded-xl transition-colors">
+                <button type="submit" className="px-6 py-3 bg-emerald-500 hover:bg-emerald-600 text-white font-medium rounded-xl transition-colors">
                   Subscribe
                 </button>
               </form>
@@ -165,9 +165,9 @@ export const Footer = forwardRef<HTMLElement, React.HTMLAttributes<HTMLElement>>
             <div className="lg:col-span-3">
               <Link to="/" className="inline-flex items-center gap-2 mb-4">
                 <div className="w-10 h-10 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-xl flex items-center justify-center">
-                  <span className="text-white font-bold text-lg">AP</span>
+                  <span className="text-white font-medium text-lg">AP</span>
                 </div>
-                <span className="text-xl font-bold tracking-tight text-white">
+                <span className="text-xl font-medium tracking-tight text-white">
                   Appoint<span className="text-emerald-400">Panda</span>
                 </span>
               </Link>
@@ -210,7 +210,7 @@ export const Footer = forwardRef<HTMLElement, React.HTMLAttributes<HTMLElement>>
 
             {/* Company Links */}
             <div className="lg:col-span-2">
-              <h4 className="text-sm font-bold text-white mb-4 uppercase tracking-wider">Company</h4>
+              <h4 className="text-sm font-medium text-white mb-4 uppercase tracking-wider">Company</h4>
               <ul className="space-y-3">
                 {company.map((item) => (
                   <li key={item.path}>
@@ -225,7 +225,7 @@ export const Footer = forwardRef<HTMLElement, React.HTMLAttributes<HTMLElement>>
 
             {/* Resources Links */}
             <div className="lg:col-span-2">
-              <h4 className="text-sm font-bold text-white mb-4 uppercase tracking-wider">Resources</h4>
+              <h4 className="text-sm font-medium text-white mb-4 uppercase tracking-wider">Resources</h4>
               <ul className="space-y-3">
                 {resources.map((item) => (
                   <li key={item.path}>
@@ -240,7 +240,7 @@ export const Footer = forwardRef<HTMLElement, React.HTMLAttributes<HTMLElement>>
 
             {/* Popular Services */}
             <div className="lg:col-span-2">
-              <h4 className="text-sm font-bold text-white mb-4 uppercase tracking-wider">Popular Services</h4>
+              <h4 className="text-sm font-medium text-white mb-4 uppercase tracking-wider">Popular Services</h4>
               <ul className="space-y-3">
                 {TOP_SERVICES.slice(0, 6).map((service) => (
                   <li key={service.slug}>
@@ -255,11 +255,11 @@ export const Footer = forwardRef<HTMLElement, React.HTMLAttributes<HTMLElement>>
 
             {/* Top Cities */}
             <div className="lg:col-span-3">
-              <h4 className="text-sm font-bold text-white mb-4 uppercase tracking-wider">Top Cities</h4>
+              <h4 className="text-sm font-medium text-white mb-4 uppercase tracking-wider">Top Cities</h4>
               <div className="space-y-4">
                 {ACTIVE_STATES.slice(0, 4).map((state) => (
                   <div key={state.slug}>
-                    <Link to={`/${state.slug}/`} className="text-sm font-semibold text-white hover:text-emerald-400 transition-colors flex items-center gap-1 mb-2">
+                    <Link to={`/${state.slug}/`} className="text-sm font-medium text-white hover:text-emerald-400 transition-colors flex items-center gap-1 mb-2">
                       {state.name}
                       <ChevronRight className="h-3 w-3 text-emerald-400" />
                     </Link>
@@ -283,7 +283,7 @@ export const Footer = forwardRef<HTMLElement, React.HTMLAttributes<HTMLElement>>
           {/* Services Row */}
           <div className="border-t border-white/10 mt-10 pt-8">
             <nav aria-label="Dental Services" className="flex flex-wrap gap-x-4 gap-y-2 items-center">
-              <span className="text-xs font-semibold text-slate-500 uppercase mr-2">Services:</span>
+              <span className="text-xs font-medium text-slate-500 uppercase mr-2">Services:</span>
               {TOP_SERVICES.map((service, idx) => (
                 <Link
                   key={service.slug}

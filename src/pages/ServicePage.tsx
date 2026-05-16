@@ -280,7 +280,7 @@ const ServicePage = () => {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.1 }}
-              className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black tracking-tight text-foreground mb-3 px-2" 
+              className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight text-foreground mb-3 px-2" 
               style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}
             >
               {treatmentName}
@@ -373,7 +373,7 @@ const ServicePage = () => {
         <Section size="lg" className="bg-muted/30">
           <div className="max-w-4xl mx-auto text-center">
             <span className="inline-block text-xs font-bold text-emerald uppercase tracking-widest mb-2">By Location</span>
-            <h2 className="text-2xl md:text-3xl font-black text-foreground mb-6">
+            <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-6">
               {treatmentName} Specialists <span className="text-primary">By State</span>
             </h2>
             <div className="grid sm:grid-cols-3 gap-3">
@@ -404,7 +404,7 @@ const ServicePage = () => {
         <div className="max-w-3xl mx-auto">
           <div className="text-center mb-8">
             <span className="inline-block text-xs font-bold text-primary uppercase tracking-widest mb-2">Have Questions?</span>
-            <h2 className="text-2xl md:text-3xl font-black text-foreground">
+            <h2 className="text-2xl md:text-3xl font-bold text-foreground">
               Frequently Asked <span className="text-primary">Questions</span>
             </h2>
           </div>

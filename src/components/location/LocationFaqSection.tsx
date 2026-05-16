@@ -61,7 +61,7 @@ export function LocationFaqSection({ cityName, stateAbbr, faqs, variation }: Loc
             <HelpCircle className={`h-4 w-4 text-${accent}-400`} />
             <span className={`text-sm font-semibold text-${accent}-300`}>Questions?</span>
           </div>
-          <h2 className="text-3xl md:text-4xl font-black text-white mb-4">
+          <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
             Frequently Asked <span className={`text-${accent}-400`}>Questions</span>
           </h2>
           <p className="text-slate-400 max-w-xl mx-auto">

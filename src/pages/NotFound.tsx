@@ -32,7 +32,7 @@ const NotFound = () => {
       <div className="text-center px-4 max-w-md">
         {/* 404 Visual */}
         <div className="mb-6">
-          <span className="text-8xl font-black bg-gradient-to-r from-primary to-teal bg-clip-text text-transparent">
+          <span className="text-8xl font-bold bg-gradient-to-r from-primary to-teal bg-clip-text text-transparent">
             404
           </span>
         </div>

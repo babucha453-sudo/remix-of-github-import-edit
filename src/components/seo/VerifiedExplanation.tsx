@@ -41,7 +41,7 @@ export function VerifiedExplanation({ className = "" }: VerifiedExplanationProps
     <div className={`space-y-8 ${className}`}>
       <div className="text-center">
         <span className="inline-block text-xs font-bold text-emerald uppercase tracking-widest mb-2">Trust & Safety</span>
-        <h2 className="text-2xl md:text-3xl font-black text-foreground mb-4">
+        <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-4">
           Understanding Our Verification System
         </h2>
         <p className="text-muted-foreground leading-relaxed max-w-2xl mx-auto">

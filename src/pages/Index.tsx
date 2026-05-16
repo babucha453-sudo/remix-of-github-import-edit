@@ -167,11 +167,11 @@ const Index = () => {
           <div className="max-w-4xl mx-auto text-center">
             <div className="inline-flex items-center gap-2 bg-primary/20 border border-primary/40 rounded-full px-5 py-2.5 mb-5 md:mb-6 shadow-xl shadow-primary/15">
               <div className="w-2 h-2 rounded-full bg-primary" />
-              <span className="text-xs font-black text-primary uppercase tracking-widest leading-none">AI-Powered Dental Matching</span>
+              <span className="text-xs font-bold text-primary uppercase tracking-widest leading-none">AI-Powered Dental Matching</span>
             </div>
 
             <h1
-              className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-white tracking-tight leading-[1.05] mb-2"
+              className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-white tracking-tight leading-[1.05] mb-2"
               style={{ fontFamily: "'Plus Jakarta Sans', sans-serif" }}
             >
               Find Your Perfect <br className="hidden sm:block" />
@@ -181,7 +181,7 @@ const Index = () => {
             <div className="flex justify-center mb-5 min-h-[1.3em]">
               <AnimatedHeroHeadlines
                 headlines={animatedHeadlines}
-                className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black"
+                className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold"
               />
             </div>
 
@@ -209,7 +209,7 @@ const Index = () => {
                     <stat.icon className="h-5 w-5 text-primary" />
                   </div>
                   <div className="text-left min-w-0">
-                    <div className="text-base md:text-lg font-black text-white">{stat.value}</div>
+                    <div className="text-base md:text-lg font-bold text-white">{stat.value}</div>
                     <p className="text-[9px] md:text-[10px] font-bold text-white/50 uppercase tracking-wider truncate">{stat.label}</p>
                   </div>
                 </div>
@@ -237,7 +237,7 @@ const Index = () => {
               <MapPin className="h-3.5 w-3.5 text-primary" />
               <span className="text-sm font-bold text-primary">Browse by State</span>
             </div>
-            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black text-foreground">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-foreground">
               Find Dentists in Your <span className="text-primary">State</span>
             </h2>
             <p className="text-muted-foreground mt-2 md:mt-3 max-w-lg mx-auto text-sm md:text-base">
@@ -309,7 +309,7 @@ const Index = () => {
           <div className="text-center mt-8 md:mt-10">
             <Link
               to="/search"
-              className="inline-flex items-center gap-2 text-muted-foreground hover:text-primary font-bold transition-colors text-sm md:text-base"
+              className="inline-flex items-center gap-2 text-muted-foreground hover:text-primary font-medium transition-colors text-sm md:text-base"
             >
               View All States
               <ArrowRight className="h-4 w-4" />
@@ -330,7 +330,7 @@ const Index = () => {
               <CheckCircle className="h-3.5 w-3.5 text-primary" />
               <span className="text-sm font-bold text-primary">Why Choose Us</span>
             </div>
-            <h2 className="text-2xl sm:text-3xl md:text-4xl font-black text-white">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white">
               The Smart Way to Find <span className="text-primary">Dental Care</span>
             </h2>
             <p className="text-white/60 mt-2 md:mt-3 max-w-xl mx-auto text-sm md:text-base">
@@ -373,7 +373,7 @@ const Index = () => {
                   <Star className="h-4 w-4 text-gold fill-gold" />
                   <span className="text-sm font-bold text-gold">Elite Selection</span>
                 </div>
-                <h2 className="text-4xl md:text-5xl font-black text-foreground">
+                <h2 className="text-4xl md:text-5xl font-bold text-foreground">
                   The <span className="italic text-primary">Top Rated</span> Dentists
                 </h2>
                 <p className="text-muted-foreground mt-3 max-w-lg mx-auto">
@@ -417,7 +417,7 @@ const Index = () => {
                   <Building2 className="h-4 w-4 text-primary" />
                   <span className="text-sm font-bold text-primary tracking-wide">Comprehensive Care</span>
                 </div>
-                <h2 className="text-4xl md:text-5xl font-black text-foreground">
+                <h2 className="text-4xl md:text-5xl font-bold text-foreground">
                   Dental <span className="text-primary relative">
                     Services
                     <svg className="absolute -bottom-1 left-0 w-full h-2 text-primary/30" viewBox="0 0 100 8" preserveAspectRatio="none">
@@ -485,7 +485,7 @@ const Index = () => {
               <Sparkles className="h-4 w-4 text-primary" />
               <span className="text-sm font-bold text-primary tracking-wide">Simple 3-Step Process</span>
             </div>
-            <h2 className="text-4xl md:text-5xl font-black text-foreground mb-4">
+            <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
               How It <span className="text-primary">Works</span>
             </h2>
             <p className="text-lg text-muted-foreground max-w-xl mx-auto">
@@ -503,7 +503,7 @@ const Index = () => {
               <div className="group relative animate-fade-in-up" style={{ animationDelay: '0s' }}>
                 <div className="relative bg-card rounded-3xl p-8 border border-border hover:border-primary/30 hover:shadow-2xl hover:shadow-primary/5 transition-all duration-500 h-full">
                   {/* Step number */}
-                  <div className="relative z-20 w-16 h-16 rounded-2xl bg-gradient-to-br from-primary to-primary/80 text-primary-foreground flex items-center justify-center mx-auto -mt-12 mb-6 text-2xl font-black shadow-xl shadow-primary/30 group-hover:scale-110 transition-transform duration-300 border-4 border-background">
+                  <div className="relative z-20 w-16 h-16 rounded-2xl bg-gradient-to-br from-primary to-primary/80 text-primary-foreground flex items-center justify-center mx-auto -mt-12 mb-6 text-2xl font-bold shadow-xl shadow-primary/30 group-hover:scale-110 transition-transform duration-300 border-4 border-background">
                     1
                   </div>
 
@@ -522,7 +522,7 @@ const Index = () => {
               {/* Step 2 */}
               <div className="group relative animate-fade-in-up" style={{ animationDelay: '0.15s' }}>
                 <div className="relative bg-card rounded-3xl p-8 border border-border hover:border-primary/30 hover:shadow-2xl hover:shadow-primary/5 transition-all duration-500 h-full">
-                  <div className="relative z-20 w-16 h-16 rounded-2xl bg-gradient-to-br from-primary to-primary/80 text-primary-foreground flex items-center justify-center mx-auto -mt-12 mb-6 text-2xl font-black shadow-xl shadow-primary/30 group-hover:scale-110 transition-transform duration-300 border-4 border-background">
+                  <div className="relative z-20 w-16 h-16 rounded-2xl bg-gradient-to-br from-primary to-primary/80 text-primary-foreground flex items-center justify-center mx-auto -mt-12 mb-6 text-2xl font-bold shadow-xl shadow-primary/30 group-hover:scale-110 transition-transform duration-300 border-4 border-background">
                     2
                   </div>
 
@@ -540,7 +540,7 @@ const Index = () => {
               {/* Step 3 */}
               <div className="group relative animate-fade-in-up" style={{ animationDelay: '0.3s' }}>
                 <div className="relative bg-card rounded-3xl p-8 border border-border hover:border-primary/30 hover:shadow-2xl hover:shadow-primary/5 transition-all duration-500 h-full">
-                  <div className="relative z-20 w-16 h-16 rounded-2xl bg-gradient-to-br from-primary to-primary/80 text-primary-foreground flex items-center justify-center mx-auto -mt-12 mb-6 text-2xl font-black shadow-xl shadow-primary/30 group-hover:scale-110 transition-transform duration-300 border-4 border-background">
+                  <div className="relative z-20 w-16 h-16 rounded-2xl bg-gradient-to-br from-primary to-primary/80 text-primary-foreground flex items-center justify-center mx-auto -mt-12 mb-6 text-2xl font-bold shadow-xl shadow-primary/30 group-hover:scale-110 transition-transform duration-300 border-4 border-background">
                     3
                   </div>
 
@@ -595,7 +595,7 @@ const Index = () => {
             </div>
 
             {/* Heading */}
-            <h2 className="text-4xl md:text-6xl font-black text-white mb-6 leading-tight">
+            <h2 className="text-4xl md:text-6xl font-bold text-white mb-6 leading-tight">
               Ready to Find Your
               <span className="block text-primary mt-2">Perfect Dentist?</span>
             </h2>
@@ -608,15 +608,15 @@ const Index = () => {
             {/* Stats row */}
             <div className="flex flex-wrap justify-center gap-8 mb-12">
               <div className="text-center">
-                <div className="text-3xl font-black text-primary mb-1">{realCounts?.clinics?.toLocaleString() || '0'}+</div>
+                <div className="text-3xl font-bold text-primary mb-1">{realCounts?.clinics?.toLocaleString() || '0'}+</div>
                 <div className="text-sm text-white/50 font-semibold">Verified Practices</div>
               </div>
               <div className="text-center">
-                <div className="text-3xl font-black text-primary mb-1">4.9★</div>
+                <div className="text-3xl font-bold text-primary mb-1">4.9★</div>
                 <div className="text-sm text-white/50 font-semibold">Average Rating</div>
               </div>
               <div className="text-center">
-                <div className="text-3xl font-black text-primary mb-1">60s</div>
+                <div className="text-3xl font-bold text-primary mb-1">60s</div>
                 <div className="text-sm text-white/50 font-semibold">To Book</div>
               </div>
             </div>

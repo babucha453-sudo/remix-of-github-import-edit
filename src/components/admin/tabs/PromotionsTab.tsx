@@ -384,7 +384,7 @@ export default function PromotionsTab() {
                             <span className="font-bold text-foreground">{p.name}</span>
                           </div>
                           <div className="flex items-baseline gap-1">
-                            <span className="text-2xl font-black text-foreground">${p.price_monthly || 0}</span>
+                            <span className="text-2xl font-bold text-foreground">${p.price_monthly || 0}</span>
                             <span className="text-muted-foreground text-sm">/month</span>
                           </div>
                         </button>
@@ -479,7 +479,7 @@ export default function PromotionsTab() {
                 <CheckCircle className="h-7 w-7" />
               </div>
               <div>
-                <p className="text-4xl font-black">{activePromotions?.length || 0}</p>
+                <p className="text-4xl font-bold">{activePromotions?.length || 0}</p>
                 <p className="text-emerald-100 font-medium">Active Promotions</p>
               </div>
             </div>
@@ -494,7 +494,7 @@ export default function PromotionsTab() {
                 <Clock className="h-7 w-7" />
               </div>
               <div>
-                <p className="text-4xl font-black">{expiredPromotions?.length || 0}</p>
+                <p className="text-4xl font-bold">{expiredPromotions?.length || 0}</p>
                 <p className="text-slate-200 font-medium">Expired</p>
               </div>
             </div>
@@ -509,7 +509,7 @@ export default function PromotionsTab() {
                 <Award className="h-7 w-7" />
               </div>
               <div>
-                <p className="text-4xl font-black">{promotions?.length || 0}</p>
+                <p className="text-4xl font-bold">{promotions?.length || 0}</p>
                 <p className="text-amber-100 font-medium">Total Granted</p>
               </div>
             </div>

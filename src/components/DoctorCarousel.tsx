@@ -55,7 +55,7 @@ export function DoctorCarousel({ doctors }: DoctorCarouselProps) {
         >
           <div className="text-center">
             <div className="text-label text-card/80 mb-1 text-xs uppercase tracking-wide font-bold">Explore All</div>
-            <div className="text-data text-xl text-card mb-3 font-black">120+</div>
+            <div className="text-data text-xl text-card mb-3 font-bold">120+</div>
             <p className="text-xs text-card/70 mb-3">Specialists</p>
             <div className="h-9 w-9 rounded-full bg-primary flex items-center justify-center mx-auto group-hover:scale-110 transition-transform">
               <ArrowRight className="h-4 w-4 text-primary-foreground" />

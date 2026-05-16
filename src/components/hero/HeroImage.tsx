@@ -38,7 +38,7 @@ export const HeroImage = () => {
                 </svg>
               </div>
               <div>
-                <p className="text-[10px] md:text-xs font-bold text-muted-foreground">VERIFIED CLINICS</p>
+                <p className="text-[10px] md:text-xs font-semibold text-muted-foreground">VERIFIED CLINICS</p>
                 <p className="text-xs md:text-sm font-bold text-foreground">500+ Across USA</p>
               </div>
             </div>

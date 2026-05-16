@@ -284,7 +284,7 @@ const ServiceLocationPage = () => {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.1 }}
-              className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black text-foreground tracking-tight mb-3 px-2 text-balance"
+              className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-foreground tracking-tight mb-3 px-2 text-balance"
               style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", textWrap: 'balance' }}
             >
               {pageH1.includes(locationName) ? (
@@ -419,7 +419,7 @@ const ServiceLocationPage = () => {
         <div className="max-w-3xl mx-auto">
           <div className="text-center mb-8">
             <span className="inline-block text-xs font-bold text-primary uppercase tracking-widest mb-2">Have Questions?</span>
-            <h2 className="text-2xl md:text-3xl font-black text-foreground">
+            <h2 className="text-2xl md:text-3xl font-bold text-foreground">
               Frequently Asked <span className="text-primary">Questions</span>
             </h2>
           </div>

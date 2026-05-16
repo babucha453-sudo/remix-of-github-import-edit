@@ -59,28 +59,28 @@ export const EnhancedHeroBackground = () => {
       
       {/* Animated floating crosses */}
       <motion.div 
-        className="absolute top-[12%] right-[15%] text-primary/25 text-6xl md:text-7xl font-black select-none hidden md:block"
+        className="absolute top-[12%] right-[15%] text-primary/25 text-6xl md:text-7xl font-bold select-none hidden md:block"
         animate={{ y: [-10, 10, -10], opacity: [0.15, 0.35, 0.15], rotate: [0, 15, 0] }}
         transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
       >
         +
       </motion.div>
       <motion.div 
-        className="absolute bottom-[20%] left-[8%] text-teal/20 text-5xl md:text-6xl font-black select-none hidden md:block"
+        className="absolute bottom-[20%] left-[8%] text-teal/20 text-5xl md:text-6xl font-bold select-none hidden md:block"
         animate={{ y: [0, -12, 0], opacity: [0.1, 0.25, 0.1], rotate: [0, -10, 0] }}
         transition={{ duration: 7, repeat: Infinity, ease: "easeInOut", delay: 1.5 }}
       >
         +
       </motion.div>
       <motion.div 
-        className="absolute top-[55%] right-[6%] text-gold/15 text-4xl font-black select-none hidden lg:block"
+        className="absolute top-[55%] right-[6%] text-gold/15 text-4xl font-bold select-none hidden lg:block"
         animate={{ y: [5, -8, 5], opacity: [0.1, 0.2, 0.1] }}
         transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 2 }}
       >
         +
       </motion.div>
       <motion.div 
-        className="absolute top-[75%] left-[20%] text-coral/15 text-3xl font-black select-none hidden lg:block"
+        className="absolute top-[75%] left-[20%] text-coral/15 text-3xl font-bold select-none hidden lg:block"
         animate={{ y: [-5, 8, -5], opacity: [0.08, 0.18, 0.08] }}
         transition={{ duration: 6, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
       >

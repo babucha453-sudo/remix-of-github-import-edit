@@ -74,7 +74,7 @@ const ServicesPage = () => {
               Verified Specialists
             </Badge>
             
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-black text-foreground tracking-tight mb-4">
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-foreground tracking-tight mb-4">
               Dental
               <span className="block text-primary">Services</span>
             </h1>

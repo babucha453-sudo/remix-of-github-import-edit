@@ -204,13 +204,13 @@
   body {
     @apply bg-background text-foreground antialiased;
     font-family: var(--font-plus-jakarta), 'Plus Jakarta Sans', system-ui, sans-serif;
-    font-weight: 600;
+    font-weight: 500;
     overflow-x: hidden;
   }
 
   h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-plus-jakarta), 'Plus Jakarta Sans', system-ui, sans-serif;
-    @apply tracking-tight;
+    @apply font-semibold tracking-tight;
   }
 }
 
@@ -236,7 +236,7 @@
   .text-micro {
     font-family: var(--font-plus-jakarta), 'Plus Jakarta Sans', system-ui, sans-serif;
     font-size: 11px;
-    @apply uppercase font-bold tracking-widest text-muted-foreground;
+    @apply uppercase font-semibold tracking-widest text-muted-foreground;
   }
 
   /* Interface Elements - 11px uppercase wide tracking */
@@ -244,19 +244,19 @@
     font-family: var(--font-plus-jakarta), 'Plus Jakarta Sans', system-ui, sans-serif;
     font-size: 12px;
     letter-spacing: 0.12em;
-    @apply uppercase font-extrabold;
+    @apply uppercase font-semibold;
   }
 
   /* Data/Numbers - High prominence */
   .text-data {
     font-family: var(--font-plus-jakarta), 'Plus Jakarta Sans', system-ui, sans-serif;
-    @apply font-extrabold;
+    @apply font-semibold;
   }
 
   /* Body Content */
   .text-body {
     font-family: var(--font-plus-jakarta), 'Plus Jakarta Sans', system-ui, sans-serif;
-    @apply font-semibold leading-relaxed;
+    @apply font-medium leading-relaxed;
   }
 
   /* ========================================
@@ -463,7 +463,7 @@
      ======================================== */
   
   .btn-primary {
-    @apply px-6 py-3 bg-primary text-primary-foreground font-bold rounded-xl transition-all;
+    @apply px-6 py-3 bg-primary text-primary-foreground font-semibold rounded-xl transition-all;
     box-shadow: 0 10px 15px -3px hsl(var(--primary) / 0.3);
   }
 
@@ -472,7 +472,7 @@
   }
 
   .btn-dark {
-    @apply px-6 py-4 bg-foreground text-background font-bold rounded-2xl transition-all;
+    @apply px-6 py-4 bg-foreground text-background font-semibold rounded-2xl transition-all;
     box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.2);
   }
 

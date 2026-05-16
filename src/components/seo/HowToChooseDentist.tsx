@@ -40,7 +40,7 @@ export function HowToChooseDentist({ locationName, className = "" }: HowToChoose
     <div className={`space-y-8 ${className}`}>
       <div className="text-center">
         <span className="inline-block text-xs font-bold text-primary uppercase tracking-widest mb-2">Expert Tips</span>
-        <h2 className="text-2xl md:text-3xl font-black text-foreground mb-4">
+        <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-4">
           How to Choose the Right Dentist{locationName ? ` in ${locationName}` : ''}
         </h2>
         <p className="text-muted-foreground leading-relaxed max-w-2xl mx-auto">

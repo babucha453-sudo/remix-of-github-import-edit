@@ -70,7 +70,7 @@ export function AutoScrollCarousel({ doctors }: AutoScrollCarouselProps) {
           >
             <div className="text-center">
               <div className="text-label text-card/80 mb-1 text-xs uppercase tracking-wide font-bold">Explore All</div>
-              <div className="text-data text-xl text-card mb-3 font-black">{doctors.length}+</div>
+              <div className="text-data text-xl text-card mb-3 font-bold">{doctors.length}+</div>
               <p className="text-xs text-card/70 mb-3">Top Rated</p>
               <div className="h-9 w-9 rounded-full bg-primary flex items-center justify-center mx-auto group-hover:scale-110 transition-transform">
                 <ArrowRight className="h-4 w-4 text-primary-foreground" />

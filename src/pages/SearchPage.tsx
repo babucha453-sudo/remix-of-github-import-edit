@@ -306,7 +306,7 @@ export default function SearchPage() {
       {/* Hero Search Section - Emerald Theme */}
       <section className="bg-gradient-to-br from-emerald-950 via-slate-900 to-slate-950 py-12">
         <div className="container mx-auto px-4">
-          <h1 className="text-3xl md:text-4xl font-black text-white mb-2 text-center">
+          <h1 className="text-3xl md:text-4xl font-bold text-white mb-2 text-center">
             Find Your Perfect Dentist
           </h1>
           <p className="text-emerald-100 text-center mb-8 max-w-2xl mx-auto">

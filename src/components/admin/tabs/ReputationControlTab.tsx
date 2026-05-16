@@ -248,7 +248,7 @@ export default function AdminReputationControlTab() {
               {topClinics?.slice(0, 10).map((clinic, i) => (
                 <div key={clinic.id} className="flex items-center justify-between p-2 rounded-lg bg-muted/50">
                   <div className="flex items-center gap-3">
-                    <span className="text-sm font-bold text-muted-foreground w-6">{i + 1}</span>
+                    <span className="text-sm font-medium text-muted-foreground w-6">{i + 1}</span>
                     <span className="font-medium">{clinic.name}</span>
                   </div>
                   <div className="flex items-center gap-2">

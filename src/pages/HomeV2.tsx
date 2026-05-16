@@ -374,7 +374,7 @@ const HomeV2 = () => {
               initial={shouldReduceMotion ? {} : { opacity: 0, y: 30 }}
               animate={shouldReduceMotion ? {} : { opacity: 1, y: 0 }}
               transition={shouldReduceMotion ? {} : { delay: 0.1 }}
-              className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-white text-center mb-6 leading-[1.1]"
+              className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-white text-center mb-6 leading-[1.1]"
             >
               Find Your Perfect <br className="hidden sm:block" />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-teal-300 to-emerald-400">
@@ -514,7 +514,7 @@ const HomeV2 = () => {
               {stats.map((stat, i) => (
                 <div key={i} className="bg-white/10 backdrop-blur-sm border border-white/10 rounded-2xl p-5 text-center">
                   <stat.icon className="h-6 w-6 mx-auto text-emerald-400 mb-2" />
-                  <div className="text-2xl md:text-3xl font-black text-white">{stat.value}</div>
+                  <div className="text-2xl md:text-3xl font-bold text-white">{stat.value}</div>
                   <div className="text-sm text-slate-300 font-medium">{stat.label}</div>
                 </div>
               ))}
@@ -558,7 +558,7 @@ const HomeV2 = () => {
             viewport={{ once: true }}
             className="text-center mb-14"
           >
-            <h2 className="text-3xl md:text-4xl font-black text-foreground mb-3">
+            <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-3">
               Book in <span className="text-emerald-500">3 Easy Steps</span>
             </h2>
             <p className="text-muted-foreground">No phone calls. No waiting. Just book.</p>
@@ -597,7 +597,7 @@ const HomeV2 = () => {
             viewport={{ once: true }}
             className="text-center mb-14"
           >
-            <h2 className="text-3xl md:text-4xl font-black text-foreground mb-3">
+            <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-3">
               Why Patients Choose <span className="text-emerald-500">AppointPanda</span>
             </h2>
           </motion.div>
@@ -634,7 +634,7 @@ const HomeV2 = () => {
               viewport={{ once: true }}
               className="text-center mb-10"
             >
-              <h2 className="text-3xl md:text-4xl font-black text-white mb-3">
+              <h2 className="text-3xl md:text-4xl font-bold text-white mb-3">
                 Top-Rated <span className="text-emerald-400">Dentists</span>
               </h2>
               <p className="text-slate-400">Verified professionals with excellent patient reviews</p>
@@ -656,7 +656,7 @@ const HomeV2 = () => {
             viewport={{ once: true }}
             className="text-center mb-12"
           >
-            <h2 className="text-3xl md:text-4xl font-black text-foreground mb-3">
+            <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-3">
               Comprehensive <span className="text-emerald-500">Dental Services</span>
             </h2>
             <p className="text-muted-foreground max-w-xl mx-auto">
@@ -701,7 +701,7 @@ const HomeV2 = () => {
             viewport={{ once: true }}
             className="text-center mb-12"
           >
-            <h2 className="text-3xl md:text-4xl font-black text-foreground mb-3">
+            <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-3">
               Find Dentists in Your <span className="text-emerald-500">State</span>
             </h2>
             <p className="text-muted-foreground">
@@ -763,7 +763,7 @@ const HomeV2 = () => {
             viewport={{ once: true }}
             className="text-center mb-12"
           >
-            <h2 className="text-3xl md:text-4xl font-black text-foreground mb-3">
+            <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-3">
               What Patients <span className="text-emerald-500">Say</span>
             </h2>
           </motion.div>
@@ -818,7 +818,7 @@ const HomeV2 = () => {
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
               >
-                <h2 className="text-2xl md:text-3xl font-black text-gray-900 mb-4">
+                <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4">
                   Are You a <span className="text-emerald-500">Dentist</span>?
                 </h2>
                 <p className="text-gray-600 mb-6">
@@ -870,7 +870,7 @@ const HomeV2 = () => {
                   <Shirt className="h-3.5 w-3.5" />
                   Custom Manufacturing
                 </div>
-                <h2 className="text-2xl md:text-3xl font-black mb-4">
+                <h2 className="text-2xl md:text-3xl font-bold mb-4">
                   Bespoke Garments for <span className="text-emerald-400">Dental & Professional Teams</span>
                 </h2>
                 <p className="text-slate-300 mb-6">
@@ -917,7 +917,7 @@ const HomeV2 = () => {
         
         <div className="container mx-auto px-4 relative z-10">
           <div className="max-w-2xl mx-auto text-center">
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-black text-white mb-6">
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-6">
               Ready to Find Your <span className="text-emerald-400">Perfect Dentist</span>?
             </h2>
             <p className="text-slate-300 mb-10 text-lg">

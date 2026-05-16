@@ -185,7 +185,7 @@ const OptimizedContent = ({
           </div>
         </div>
         
-        <h2 className="text-2xl md:text-3xl font-black text-foreground mb-6">
+        <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-6">
           {stripMarkdown(contentSections[0]?.heading || getDefaultHeading())}
         </h2>
 

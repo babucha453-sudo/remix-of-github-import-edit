@@ -67,7 +67,7 @@ export const ForDentistsAISection = ({ className, variant = "full" }: ForDentist
               <Sparkles className="h-4 w-4 text-primary" />
               <span className="text-sm font-bold text-primary">For Dental Practices</span>
             </div>
-            <h2 className="text-3xl md:text-4xl font-black text-white mb-4">
+            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
               AI That Works <span className="text-primary">For You</span>
             </h2>
             <p className="text-white/60 max-w-2xl mx-auto">

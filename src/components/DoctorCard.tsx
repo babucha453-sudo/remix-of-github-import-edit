@@ -88,7 +88,7 @@ export const DoctorCard = forwardRef<HTMLDivElement, DoctorCardProps>(({
           {/* Bottom Info Overlay */}
           <div className="absolute inset-x-0 bottom-0 p-4 pt-10 bg-gradient-to-t from-black/95 via-black/80 to-transparent">
             <div className="bg-black/50 rounded-2xl p-4 border border-white/10">
-              <h3 className="text-base font-black text-white truncate mb-0.5">{name}</h3>
+              <h3 className="text-base font-bold text-white truncate mb-0.5">{name}</h3>
               <p className="text-xs text-primary-foreground font-bold truncate opacity-90 mb-2">{specialty}</p>
 
               <div className="flex items-center justify-between gap-2 mt-auto">

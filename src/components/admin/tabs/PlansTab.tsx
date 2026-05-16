@@ -594,7 +594,7 @@ export default function PlansTab() {
                               <span className="font-bold text-foreground">{plan.name}</span>
                             </div>
                             <div className="flex items-baseline gap-1">
-                              <span className="text-2xl font-black text-foreground">${plan.price_usd}</span>
+                              <span className="text-2xl font-bold text-foreground">${plan.price_usd}</span>
                               <span className="text-muted-foreground text-sm">/{plan.billing_period}</span>
                             </div>
                           </button>
@@ -713,7 +713,7 @@ export default function PlansTab() {
               <div className="text-center py-4 border-y border-border my-4">
                 <div className="flex items-baseline justify-center gap-1">
                   <span className="text-sm text-muted-foreground">$</span>
-                  <span className="text-4xl font-black text-foreground">{plan.price_usd}</span>
+                  <span className="text-4xl font-bold text-foreground">{plan.price_usd}</span>
                   <span className="text-muted-foreground">/{plan.billing_period}</span>
                 </div>
                 <div className="mt-2 flex items-center justify-center gap-1 text-sm">

@@ -112,7 +112,7 @@ export default function GarmentsPage() {
                 <Shirt className="h-4 w-4" />
                 Custom Manufacturing
               </div>
-              <h1 className="text-3xl md:text-5xl lg:text-6xl font-black text-white mb-6 leading-tight">
+              <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight">
                 Bespoke Garments & <span className="text-emerald-400">Professional Uniforms</span>
               </h1>
               <p className="text-lg md:text-xl text-slate-300 mb-10 max-w-2xl mx-auto">
@@ -140,7 +140,7 @@ export default function GarmentsPage() {
       <section className="py-16 md:py-24 bg-slate-50">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
-            <h2 className="text-2xl md:text-4xl font-black text-slate-900 mb-4">
+            <h2 className="text-2xl md:text-4xl font-bold text-slate-900 mb-4">
               Industries We Serve
             </h2>
             <p className="text-slate-600 max-w-2xl mx-auto text-lg">
@@ -173,7 +173,7 @@ export default function GarmentsPage() {
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
             <div className="text-center mb-12">
-              <h2 className="text-2xl md:text-4xl font-black text-slate-900 mb-4">
+              <h2 className="text-2xl md:text-4xl font-bold text-slate-900 mb-4">
                 What We Make
               </h2>
               <p className="text-slate-600 max-w-2xl mx-auto text-lg">
@@ -206,7 +206,7 @@ export default function GarmentsPage() {
       <section className="py-16 md:py-24 bg-gradient-to-br from-emerald-50 via-white to-teal-50">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
-            <h2 className="text-2xl md:text-4xl font-black text-slate-900 mb-4">
+            <h2 className="text-2xl md:text-4xl font-bold text-slate-900 mb-4">
               Why Choose Our Garments
             </h2>
             <p className="text-slate-600 max-w-2xl mx-auto text-lg">
@@ -238,7 +238,7 @@ export default function GarmentsPage() {
       <section className="py-16 md:py-24 bg-slate-900 text-white">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
-            <h2 className="text-2xl md:text-4xl font-black mb-4">
+            <h2 className="text-2xl md:text-4xl font-bold mb-4">
               How It Works
             </h2>
             <p className="text-slate-400 max-w-2xl mx-auto">
@@ -260,7 +260,7 @@ export default function GarmentsPage() {
                 transition={{ delay: i * 0.1 }}
                 className="text-center"
               >
-                <div className="h-14 w-14 bg-emerald-500 rounded-full flex items-center justify-center text-xl font-black mx-auto mb-4">
+                <div className="h-14 w-14 bg-emerald-500 rounded-full flex items-center justify-center text-xl font-bold mx-auto mb-4">
                   {item.step}
                 </div>
                 <h3 className="font-bold text-lg mb-2">{item.title}</h3>
@@ -276,7 +276,7 @@ export default function GarmentsPage() {
         <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto">
             <div className="text-center mb-12">
-              <h2 className="text-2xl md:text-4xl font-black text-slate-900 mb-4">
+              <h2 className="text-2xl md:text-4xl font-bold text-slate-900 mb-4">
                 Frequently Asked Questions
               </h2>
             </div>
@@ -314,7 +314,7 @@ export default function GarmentsPage() {
         </div>
         <div className="container mx-auto px-4 relative z-10">
           <div className="max-w-2xl mx-auto text-center text-white">
-            <h2 className="text-3xl md:text-4xl font-black mb-6">
+            <h2 className="text-3xl md:text-4xl font-bold mb-6">
               Ready to Dress Your Team?
             </h2>
             <p className="text-emerald-100 mb-10 text-lg">

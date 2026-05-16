@@ -95,14 +95,14 @@ export const PageHero = ({
             transition={{ delay: 0.1 }}
           >
             <span 
-              className="block text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-black text-foreground tracking-tight leading-[1.1] text-balance" 
+              className="block text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold text-foreground tracking-tight leading-[1.1] text-balance" 
               style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", textWrap: 'balance' }}
             >
               {title}
             </span>
             {highlight && (
               <span 
-                className="block text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-black tracking-tight leading-[1.1] mt-1 text-balance" 
+                className="block text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold tracking-tight leading-[1.1] mt-1 text-balance" 
                 style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", textWrap: 'balance' }}
               >
                 <span className="text-primary">{highlight}</span>

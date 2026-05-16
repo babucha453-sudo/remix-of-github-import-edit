@@ -209,7 +209,7 @@ const AISearchPage = () => {
               Smart Search
             </Badge>
 
-            <h1 className="text-2xl md:text-4xl font-black text-white tracking-tight mb-2 md:mb-3">
+            <h1 className="text-2xl md:text-4xl font-bold text-white tracking-tight mb-2 md:mb-3">
               Just Tell Us What You Need
             </h1>
             <p className="text-sm md:text-base text-white/60 max-w-xl mx-auto">
