@@ -66,6 +66,7 @@ const AppointmentManagePage = lazyRetry(() => import("./pages/AppointmentManageP
 const PatientFormPage = lazyRetry(() => import("./pages/PatientFormPage"));
 const BookDirectPage = lazyRetry(() => import("./pages/BookDirectPage"));
 const HomeV2 = lazyRetry(() => import("./pages/HomeV2"));
+const TeamInvitePage = lazyRetry(() => import("./pages/TeamInvitePage"));
 
 // Free Tools - Phase 3
 const DentalCostCalculator = lazyRetry(() => import("./pages/tools/DentalCostCalculator"));
@@ -203,6 +204,7 @@ const App = () => (
                   <Route path="/signup/dentist" element={<DentistSignupPage />} />
                   <Route path="/onboarding" element={<GMBOnboarding />} />
                   <Route path="/gmb-select" element={<GMBBusinessSelection />} />
+                  <Route path="/team-invite/:token" element={<TeamInvitePage />} />
 
                   {/* Dashboards */}
                   <Route path="/admin" element={<AdminDashboard />} />

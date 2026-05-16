@@ -3,11 +3,12 @@
  * Calendar view with appointment management
  */
 
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { format, startOfWeek, addDays, isToday, isTomorrow, parseISO } from 'date-fns';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
 import {
   Calendar,
   Clock,
@@ -29,6 +30,7 @@ import {
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
 import {
   Select,
@@ -74,6 +76,9 @@ export default function AppointmentsPageV2({ onNavigate }: AppointmentsPageV2Pro
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [statusFilter, setStatusFilter] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState('');
+  const [rescheduleModal, setRescheduleModal] = useState<{open: boolean, appointment: any}>({open: false, appointment: null});
+  const [newDate, setNewDate] = useState('');
+  const [newTime, setNewTime] = useState('');
 
   // Fetch clinic
   const { data: clinic } = useQuery({
@@ -136,6 +141,25 @@ export default function AppointmentsPageV2({ onNavigate }: AppointmentsPageV2Pro
     },
     onError: () => {
       toast.error('Failed to update appointment');
+    },
+  });
+
+  // Reschedule appointment
+  const rescheduleAppointment = useMutation({
+    mutationFn: async ({ id, preferredDate, preferredTime }: { id: string; preferredDate: string; preferredTime: string }) => {
+      const { error } = await supabase
+        .from('appointments')
+        .update({ preferred_date: preferredDate, preferred_time: preferredTime })
+        .eq('id', id);
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['appointments-v2'] });
+      toast.success('Appointment rescheduled');
+      setRescheduleModal({open: false, appointment: null});
+    },
+    onError: () => {
+      toast.error('Failed to reschedule appointment');
     },
   });
 
@@ -363,7 +387,14 @@ export default function AppointmentsPageV2({ onNavigate }: AppointmentsPageV2Pro
                             Mark Complete
                           </DropdownMenuItem>
                         )}
-                        <DropdownMenuItem className="gap-2">
+                        <DropdownMenuItem 
+                            className="gap-2"
+                            onClick={() => {
+                              setRescheduleModal({open: true, appointment: apt});
+                              setNewDate(apt.preferred_date || '');
+                              setNewTime(apt.preferred_time || '');
+                            }}
+                          >
                           <RefreshCw className="h-4 w-4" />
                           Reschedule
                         </DropdownMenuItem>
@@ -384,6 +415,52 @@ export default function AppointmentsPageV2({ onNavigate }: AppointmentsPageV2Pro
           )}
         </div>
       </PremiumCard>
+
+      {/* Reschedule Modal */}
+      <Dialog open={rescheduleModal.open} onOpenChange={(open) => !open && setRescheduleModal({open: false, appointment: null})}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Reschedule Appointment</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4 py-4">
+            <div className="space-y-2">
+              <Label>Patient</Label>
+              <p className="font-medium">{rescheduleModal.appointment?.patient_name}</p>
+            </div>
+            <div className="space-y-2">
+              <Label>New Date</Label>
+              <Input 
+                type="date" 
+                value={newDate} 
+                onChange={(e) => setNewDate(e.target.value)}
+              />
+            </div>
+            <div className="space-y-2">
+              <Label>New Time</Label>
+              <Input 
+                type="time" 
+                value={newTime} 
+                onChange={(e) => setNewTime(e.target.value)}
+              />
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setRescheduleModal({open: false, appointment: null})}>
+              Cancel
+            </Button>
+            <Button 
+              onClick={() => rescheduleAppointment.mutate({
+                id: rescheduleModal.appointment?.id,
+                preferredDate: newDate,
+                preferredTime: newTime
+              })}
+              disabled={!newDate || !newTime || rescheduleAppointment.isPending}
+            >
+              {rescheduleAppointment.isPending ? 'Saving...' : 'Confirm Reschedule'}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

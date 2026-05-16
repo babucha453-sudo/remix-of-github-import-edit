@@ -68,6 +68,11 @@ export default function TeamManagementTab() {
   const [imageUrl, setImageUrl] = useState('');
   const [isUploading, setIsUploading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const [inviteEmail, setInviteEmail] = useState('');
+  const [inviteName, setInviteName] = useState('');
+  const [inviteRole, setInviteRole] = useState('');
+  const [isInviting, setIsInviting] = useState(false);
+  const [isInviteModalOpen, setIsInviteModalOpen] = useState(false);
 
   const { data: clinic, isLoading: clinicLoading } = useQuery({
     queryKey: ['dentist-clinic-team', user?.id],
@@ -177,6 +182,41 @@ export default function TeamManagementTab() {
     },
   });
 
+  const sendInvite = useMutation({
+    mutationFn: async () => {
+      if (!clinic?.id || !user?.id || !inviteEmail) {
+        throw new Error('Email and clinic are required');
+      }
+      const { error } = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/invite-team-member`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${(await supabase.auth.getSession()).data.session?.access_token}`,
+        },
+        body: JSON.stringify({
+          email: inviteEmail,
+          name: inviteName || inviteEmail.split('@')[0],
+          clinicId: clinic.id,
+          role: inviteRole || null,
+          invitedBy: user.id,
+          clinicName: clinic.name,
+        }),
+      });
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['clinic-team'] });
+      setIsInviteModalOpen(false);
+      setInviteEmail('');
+      setInviteName('');
+      setInviteRole('');
+      toast.success(`Invitation sent to ${inviteEmail}`);
+    },
+    onError: (error: any) => {
+      toast.error(error.message || 'Failed to send invitation');
+    },
+  });
+
   const resetForm = () => {
     setName('');
     setRole('');
@@ -231,6 +271,10 @@ export default function TeamManagementTab() {
         <Button onClick={() => { resetForm(); setEditingMember(null); setIsAddingMember(true); }}>
           <Plus className="h-4 w-4 mr-2" />
           Add Member
+        </Button>
+        <Button variant="outline" onClick={() => setIsInviteModalOpen(true)}>
+          <PlusCircle className="h-4 w-4 mr-2" />
+          Invite via Email
         </Button>
       </div>
 
@@ -435,6 +479,69 @@ export default function TeamManagementTab() {
                 <Plus className="h-4 w-4 mr-2" />
               )}
               {editingMember ? 'Update' : 'Add Member'}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Invite via Email Modal */}
+      <Dialog open={isInviteModalOpen} onOpenChange={setIsInviteModalOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Invite Team Member</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4 py-4">
+            <div className="space-y-2">
+              <Label htmlFor="invite-email">Email Address *</Label>
+              <Input
+                id="invite-email"
+                type="email"
+                placeholder="colleague@example.com"
+                value={inviteEmail}
+                onChange={(e) => setInviteEmail(e.target.value)}
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="invite-name">Name (optional)</Label>
+              <Input
+                id="invite-name"
+                placeholder="Dr. Jane Smith"
+                value={inviteName}
+                onChange={(e) => setInviteName(e.target.value)}
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="invite-role">Role (optional)</Label>
+              <select
+                id="invite-role"
+                className="w-full h-10 px-3 rounded-md border border-input bg-background text-sm"
+                value={inviteRole}
+                onChange={(e) => setInviteRole(e.target.value)}
+              >
+                <option value="">Select a role</option>
+                {PREDEFINED_ROLES.map(r => (
+                  <option key={r} value={r}>{r}</option>
+                ))}
+              </select>
+            </div>
+            <p className="text-xs text-muted-foreground">
+              They'll receive an email with a link to join your team. If they don't have an account, they'll be prompted to create one.
+            </p>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setIsInviteModalOpen(false)}>
+              Cancel
+            </Button>
+            <Button
+              onClick={() => sendInvite.mutate()}
+              disabled={!inviteEmail || sendInvite.isPending}
+            >
+              {sendInvite.isPending ? (
+                <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+              ) : (
+                <PlusCircle className="h-4 w-4 mr-2" />
+              )}
+              Send Invitation
             </Button>
           </DialogFooter>
         </DialogContent>

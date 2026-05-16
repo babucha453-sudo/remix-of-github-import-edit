@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
@@ -64,7 +64,7 @@ export default function DentistSettingsTab() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from('clinics')
-        .select('id, name, slug, google_place_id, website, gmb_connected, verification_status')
+        .select('id, name, slug, google_place_id, website, gmb_connected, verification_status, facebook_url, twitter_url, instagram_url, linkedin_url')
         .eq('claimed_by', user?.id)
         .limit(1)
         .single();
@@ -86,23 +86,20 @@ export default function DentistSettingsTab() {
       if (error && error.code !== 'PGRST116') throw error;
       return data;
     },
-    enabled: !!clinic?.id,
+enabled: !!clinic?.id,
   });
 
-  // Social links state (would be stored in clinic or profile)
-  const [socialLinks, setSocialLinks] = useState({
-    instagram: '',
-    facebook: '',
-    twitter: '',
-  });
-
-  // Notification settings
-  const [notifications, setNotifications] = useState({
-    emailReviewAlerts: true,
-    emailAppointments: true,
-    smsReminders: false,
-    weeklyDigest: true,
-  });
+  // Update social links when clinic data loads
+  useEffect(() => {
+    if (clinic) {
+      setSocialLinks({
+        instagram: clinic.instagram_url || '',
+        facebook: clinic.facebook_url || '',
+        twitter: clinic.twitter_url || '',
+        linkedin: clinic.linkedin_url || '',
+      });
+    }
+  }, [clinic]);
 
   // Update password
   const handleUpdatePassword = async () => {
@@ -129,9 +126,27 @@ export default function DentistSettingsTab() {
     }
   };
 
-  // Update social links (placeholder - would need DB migration)
+  // Update social links
   const handleSaveSocialLinks = async () => {
-    toast.success('Social links saved');
+    if (!clinic?.id) return;
+    
+    const { error } = await supabase
+      .from('clinics')
+      .update({
+        facebook_url: socialLinks.facebook,
+        twitter_url: socialLinks.twitter,
+        instagram_url: socialLinks.instagram,
+        linkedin_url: socialLinks.linkedin,
+      })
+      .eq('id', clinic.id);
+
+    if (error) {
+      toast.error('Failed to save social links');
+      return;
+    }
+    
+    queryClient.invalidateQueries({ queryKey: ['dentist-clinic-settings', user?.id] });
+    toast.success('Social links updated');
   };
 
   // Unlink GMB connection (remove from clinic_oauth_tokens)

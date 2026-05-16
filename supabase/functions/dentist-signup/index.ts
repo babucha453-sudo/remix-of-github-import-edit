@@ -114,7 +114,22 @@ serve(async (req) => {
       role: "dentist",
     });
 
-// Send welcome email with Resend
+    // Create dentists record
+    const { error: dentistError } = await supabaseAdmin.from("dentists").upsert({
+      user_id: newUser.user.id,
+      full_name: fullName,
+      email: email,
+      onboarding_completed: false,
+      onboarding_step: 1,
+    }, { onConflict: 'user_id' });
+
+    if (dentistError) {
+      console.error("Error creating dentists record:", dentistError);
+    } else {
+      console.log("Dentists record created for user:", newUser.user.id);
+    }
+
+    // Send welcome email with Resend
     const resendApiKey = Deno.env.get("RESEND_API_KEY");
     if (resendApiKey) {
       try {
