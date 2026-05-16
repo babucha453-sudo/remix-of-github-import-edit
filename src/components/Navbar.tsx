@@ -158,7 +158,7 @@ export function Navbar() {
                     <span className="text-base font-semibold tracking-tight text-slate-900 leading-none">
                       Appoint<span className="text-emerald-600">Panda</span>
                     </span>
-                    <span className="text-[9px] text-slate-500 font-medium uppercase tracking-wider">
+                    <span className="text-[9px] text-slate-500 font-bold uppercase tracking-wider">
                       {siteSettings?.siteTagline || 'US Dental Directory'}
                     </span>
                   </div>
@@ -170,23 +170,23 @@ export function Navbar() {
             <div className="hidden lg:flex items-center gap-1" role="navigation" aria-label="Main navigation">
               <Link 
                 to="/search" 
-                className="flex items-center gap-1.5 px-4 py-2 text-sm font-medium text-slate-600 hover:text-emerald-600 transition-colors rounded-lg hover:bg-emerald-50"
+                className="flex items-center gap-1.5 px-4 py-2 text-sm font-semibold text-slate-600 hover:text-emerald-600 transition-colors rounded-lg hover:bg-emerald-50"
               >
                 <Search className="h-4 w-4" />
                 Search
               </Link>
 
               <DropdownMenu>
-                <DropdownMenuTrigger className="flex items-center gap-1.5 px-4 py-2 text-sm font-medium text-slate-600 hover:text-emerald-600 transition-colors rounded-lg hover:bg-emerald-50">
+                <DropdownMenuTrigger className="flex items-center gap-1.5 px-4 py-2 text-sm font-semibold text-slate-600 hover:text-emerald-600 transition-colors rounded-lg hover:bg-emerald-50">
                   Treatments
                   <ChevronDown className="h-4 w-4" />
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="start" className="w-56 rounded-xl p-2 bg-white border border-slate-200 shadow-lg z-50">
-                  <DropdownMenuItem asChild className="rounded-lg font-medium text-slate-900">
+                  <DropdownMenuItem asChild className="rounded-lg font-bold text-slate-900">
                     <Link to="/services">All Services</Link>
                   </DropdownMenuItem>
                   {treatments.map((item) => (
-                    <DropdownMenuItem key={item.slug} asChild className="rounded-lg font-medium text-slate-700">
+                    <DropdownMenuItem key={item.slug} asChild className="rounded-lg font-bold text-slate-700">
                       <Link to={`/services/${item.slug}`}>{item.name}</Link>
                     </DropdownMenuItem>
                   ))}
@@ -195,7 +195,7 @@ export function Navbar() {
 
               {/* Locations Dropdown with Hardcoded States */}
               <DropdownMenu>
-                <DropdownMenuTrigger className="flex items-center gap-1.5 px-4 py-2 text-sm font-medium text-slate-600 hover:text-emerald-600 transition-colors rounded-lg hover:bg-emerald-50">
+                <DropdownMenuTrigger className="flex items-center gap-1.5 px-4 py-2 text-sm font-semibold text-slate-600 hover:text-emerald-600 transition-colors rounded-lg hover:bg-emerald-50">
                   <MapPin className="h-4 w-4" />
                   Locations
                   <ChevronDown className="h-4 w-4" />
@@ -203,7 +203,7 @@ export function Navbar() {
                 <DropdownMenuContent align="start" className="w-72 rounded-xl p-2 bg-white border border-slate-200 shadow-lg z-50">
                   {LOCATIONS.map((state) => (
                     <DropdownMenuSub key={state.slug}>
-                      <DropdownMenuSubTrigger className="rounded-lg font-medium text-slate-900 hover:bg-slate-900 hover:text-white cursor-pointer transition-colors">
+                      <DropdownMenuSubTrigger className="rounded-lg font-bold text-slate-900 hover:bg-slate-900 hover:text-white cursor-pointer transition-colors">
                         <Link to={`/${state.slug}`} className="flex items-center justify-between w-full">
                           {state.name}
                         </Link>
@@ -214,7 +214,7 @@ export function Navbar() {
                         </DropdownMenuItem>
                         <div className="border-t border-slate-100 my-1" />
                         {state.cities.map((city) => (
-                          <DropdownMenuItem key={city.slug} asChild className="rounded-lg font-medium text-slate-700">
+                          <DropdownMenuItem key={city.slug} asChild className="rounded-lg font-bold text-slate-700">
                             <Link to={`/${state.slug}/${city.slug}`}>{city.name}</Link>
                           </DropdownMenuItem>
                         ))}
@@ -224,10 +224,10 @@ export function Navbar() {
                   
                   {/* View All States Link */}
                   <div className="border-t border-slate-200 my-2" />
-                  <DropdownMenuItem asChild className="rounded-lg font-medium text-emerald">
+                  <DropdownMenuItem asChild className="rounded-lg font-bold text-emerald">
                     <Link to="/search">View All States</Link>
                   </DropdownMenuItem>
-                  <DropdownMenuItem asChild className="rounded-lg text-slate-600">
+                  <DropdownMenuItem asChild className="rounded-lg font-bold text-slate-600">
                     <Link to="/services">All Services</Link>
                   </DropdownMenuItem>
                 </DropdownMenuContent>
@@ -240,19 +240,19 @@ export function Navbar() {
                   <ChevronDown className="h-4 w-4" />
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="start" className="w-56 rounded-xl p-2 bg-white border border-slate-200 shadow-lg z-50">
-                  <DropdownMenuItem asChild className="rounded-lg font-medium text-slate-700">
+                  <DropdownMenuItem asChild className="rounded-lg font-bold text-slate-700">
                     <Link to="/tools/dental-cost-calculator">
                       <Calculator className="h-4 w-4 mr-2" />
                       Dental Cost Calculator
                     </Link>
                   </DropdownMenuItem>
-                  <DropdownMenuItem asChild className="rounded-lg font-medium text-slate-700">
+                  <DropdownMenuItem asChild className="rounded-lg font-bold text-slate-700">
                     <Link to="/tools/insurance-checker">
                       <Shield className="h-4 w-4 mr-2" />
                       Insurance Checker
                     </Link>
                   </DropdownMenuItem>
-                  <DropdownMenuItem asChild className="rounded-lg font-medium text-slate-700">
+                  <DropdownMenuItem asChild className="rounded-lg font-bold text-slate-700">
                     <Link to="/emergency-dentist">
                       <Zap className="h-4 w-4 mr-2" />
                       Emergency Dentist
@@ -293,7 +293,7 @@ export function Navbar() {
               </Button>
               <Button 
                 size="sm" 
-                className="rounded-xl bg-emerald text-white hover:bg-emerald/90 font-semibold shadow-md shadow-emerald/25"
+                className="rounded-xl bg-emerald text-white hover:bg-emerald/90 font-bold shadow-md shadow-emerald/25"
                 onClick={() => navigate("/search")}
               >
                 Find Dentist
@@ -319,12 +319,12 @@ export function Navbar() {
                 <Link to="/services" className="block px-4 py-3 text-sm font-medium text-slate-700 hover:bg-slate-100 rounded-xl" onClick={() => setMobileMenuOpen(false)}>Treatments</Link>
                 
                 {/* Mobile: States */}
-                <div className="px-4 py-2 text-xs font-medium text-slate-400 uppercase tracking-wider">Locations</div>
+                <div className="px-4 py-2 text-xs font-bold text-slate-400 uppercase tracking-wider">Locations</div>
                 {LOCATIONS.map((state) => (
                   <div key={state.slug}>
                     <Link 
                       to={`/${state.slug}`} 
-                      className="block px-4 py-2 text-sm font-medium text-slate-800 hover:bg-slate-100 rounded-xl" 
+                      className="rounded-lg font-bold text-slate-800 hover:bg-slate-100 rounded-xl" 
                       onClick={() => setMobileMenuOpen(false)}
                     >
                       {state.name}
