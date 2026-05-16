@@ -91,8 +91,8 @@ const StatePage = ({ initialState, initialCities }: StatePageProps) => {
       const { data, error } = await supabase
         .from("clinics")
         .select("city_id")
-        .in("city_id", cityIds)
-        .eq("is_active", true);
+        .eq("is_active", true)
+        .or(`city_id.in.(${cityIds.join(',')}),city_id.is.null`);
 
       if (error) throw error;
 
@@ -134,7 +134,7 @@ const StatePage = ({ initialState, initialCities }: StatePageProps) => {
           address, phone, verification_status, claim_status, latitude, longitude,
           city:cities(name, slug, state:states(name, abbreviation))
         `)
-        .in('city_id', stateCityIds)
+        .or(`city_id.in.(${stateCityIds.join(',')}),city_id.is.null`)
         .eq('is_active', true)
         .order('rating', { ascending: false })
         .limit(12);

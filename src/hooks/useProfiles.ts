@@ -271,7 +271,7 @@ export function useTopDentistsPerLocation(limit: number = 8) {
           city:cities(id, name, slug, state_id)
         `)
         .eq('is_active', true)
-        .in('city_id', activeCityIds)
+        .or(`city_id.in.(${activeCityIds.join(',')}),city_id.is.null`)
         .order('rating', { ascending: false });
       
       if (!clinics) return [];

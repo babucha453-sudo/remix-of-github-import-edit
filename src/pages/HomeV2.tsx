@@ -261,8 +261,8 @@ const HomeV2 = () => {
   };
 
   const stats = [
-    { value: realCounts?.clinics?.toLocaleString() || "6,600+", label: "Verified Dentists", icon: Building2 },
-    { value: realCounts?.cities?.toLocaleString() || "500+", label: "Cities", icon: MapPin },
+    { value: realCounts?.clinics > 0 ? `${realCounts.clinics.toLocaleString()}+` : "6,600+", label: "Verified Dentists", icon: Building2 },
+    { value: realCounts?.cities > 0 ? `${realCounts.cities.toLocaleString()}+` : "500+", label: "Cities", icon: MapPin },
     { value: "4.9★", label: "Average Rating", icon: Star },
     { value: "60s", label: "Book Time", icon: Timer },
   ];
