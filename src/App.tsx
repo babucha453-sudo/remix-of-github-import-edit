@@ -10,7 +10,7 @@ import { AuthProvider } from "@/hooks/useAuth";
 import { useVisitorTracking } from "@/hooks/useVisitorTracking";
 import { useDynamicFavicon } from "@/hooks/useDynamicFavicon";
 import { HelmetProvider } from "react-helmet-async";
-import { Figtree } from "next/font/google";
+import { DM_Sans } from "next/font/google";
 import { AnalyticsProvider } from "@/components/analytics/AnalyticsProvider";
 import { SyncStructuredData } from "@/components/seo/SyncStructuredData";
 import { PerformanceMonitor } from "@/hooks/useWebVitals";
@@ -18,11 +18,11 @@ import { TrailingSlashRedirect } from "@/components/TrailingSlashRedirect";
 
 const PandaBot = lazyRetry(() => import("@/components/PandaBot").then(mod => ({ default: mod.PandaBot })));
 
-const figtree = Figtree({
+const dmsans = DM_Sans({
   subsets: ['latin'],
-  weight: ['300', '400', '500', '600', '700', '800', '900'],
+  weight: ['400', '500', '600', '700', '800'],
   display: 'swap',
-  variable: '--font-figtree',
+  variable: '--font-dm-sans',
 });
 
 // Critical pages - load immediately for fast FCP
@@ -116,7 +116,7 @@ const PageLoader = () => (
 );
 
 const App = () => (
-  <div className={figtree.variable}>
+  <div className={dmsans.variable}>
     <HelmetProvider>
       <QueryClientProvider client={queryClient}>
         <AuthProvider>

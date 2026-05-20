@@ -203,45 +203,45 @@
 
   body {
     @apply bg-background text-foreground antialiased;
-    font-family: var(--font-figtree), 'Figtree', system-ui, sans-serif;
+    font-family: var(--font-dm-sans), 'DM Sans', system-ui, sans-serif;
     font-weight: 600;
     overflow-x: hidden;
   }
 
   h1, h2, h3, h4, h5, h6 {
-    font-family: var(--font-figtree), 'Figtree', system-ui, sans-serif;
+    font-family: var(--font-dm-sans), 'DM Sans', system-ui, sans-serif;
     @apply font-semibold tracking-tight;
   }
 }
 
 @layer components {
   /* ========================================
-     TYPOGRAPHY SYSTEM - Figtree
+     TYPOGRAPHY SYSTEM - DM Sans
      Bold, clean, modern
      ======================================== */
   
   /* Hero Headlines - extrabold, tight tracking */
   .text-hero {
-    font-family: var(--font-figtree), 'Figtree', system-ui, sans-serif;
+    font-family: var(--font-dm-sans), 'DM Sans', system-ui, sans-serif;
     @apply font-extrabold tracking-tight leading-none;
   }
 
   /* Section Headlines */
   .text-section {
-    font-family: var(--font-figtree), 'Figtree', system-ui, sans-serif;
+    font-family: var(--font-dm-sans), 'DM Sans', system-ui, sans-serif;
     @apply font-extrabold tracking-tight;
   }
 
   /* Micro Labels - 10px uppercase */
   .text-micro {
-    font-family: var(--font-figtree), 'Figtree', system-ui, sans-serif;
+    font-family: var(--font-dm-sans), 'DM Sans', system-ui, sans-serif;
     font-size: 11px;
     @apply uppercase font-bold tracking-widest text-muted-foreground;
   }
 
   /* Interface Elements - 11px uppercase wide tracking */
   .text-interface {
-    font-family: var(--font-figtree), 'Figtree', system-ui, sans-serif;
+    font-family: var(--font-dm-sans), 'DM Sans', system-ui, sans-serif;
     font-size: 12px;
     letter-spacing: 0.12em;
     @apply uppercase font-bold;
@@ -249,13 +249,13 @@
 
   /* Data/Numbers - High prominence */
   .text-data {
-    font-family: var(--font-figtree), 'Figtree', system-ui, sans-serif;
+    font-family: var(--font-dm-sans), 'DM Sans', system-ui, sans-serif;
     @apply font-bold;
   }
 
   /* Body Content */
   .text-body {
-    font-family: var(--font-figtree), 'Figtree', system-ui, sans-serif;
+    font-family: var(--font-dm-sans), 'DM Sans', system-ui, sans-serif;
     @apply font-semibold leading-relaxed;
   }
 
@@ -650,7 +650,7 @@
 
 @layer utilities {
   .font-display {
-    font-family: var(--font-figtree), 'Figtree', system-ui, sans-serif;
+    font-family: var(--font-dm-sans), 'DM Sans', system-ui, sans-serif;
   }
 
   .bg-dark-section {
@@ -1321,11 +1321,11 @@
 
 /* Font loading optimization */
 .font-loading-fallback {
-  font-family: 'Figtree Fallback', system-ui, -apple-system, sans-serif;
+  font-family: 'DM Sans Fallback', system-ui, -apple-system, sans-serif;
 }
 
 .font-loaded {
-  font-family: 'Figtree', system-ui, -apple-system, sans-serif;
+  font-family: 'DM Sans', system-ui, -apple-system, sans-serif;
 }
 
 /* Reduce motion for accessibility */

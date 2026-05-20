@@ -14,8 +14,8 @@ export default {
     },
     extend: {
       fontFamily: {
-        sans: ['var(--font-figtree)', '"Figtree"', 'system-ui', 'sans-serif'],
-        display: ['var(--font-figtree)', '"Figtree"', 'system-ui', 'sans-serif'],
+        sans: ['var(--font-dm-sans)', '"DM Sans"', 'system-ui', 'sans-serif'],
+        display: ['var(--font-dm-sans)', '"DM Sans"', 'system-ui', 'sans-serif'],
       },
       fontWeight: {
         medium: "500",
