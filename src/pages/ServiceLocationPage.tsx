@@ -285,7 +285,7 @@ const ServiceLocationPage = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.1 }}
               className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-foreground tracking-tight mb-3 px-2 text-balance"
-              style={{ fontFamily: "'DM Sans', sans-serif", textWrap: 'balance' }}
+              style={{ fontFamily: "'Nunito', sans-serif", textWrap: 'balance' }}
             >
               {pageH1.includes(locationName) ? (
                 <>

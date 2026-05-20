@@ -7,7 +7,7 @@ import {
   QueryClient,
   QueryClientProvider,
 } from "@tanstack/react-query";
-import { DM_Sans } from "next/font/google";
+import { Nunito } from "next/font/google";
 import dynamic from "next/dynamic";
 import "@/index.css";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -20,11 +20,11 @@ import { useDynamicFavicon } from "@/hooks/useDynamicFavicon";
 import { usePerformanceMonitor } from "@/hooks/usePerformanceMonitor";
 import { ErrorBoundary } from "@/components/common/ErrorBoundary";
 
-const dmsans = DM_Sans({
+const nunito = Nunito({
   subsets: ['latin'],
   weight: ['400', '500', '600', '700', '800'],
   display: 'swap',
-  variable: '--font-dm-sans',
+  variable: '--font-nunito',
 });
 
 const PandaBot = dynamic(() => import("@/components/PandaBot").then(mod => mod.PandaBot), {
@@ -113,7 +113,7 @@ export default function App({ Component, pageProps }: AppProps) {
   const [queryClient] = useState(() => new QueryClient());
 
   return (
-    <div className={dmsans.variable}>
+    <div className={nunito.variable}>
       <HelmetProvider>
         <ThemeProvider attribute="class" defaultTheme="light" disableTransitionOnChange>
           <ForceLightTheme />
