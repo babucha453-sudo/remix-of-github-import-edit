@@ -234,7 +234,7 @@ export function Navbar() {
               </DropdownMenu>
 
               <DropdownMenu>
-                <DropdownMenuTrigger className="flex items-center gap-1.5 px-4 py-2 text-sm font-medium text-slate-600 hover:text-emerald transition-colors rounded-lg hover:bg-emerald/5">
+                <DropdownMenuTrigger className="flex items-center gap-1.5 px-4 py-2 text-sm font-semibold text-slate-600 hover:text-emerald transition-colors rounded-lg hover:bg-emerald/5">
                   <Wrench className="h-4 w-4" />
                   Tools
                   <ChevronDown className="h-4 w-4" />
@@ -263,21 +263,21 @@ export function Navbar() {
 
               <Link 
                 to="/insurance" 
-                className="px-4 py-2 text-sm font-medium text-slate-600 hover:text-emerald transition-colors rounded-lg hover:bg-emerald/5"
+                className="px-4 py-2 text-sm font-semibold text-slate-600 hover:text-emerald transition-colors rounded-lg hover:bg-emerald/5"
               >
                 Insurance
               </Link>
 
               <Link 
                 to="/pricing" 
-                className="px-4 py-2 text-sm font-medium text-slate-600 hover:text-emerald transition-colors rounded-lg hover:bg-emerald/5"
+                className="px-4 py-2 text-sm font-semibold text-slate-600 hover:text-emerald transition-colors rounded-lg hover:bg-emerald/5"
               >
                 Pricing
               </Link>
 
               <Link 
                 to="/garments" 
-                className="px-4 py-2 text-sm font-medium text-slate-600 hover:text-emerald transition-colors rounded-lg hover:bg-emerald/5"
+                className="px-4 py-2 text-sm font-semibold text-slate-600 hover:text-emerald transition-colors rounded-lg hover:bg-emerald/5"
               >
                 Garments
               </Link>
@@ -285,7 +285,7 @@ export function Navbar() {
 
             {/* Desktop Actions */}
             <div className="hidden lg:flex items-center gap-3">
-              <Button variant="ghost" size="sm" className="text-sm font-medium text-slate-600 hover:text-emerald" asChild>
+              <Button variant="ghost" size="sm" className="text-sm font-semibold text-slate-600 hover:text-emerald" asChild>
                 <Link to="/list-your-practice">List Practice</Link>
               </Button>
               <Button variant="ghost" size="icon" className="rounded-xl text-slate-600 hover:text-emerald" asChild>
@@ -313,10 +313,10 @@ export function Navbar() {
           {mobileMenuOpen && (
             <div className="lg:hidden py-6 border-t border-slate-200 animate-fade-in-up bg-white">
               <div className="space-y-1">
-                <Link to="/search" className="flex items-center gap-2 px-4 py-3 text-sm font-medium text-slate-700 hover:bg-slate-100 rounded-xl" onClick={() => setMobileMenuOpen(false)}>
+                <Link to="/search" className="flex items-center gap-2 px-4 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-100 rounded-xl" onClick={() => setMobileMenuOpen(false)}>
                   <Search className="h-4 w-4" /> Search
                 </Link>
-                <Link to="/services" className="block px-4 py-3 text-sm font-medium text-slate-700 hover:bg-slate-100 rounded-xl" onClick={() => setMobileMenuOpen(false)}>Treatments</Link>
+                <Link to="/services" className="block px-4 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-100 rounded-xl" onClick={() => setMobileMenuOpen(false)}>Treatments</Link>
                 
                 {/* Mobile: States */}
                 <div className="px-4 py-2 text-xs font-bold text-slate-400 uppercase tracking-wider">Locations</div>
@@ -333,7 +333,7 @@ export function Navbar() {
                       <Link 
                         key={city.slug}
                         to={`/${state.slug}/${city.slug}`} 
-                        className="block px-8 py-2 text-sm font-medium text-slate-600 hover:bg-slate-100 rounded-xl" 
+                        className="block px-8 py-2 text-sm font-semibold text-slate-600 hover:bg-slate-100 rounded-xl" 
                         onClick={() => setMobileMenuOpen(false)}
                       >
                         {city.name}
@@ -342,12 +342,12 @@ export function Navbar() {
                   </div>
                 ))}
                 
-                <Link to="/insurance" className="block px-4 py-3 text-sm font-medium text-slate-700 hover:bg-slate-100 rounded-xl" onClick={() => setMobileMenuOpen(false)}>Insurance</Link>
-                <Link to="/pricing" className="block px-4 py-3 text-sm font-medium text-slate-700 hover:bg-slate-100 rounded-xl" onClick={() => setMobileMenuOpen(false)}>Pricing</Link>
-                <Link to="/blog" className="block px-4 py-3 text-sm font-medium text-slate-700 hover:bg-slate-100 rounded-xl" onClick={() => setMobileMenuOpen(false)}>Blog</Link>
-                <Link to="/faq" className="block px-4 py-3 text-sm font-medium text-slate-700 hover:bg-slate-100 rounded-xl" onClick={() => setMobileMenuOpen(false)}>FAQ</Link>
-                <Link to="/garments" className="block px-4 py-3 text-sm font-medium text-slate-700 hover:bg-slate-100 rounded-xl" onClick={() => setMobileMenuOpen(false)}>Garments</Link>
-                <Link to="/contact" className="block px-4 py-3 text-sm font-medium text-slate-700 hover:bg-slate-100 rounded-xl" onClick={() => setMobileMenuOpen(false)}>Contact</Link>
+                <Link to="/insurance" className="block px-4 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-100 rounded-xl" onClick={() => setMobileMenuOpen(false)}>Insurance</Link>
+                <Link to="/pricing" className="block px-4 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-100 rounded-xl" onClick={() => setMobileMenuOpen(false)}>Pricing</Link>
+                <Link to="/blog" className="block px-4 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-100 rounded-xl" onClick={() => setMobileMenuOpen(false)}>Blog</Link>
+                <Link to="/faq" className="block px-4 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-100 rounded-xl" onClick={() => setMobileMenuOpen(false)}>FAQ</Link>
+                <Link to="/garments" className="block px-4 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-100 rounded-xl" onClick={() => setMobileMenuOpen(false)}>Garments</Link>
+                <Link to="/contact" className="block px-4 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-100 rounded-xl" onClick={() => setMobileMenuOpen(false)}>Contact</Link>
               </div>
               
               <div className="mt-6 pt-6 border-t border-slate-200 px-4">
