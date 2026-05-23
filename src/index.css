@@ -212,6 +212,10 @@
     font-family: var(--font-nunito), 'Nunito', system-ui, sans-serif;
     @apply font-semibold tracking-tight;
   }
+
+  nav, header, footer {
+    font-family: var(--font-nunito), 'Nunito', system-ui, sans-serif;
+  }
 }
 
 @layer components {
@@ -462,19 +466,21 @@
      BUTTON STYLES
      ======================================== */
   
-  .btn-primary {
-    @apply px-6 py-3 bg-primary text-primary-foreground font-bold rounded-xl transition-all;
-    box-shadow: 0 10px 15px -3px hsl(var(--primary) / 0.3);
-  }
+   .btn-primary {
+     @apply px-6 py-3 bg-primary text-primary-foreground font-bold rounded-xl transition-all;
+     font-family: var(--font-nunito), 'Nunito', system-ui, sans-serif;
+     box-shadow: 0 10px 15px -3px hsl(var(--primary) / 0.3);
+   }
 
   .btn-primary:hover {
     @apply bg-primary/90;
   }
 
-  .btn-dark {
-    @apply px-6 py-4 bg-foreground text-background font-bold rounded-2xl transition-all;
-    box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.2);
-  }
+   .btn-dark {
+     @apply px-6 py-4 bg-foreground text-background font-bold rounded-2xl transition-all;
+     font-family: var(--font-nunito), 'Nunito', system-ui, sans-serif;
+     box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.2);
+   }
 
   .btn-dark:hover {
     background: hsl(var(--brand-700));

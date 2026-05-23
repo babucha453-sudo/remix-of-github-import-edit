@@ -112,6 +112,14 @@ function RouteChangeHandler({ children }: { children: React.ReactNode }) {
 export default function App({ Component, pageProps }: AppProps) {
   const [queryClient] = useState(() => new QueryClient());
 
+  useEffect(() => {
+    const root = document.querySelector(`.${nunito.variable}`);
+    if (root) {
+      const value = getComputedStyle(root).getPropertyValue('--font-nunito');
+      document.body.style.setProperty('--font-nunito', value);
+    }
+  }, []);
+
   return (
     <div className={nunito.variable}>
       <HelmetProvider>

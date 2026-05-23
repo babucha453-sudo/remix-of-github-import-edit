@@ -115,8 +115,17 @@ const PageLoader = () => (
   </div>
 );
 
-const App = () => (
-  <div className={nunito.variable}>
+const App = () => {
+  useEffect(() => {
+    const root = document.querySelector(`.${nunito.variable}`);
+    if (root) {
+      const value = getComputedStyle(root).getPropertyValue('--font-nunito');
+      document.body.style.setProperty('--font-nunito', value);
+    }
+  }, []);
+
+  return (
+    <div className={nunito.variable}>
     <HelmetProvider>
       <QueryClientProvider client={queryClient}>
         <AuthProvider>
