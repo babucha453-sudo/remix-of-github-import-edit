@@ -53,7 +53,7 @@ const DentistPage = () => {
       if (!slug || slug.includes('/')) return null; // Prevent path traversal
       const { data, error } = await supabase
         .from("dentists")
-        .select("*, clinic:clinics(id, name, slug, address, phone, latitude, longitude, city:cities(name, slug, state:states(name, abbreviation, slug)))")
+        .select("*, clinic:clinics(id, name, slug, address, phone, latitude, longitude, claim_status, city:cities(name, slug, state:states(name, abbreviation, slug)))")
         .eq("slug", slug)
         .maybeSingle(); // Use maybeSingle to return null instead of error for no match
       if (error) throw error;
@@ -213,6 +213,7 @@ const DentistPage = () => {
   const stateSlug = dentist.clinic?.city?.state?.slug || '';
   const citySlug = dentist.clinic?.city?.slug || '';
   const locationDisplay = stateAbbr ? `${cityName}, ${stateAbbr}` : cityName;
+  const isClaimed = dentist.clinic?.claim_status === "claimed";
 
   const breadcrumbs = [
     { label: "Dentists", href: "/search" },
@@ -367,10 +368,12 @@ const DentistPage = () => {
 
               {/* Actions */}
               <div className="flex md:flex-col gap-3">
-                <Button size="lg" className="rounded-xl font-bold flex-1 md:flex-none" onClick={() => setBookingOpen(true)}>
-                  <Calendar className="h-4 w-4 mr-2" />
-                  Book Appointment
-                </Button>
+                {isClaimed && (
+                  <Button size="lg" className="rounded-xl font-bold flex-1 md:flex-none" onClick={() => setBookingOpen(true)}>
+                    <Calendar className="h-4 w-4 mr-2" />
+                    Book Appointment
+                  </Button>
+                )}
                 <div className="flex gap-2">
                   <Button 
                     variant="outline" 
@@ -516,17 +519,19 @@ const DentistPage = () => {
             )}
 
             {/* Inline Booking Calendar */}
-            <div className="lg:sticky lg:top-24">
-              <InlineBookingCalendar
-                profileId={dentist.id}
-                profileName={dentist.name}
-                profileType="dentist"
-                clinicId={dentist.clinic_id || undefined}
-                clinicLatitude={dentist.clinic?.latitude ? Number(dentist.clinic.latitude) : undefined}
-                clinicLongitude={dentist.clinic?.longitude ? Number(dentist.clinic.longitude) : undefined}
-                clinicAddress={dentist.clinic?.address || undefined}
-              />
-            </div>
+            {isClaimed && (
+              <div className="lg:sticky lg:top-24">
+                <InlineBookingCalendar
+                  profileId={dentist.id}
+                  profileName={dentist.name}
+                  profileType="dentist"
+                  clinicId={dentist.clinic_id || undefined}
+                  clinicLatitude={dentist.clinic?.latitude ? Number(dentist.clinic.latitude) : undefined}
+                  clinicLongitude={dentist.clinic?.longitude ? Number(dentist.clinic.longitude) : undefined}
+                  clinicAddress={dentist.clinic?.address || undefined}
+                />
+              </div>
+            )}
           </div>
         </div>
       </Section>
@@ -546,17 +551,19 @@ const DentistPage = () => {
       </Section>
       
       {/* Multi-Step Booking Modal */}
-      <MultiStepBookingModal
-        open={bookingOpen}
-        onOpenChange={setBookingOpen}
-        profileId={dentist.id}
-        profileName={dentist.name}
-        profileType="dentist"
-        clinicId={dentist.clinic_id || undefined}
-        clinicLatitude={dentist.clinic?.latitude ? Number(dentist.clinic.latitude) : undefined}
-        clinicLongitude={dentist.clinic?.longitude ? Number(dentist.clinic.longitude) : undefined}
-        clinicAddress={dentist.clinic?.address || undefined}
-      />
+      {isClaimed && (
+        <MultiStepBookingModal
+          open={bookingOpen}
+          onOpenChange={setBookingOpen}
+          profileId={dentist.id}
+          profileName={dentist.name}
+          profileType="dentist"
+          clinicId={dentist.clinic_id || undefined}
+          clinicLatitude={dentist.clinic?.latitude ? Number(dentist.clinic.latitude) : undefined}
+          clinicLongitude={dentist.clinic?.longitude ? Number(dentist.clinic.longitude) : undefined}
+          clinicAddress={dentist.clinic?.address || undefined}
+        />
+      )}
     </PageLayout>
   );
 };

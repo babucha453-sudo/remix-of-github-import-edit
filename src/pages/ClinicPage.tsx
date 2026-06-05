@@ -487,14 +487,16 @@ const ClinicPage = () => {
 
             {/* Action Buttons - Desktop */}
             <div className="hidden lg:flex flex-col gap-2 shrink-0">
-              <Button
-                size="lg"
-                className="rounded-xl font-bold"
-                onClick={() => handleBookClick()}
-              >
-                <Calendar className="h-4 w-4 mr-2" />
-                Book Appointment
-              </Button>
+              {isClaimed && (
+                <Button
+                  size="lg"
+                  className="rounded-xl font-bold"
+                  onClick={() => handleBookClick()}
+                >
+                  <Calendar className="h-4 w-4 mr-2" />
+                  Book Appointment
+                </Button>
+              )}
               <div className="flex gap-2">
                 <Button variant="outline" size="icon" className="rounded-xl flex-1">
                   <Share2 className="h-4 w-4" />
@@ -831,32 +833,36 @@ const ClinicPage = () => {
         </div>
 
         {/* Mobile Sticky Book Button */}
-        <div className="lg:hidden fixed bottom-0 left-0 right-0 p-3 bg-white/95 backdrop-blur border-t border-gray-100 z-50">
-          <Button
-            className="w-full rounded-xl font-bold h-12 shadow-lg shadow-black/10"
-            size="lg"
-            onClick={() => handleBookClick()}
-          >
-            <Calendar className="h-5 w-5 mr-2" />
-            Book Appointment
-          </Button>
-        </div>
+        {isClaimed && (
+          <div className="lg:hidden fixed bottom-0 left-0 right-0 p-3 bg-white/95 backdrop-blur border-t border-gray-100 z-50">
+            <Button
+              className="w-full rounded-xl font-bold h-12 shadow-lg shadow-black/10"
+              size="lg"
+              onClick={() => handleBookClick()}
+            >
+              <Calendar className="h-5 w-5 mr-2" />
+              Book Appointment
+            </Button>
+          </div>
+        )}
       </Section>
 
       {/* Smart Booking Modal - Dark Theme */}
-      <SmartBookingModal
-        open={bookingOpen}
-        onOpenChange={setBookingOpen}
-        clinicId={clinic.id}
-        clinicName={clinic.name}
-        clinicAddress={clinic.address || undefined}
-        dentistId={selectedDentistId}
-        dentistName={selectedDentistId
-          ? dentists?.find(d => d.id === selectedDentistId)?.name
-          : undefined
-        }
-        clinicRating={clinic.rating ? Number(clinic.rating) : undefined}
-      />
+      {isClaimed && (
+        <SmartBookingModal
+          open={bookingOpen}
+          onOpenChange={setBookingOpen}
+          clinicId={clinic.id}
+          clinicName={clinic.name}
+          clinicAddress={clinic.address || undefined}
+          dentistId={selectedDentistId}
+          dentistName={selectedDentistId
+            ? dentists?.find(d => d.id === selectedDentistId)?.name
+            : undefined
+          }
+          clinicRating={clinic.rating ? Number(clinic.rating) : undefined}
+        />
+      )}
     </PageLayout>
   );
 };
