@@ -34,7 +34,7 @@ serve(async (req: Request) => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        from: "AppointPanda <noreply@appointpanda.com>",
+        from: "AppointPanda <no-reply@appointpanda.com>",
         to: [testEmail],
         subject: "AppointPanda Email Test",
         html: `

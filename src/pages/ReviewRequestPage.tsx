@@ -7,6 +7,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
+import { LazyImage } from "@/components/common/LazyImage";
 import { ThumbsUp, ThumbsDown, Star, CheckCircle, Building2, Heart, Sparkles, AlertCircle } from 'lucide-react';
 import { toast } from 'sonner';
 
@@ -279,10 +280,10 @@ export default function ReviewRequestPage() {
           {/* Logo/Header */}
           <div className="text-center mb-8">
             {clinic?.cover_image_url ? (
-              <img 
+              <LazyImage 
                 src={clinic.cover_image_url} 
                 alt={clinic.name}
-                className="h-20 w-20 rounded-2xl object-cover mx-auto mb-4 shadow-lg border-2 border-white"
+                className="h-20 w-20 rounded-2xl mx-auto mb-4 shadow-lg border-2 border-white"
               />
             ) : (
               <div className="h-20 w-20 rounded-2xl bg-gradient-to-br from-primary to-teal flex items-center justify-center mx-auto mb-4 shadow-lg">

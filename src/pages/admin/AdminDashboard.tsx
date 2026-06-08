@@ -294,23 +294,16 @@ const adminTabGroups = [
   {
     label: 'Marketing',
     tabs: [
-      { id: 'gmb-scraper', label: 'Scraper', icon: Bot },
       { id: 'email-enrichment', label: 'Email', icon: Mail },
       { id: 'gmb-bridge', label: 'Import', icon: Globe },
       { id: 'outreach', label: 'Outreach', icon: Mail },
-      { id: 'promotions', label: 'Promos', icon: Target },
     ],
   },
   {
     label: 'Content',
     tabs: [
       { id: 'clinic-enrichment', label: 'Enrichment', icon: Sparkles },
-      { id: 'content-studio', label: 'Studio', icon: Sparkles },
-      { id: 'content-hub', label: 'Hub', icon: Layers },
-      { id: 'content-audit', label: 'Audit', icon: Activity },
       { id: 'blog-management', label: 'Blog', icon: BookOpen },
-      { id: 'pages', label: 'Pages', icon: FileText },
-      { id: 'blog', label: 'Blog Posts', icon: BookOpen },
       { id: 'static-pages', label: 'Static', icon: Globe },
     ],
   },
@@ -318,13 +311,8 @@ const adminTabGroups = [
     label: 'SEO',
     tabs: [
       { id: 'seo-operations', label: 'Operations', icon: Sparkles },
-      { id: 'seo-command-center', label: 'Command', icon: Sparkles },
       { id: 'structured-data', label: 'Schema', icon: Database },
       { id: 'seo-health', label: 'Health', icon: Activity },
-      { id: 'meta-optimizer', label: 'Meta', icon: Search },
-      { id: 'ranking-rules', label: 'Ranking', icon: TrendingUp },
-      { id: 'pinned-profiles', label: 'Pinned', icon: Star },
-      { id: 'top-dentists', label: 'Top', icon: Star },
     ],
   },
   {

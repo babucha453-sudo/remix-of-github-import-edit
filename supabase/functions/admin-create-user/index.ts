@@ -1,6 +1,6 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.57.2";
-import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
+import { sendEmail, logEmail, getEmailSettings } from "../_shared/email.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -158,10 +158,15 @@ serve(async (req) => {
 
     console.log("User created successfully:", newUser.user.id);
 
-    // Send welcome email with Resend
+    // Send welcome email with Resend (no plaintext password)
     const resendApiKey = Deno.env.get("RESEND_API_KEY");
     if (resendApiKey && newUser.user.email) {
       try {
+        const emailSettings = await getEmailSettings(supabaseAdmin);
+        const siteUrl = Deno.env.get("NEXT_PUBLIC_SITE_URL") ?? "https://appointpanda.com";
+        const loginUrl = `${siteUrl}/auth`;
+        const resetUrl = `${siteUrl}/auth/reset-password`;
+
         const welcomeHtml = `<!DOCTYPE html>
 <html>
 <head>
@@ -175,30 +180,25 @@ serve(async (req) => {
     </div>
     <div style="padding:40px;">
       <h2 style="margin:0 0 8px;font-size:22px;color:#1a1a2e;">Welcome, ${fullName}!</h2>
-      <p style="margin:0 0 24px;color:#666;line-height:1.6;">Your AppointPanda account has been created. Sign in below to manage your dental practice.</p>
-      <div style="background:#f4f7fb;border-radius:12px;padding:20px;margin-bottom:24px;">
-        <p style="margin:0 0 4px;font-size:13px;color:#888;font-weight:600;text-transform:uppercase;">Email</p>
-        <p style="margin:0 0 4px;font-size:14px;color:#333;"><strong>${email}</strong></p>
-        <p style="margin:0 0 4px;font-size:13px;color:#888;font-weight:600;text-transform:uppercase;">Password</p>
-        <p style="margin:0;font-size:14px;color:#333;"><strong>${password}</strong></p>
+      <p style="margin:0 0 24px;color:#666;line-height:1.6;">Your AppointPanda account has been created with email <strong>${email}</strong>. Sign in below to manage your dental practice.</p>
+      <div style="text-align:center;margin-bottom:20px;">
+        <a href="${loginUrl}" style="display:inline-block;background:linear-gradient(135deg,#0097b2,#00c5cc);color:#fff;font-weight:700;font-size:15px;padding:14px 32px;border-radius:12px;text-decoration:none;box-shadow:0 4px 16px rgba(0,151,178,0.35);">Sign In to AppointPanda</a>
       </div>
-      <p style="margin:0 0 20px;font-size:13px;color:#888;">Please change your password after your first login.</p>
-      <a href="${Deno.env.get("NEXT_PUBLIC_SITE_URL") ?? "https://appointpanda.com"}/auth" style="display:inline-block;background:linear-gradient(135deg,#0097b2,#00c5cc);color:#fff;font-weight:700;font-size:15px;padding:14px 32px;border-radius:12px;text-decoration:none;">Sign In to AppointPanda</a>
-      <p style="margin:28px 0 0;font-size:12px;color:#aaa;text-align:center;">© ${new Date().getFullYear()} AppointPanda</p>
+      <p style="margin:0 0 24px;font-size:13px;color:#888;text-align:center;">If you forgot your password, <a href="${resetUrl}" style="color:#0097b2;">reset it here</a>.</p>
+      <p style="margin:0;font-size:12px;color:#aaa;text-align:center;">© ${new Date().getFullYear()} AppointPanda</p>
     </div>
   </div>
 </body>
 </html>`;
 
-        await fetch("https://api.resend.com/emails", {
-          method: "POST",
-          headers: { Authorization: `Bearer ${resendApiKey}`, "Content-Type": "application/json" },
-          body: JSON.stringify({
-            from: "AppointPanda <noreply@appointpanda.com>",
-            to: newUser.user.email,
-            subject: `Welcome to AppointPanda, ${fullName}!`,
-            html: welcomeHtml,
-          }),
+        const from = `${emailSettings.from_name} <${emailSettings.from_email}>`;
+        await sendEmail(resendApiKey, newUser.user.email, `Welcome to AppointPanda, ${fullName}!`, welcomeHtml, { from });
+        await logEmail(supabaseAdmin, {
+          recipient: newUser.user.email,
+          subject: `Welcome to AppointPanda, ${fullName}!`,
+          type: 'welcome_email',
+          status: 'sent',
+          user_id: newUser.user.id,
         });
         console.log("Welcome email sent to:", newUser.user.email);
       } catch (emailError) {

@@ -18,20 +18,17 @@ interface OnboardingCheck {
 
 async function getOnboardingData(supabase: any): Promise<OnboardingCheck[]> {
   const now = new Date();
-  const day0 = new Date(now);
-  day0.setDate(day0.getDate());
-  
-  const day3 = new Date(now);
-  day3.setDate(day3.getDate() - 3);
-  
   const day7 = new Date(now);
   day7.setDate(day7.getDate() - 7);
+
+  const lookbackDate = new Date(now);
+  lookbackDate.setDate(lookbackDate.getDate() - 14);
 
   const { data: dentists } = await supabase
     .from('dentists')
     .select('id, email, first_name, clinic_name, created_at')
     .eq('status', 'active')
-    .gte('created_at', new Date(day7.setDate(day7.getDate() - 7)).toISOString())
+    .gte('created_at', lookbackDate.toISOString())
     .lte('created_at', now.toISOString());
 
   if (!dentists || dentists.length === 0) {
@@ -63,11 +60,11 @@ async function getOnboardingData(supabase: any): Promise<OnboardingCheck[]> {
       );
       const latestEmail = sorted[0];
       
-      if (latestEmail.type === 'onboarding_day_7' || latestEmail.type === 'welcome_email') {
+      if (latestEmail.type === 'onboarding_day_7') {
         lastEmailDay = 7;
       } else if (latestEmail.type === 'onboarding_day_3') {
         lastEmailDay = 3;
-      } else if (latestEmail.type === 'onboarding_day_0') {
+      } else if (latestEmail.type === 'onboarding_day_0' || latestEmail.type === 'welcome_email') {
         lastEmailDay = 0;
       }
       lastEmailAt = latestEmail.created_at;
@@ -172,11 +169,16 @@ Deno.serve(async (req) => {
 
       console.log(`Processing ${data.email}: ${daysSinceRegistration} days since registration, last email: day ${data.lastEmailSentDay}`);
 
-      if (data.lastEmailSentDay === null) {
+      if (data.lastEmailSentDay === null && daysSinceRegistration < 3) {
         const sent = await sendWelcomeEmail(supabase, data);
         results.push({ dentistId: data.dentistId, email: data.email, action: 'welcome_email', success: sent });
         console.log(`Sent welcome email to ${data.email}: ${sent}`);
-      } 
+      }
+      else if (daysSinceRegistration >= 3 && data.lastEmailSentDay === null) {
+        const sent = await sendOnboardingEmail(supabase, data, 0);
+        results.push({ dentistId: data.dentistId, email: data.email, action: 'onboarding_day_0', success: sent });
+        console.log(`Sent day 0 email to ${data.email}: ${sent}`);
+      }
       else if (data.lastEmailSentDay === 0 && daysSinceRegistration >= 3) {
         const sent = await sendOnboardingEmail(supabase, data, 3);
         results.push({ dentistId: data.dentistId, email: data.email, action: 'onboarding_day_3', success: sent });
@@ -186,10 +188,6 @@ Deno.serve(async (req) => {
         const sent = await sendOnboardingEmail(supabase, data, 7);
         results.push({ dentistId: data.dentistId, email: data.email, action: 'onboarding_day_7', success: sent });
         console.log(`Sent day 7 email to ${data.email}: ${sent}`);
-      }
-      else if (daysSinceRegistration >= 3 && data.lastEmailSentDay === null) {
-        const sent = await sendOnboardingEmail(supabase, data, 0);
-        results.push({ dentistId: data.dentistId, email: data.email, action: 'onboarding_day_0', success: sent });
       }
       else {
         console.log(`No email needed for ${data.email} (day ${data.lastEmailSentDay}, ${daysSinceRegistration} days since reg)`);

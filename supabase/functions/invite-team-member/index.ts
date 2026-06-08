@@ -1,6 +1,7 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.57.2";
 import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
+import { sendEmail, logEmail, generateTeamInviteHTML } from "../_shared/email.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -15,47 +16,6 @@ const InviteSchema = z.object({
   invitedBy: z.string().uuid("Invalid user ID"),
   clinicName: z.string().optional(),
 });
-
-function generateInviteEmail(inviterName: string, clinicName: string, inviteLink: string) {
-  return `
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>You've been invited to join a team</title>
-</head>
-<body style="margin:0;padding:0;background:#f4f7fb;font-family:'Segoe UI',Arial,sans-serif;">
-  <div style="max-width:520px;margin:40px auto;background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,0.08);">
-    <div style="background:linear-gradient(135deg,#0097b2,#00c5cc);padding:40px 40px 30px;text-align:center;">
-      <h1 style="margin:0;font-size:28px;font-weight:800;color:#fff;">Appoint<span style="color:#ffd700;">Panda</span></h1>
-      <p style="margin:10px 0 0;color:rgba(255,255,255,0.9);font-size:14px;">Dental Practice Dashboard</p>
-    </div>
-    <div style="padding:40px;">
-      <h2 style="margin:0 0 8px;font-size:22px;font-weight:700;color:#1a1a2e;">You've been invited!</h2>
-      <p style="margin:0 0 24px;color:#666;line-height:1.6;">
-        ${inviterName} has invited you to join <strong>${clinicName || 'their dental practice'}</strong> on AppointPanda.
-      </p>
-
-      <div style="background:#f4f7fb;border-radius:12px;padding:20px;margin-bottom:24px;text-align:center;">
-        <p style="margin:0 0 4px;font-size:13px;color:#888;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;">Your Invitation</p>
-        <p style="margin:0;font-size:14px;color:#555;"><strong>${clinicName || 'Dental Practice'}</strong></p>
-      </div>
-
-      <a href="${inviteLink}" style="display:inline-block;background:linear-gradient(135deg,#0097b2,#00c5cc);color:#fff;font-weight:700;font-size:15px;padding:14px 32px;border-radius:12px;text-decoration:none;box-shadow:0 4px 16px rgba(0,151,178,0.35);">Accept Invitation</a>
-
-      <p style="margin:24px 0 0;font-size:12px;color:#aaa;text-align:center;">
-        This invitation link will expire in 7 days.<br/>
-        If you don't have an AppointPanda account, you'll be prompted to create one.
-      </p>
-
-      <p style="margin:28px 0 0;font-size:12px;color:#aaa;text-align:center;">© ${new Date().getFullYear()} AppointPanda. All rights reserved.</p>
-    </div>
-  </div>
-</body>
-</html>
-  `.trim();
-}
 
 serve(async (req) => {
   if (req.method === "OPTIONS") {
@@ -113,28 +73,26 @@ serve(async (req) => {
     const resendApiKey = Deno.env.get("RESEND_API_KEY");
     if (resendApiKey) {
       try {
-        // Get inviter name
         const { data: inviter } = await supabaseAdmin.auth.admin.getUserById(invitedBy);
         const inviterName = inviter?.user?.user_metadata?.full_name || 'A team member';
-        const emailHtml = generateInviteEmail(inviterName, clinicName || '', inviteLink);
-
-        const emailResponse = await fetch("https://api.resend.com/emails", {
-          method: "POST",
-          headers: {
-            Authorization: `Bearer ${resendApiKey}`,
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            from: "AppointPanda <noreply@appointpanda.com>",
-            to: email,
-            subject: `You've been invited to join ${clinicName || 'a dental practice'} on AppointPanda`,
-            html: emailHtml,
-          }),
+        const html = generateTeamInviteHTML({
+          clinicName: clinicName || 'a dental practice',
+          inviteUrl: inviteLink,
+          inviterName,
+          role: role || 'team member',
         });
-
-        if (!emailResponse.ok) {
-          const errBody = await emailResponse.text();
-          console.error("Resend error:", emailResponse.status, errBody);
+        const subject = `You've been invited to join ${clinicName || 'a dental practice'} on AppointPanda`;
+        const result = await sendEmail(resendApiKey, email, subject, html);
+        await logEmail(supabaseAdmin, {
+          recipient: email,
+          subject,
+          type: "team_invite",
+          status: result.success ? "sent" : "failed",
+          error_message: result.error,
+          resend_id: result.id,
+        });
+        if (!result.success) {
+          console.error("Invite email send failed:", result.error);
         } else {
           console.log("Invite email sent to:", email);
         }

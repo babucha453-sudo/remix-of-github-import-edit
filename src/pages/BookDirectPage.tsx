@@ -1,6 +1,7 @@
 import { useParams, Navigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
+import { LazyImage } from "@/components/common/LazyImage";
 import { CalendarBookingForm } from '@/components/booking/CalendarBookingForm';
 import { Skeleton } from '@/components/ui/skeleton';
 import { SEOHead } from '@/components/seo/SEOHead';
@@ -101,10 +102,10 @@ export default function BookDirectPage() {
           <div className="container max-w-lg mx-auto px-4 py-4">
             <div className="flex items-center gap-3">
               {clinic.cover_image_url ? (
-                <img 
+                <LazyImage 
                   src={clinic.cover_image_url} 
                   alt={clinic.name}
-                  className="h-12 w-12 rounded-full object-cover border-2 border-primary/20"
+                  className="h-12 w-12 rounded-full border-2 border-primary/20"
                 />
               ) : (
                 <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center">

@@ -193,9 +193,6 @@ verify_jwt = false  # Webhook: HMAC-SHA256 signature verification
 [functions.n8n-blog-insert]
 verify_jwt = false  # Webhook: n8n integration
 
-[functions.trigger-n8n-webhook]
-verify_jwt = false  # Service role: trigger n8n workflows
-
 # --------------------------------------------------------------------------
 # Listing/Lead Management (Various auth patterns)
 # --------------------------------------------------------------------------
@@ -295,5 +292,83 @@ verify_jwt = false  # Service role: bulk CSV import from storage
 [functions.test-resend-email]
 verify_jwt = false  # Public: test email endpoint
 
+[functions.send-welcome-email]
+verify_jwt = false  # Service role: welcome emails to new dentists
+
+[functions.send-onboarding-sequence]
+verify_jwt = false  # Service role: Day 0/3/7 onboarding sequence
+
+[functions.onboarding-trigger]
+verify_jwt = false  # Service role: cron trigger for onboarding emails
+
+[functions.send-review-request]
+verify_jwt = false  # Service role: send review request emails to patients
+
+[functions.review-request-automation]
+verify_jwt = false  # Service role: automated 3-step review sequences
+
+[functions.review-automation-trigger]
+verify_jwt = false  # Service role: cron trigger for review automation
+
+[functions.lead-email-notification]
+verify_jwt = false  # Service role: notify dentists of new leads
+
+[functions.lead-notification-webhook]
+verify_jwt = false  # Service role: webhook for lead notifications
+
+[functions.admin-send-password-reset]
+verify_jwt = false  # Admin: send password reset emails
+
+[functions.invite-team-member]
+verify_jwt = false  # Service role: send team invitation emails
+
+[functions.send-email-reminder]
+verify_jwt = false  # Service role: send email reminders for appointments
+
+[functions.send-claim-status-update]
+verify_jwt = false  # Service role: claim status change notifications
+
+[functions.send-profile-completion-reminder]
+verify_jwt = false  # Service role: profile completion reminder emails
+
 [edge_runtime]
 enabled = true
+
+# ============================================================================
+# AUTH / EMAIL CONFIGURATION
+# ============================================================================
+# SMTP settings for transactional emails (password reset, email confirmations, etc.)
+# Uses Resend SMTP to send from no-reply@appointpanda.com instead of Supabase default
+# ============================================================================
+
+[auth]
+enable_signup = true
+
+[auth.email]
+enable_signup = true
+enable_confirmations = false
+secure_email_change = true
+
+[auth.email.smtp]
+host = "smtp.resend.com"
+port = 465
+user = "resend"
+pass = "re_Fnh9mz5C_BkxFuDMLuAVJPkMjZnGAkywg"
+admin_email = "no-reply@appointpanda.com"
+sender_name = "Appoint Panda"
+
+[auth.email.template.recovery]
+subject = "Reset Your Appoint Panda Password"
+content_path = "./supabase/templates/recovery.html"
+
+[auth.email.template.confirmation]
+subject = "Confirm Your Appoint Panda Account"
+content_path = "./supabase/templates/confirmation.html"
+
+[auth.email.template.invite]
+subject = "You're Invited to Join Appoint Panda"
+content_path = "./supabase/templates/invite.html"
+
+[auth.email.template.magic_link]
+subject = "Your Appoint Panda Sign-In Link"
+content_path = "./supabase/templates/magic_link.html"

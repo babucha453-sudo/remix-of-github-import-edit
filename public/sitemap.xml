@@ -1,7 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <sitemap>
-    <loc>https://www.appointpanda.com/sitemap.xml</loc>
+    <loc>https://www.appointpanda.com/api/sitemap.xml?type=static</loc>
+    <lastmod>2026-05-14</lastmod>
+  </sitemap>
+  <sitemap>
+    <loc>https://www.appointpanda.com/api/sitemap.xml?type=states</loc>
+    <lastmod>2026-05-14</lastmod>
+  </sitemap>
+  <sitemap>
+    <loc>https://www.appointpanda.com/api/sitemap.xml?type=cities&amp;page=1</loc>
+    <lastmod>2026-05-14</lastmod>
+  </sitemap>
+  <sitemap>
+    <loc>https://www.appointpanda.com/api/sitemap.xml?type=cities&amp;page=2</loc>
+    <lastmod>2026-05-14</lastmod>
+  </sitemap>
+  <sitemap>
+    <loc>https://www.appointpanda.com/api/sitemap.xml?type=cities&amp;page=3</loc>
+    <lastmod>2026-05-14</lastmod>
+  </sitemap>
+  <sitemap>
+    <loc>https://www.appointpanda.com/api/sitemap.xml?type=clinics&amp;page=1</loc>
+    <lastmod>2026-05-14</lastmod>
+  </sitemap>
+  <sitemap>
+    <loc>https://www.appointpanda.com/api/sitemap.xml?type=services</loc>
+    <lastmod>2026-05-14</lastmod>
+  </sitemap>
+  <sitemap>
+    <loc>https://www.appointpanda.com/api/sitemap.xml?type=insurance</loc>
     <lastmod>2026-05-14</lastmod>
   </sitemap>
 </sitemapindex>

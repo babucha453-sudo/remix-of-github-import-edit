@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { LazyImage } from "@/components/common/LazyImage";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { PageLayout } from "@/components/layout/PageLayout";
@@ -142,10 +143,10 @@ const BlogPage = () => {
               >
                 <div className={`relative ${i === 0 ? "h-80 md:h-full" : "h-48"}`}>
                   {post.featured_image_url ? (
-                    <img
+                    <LazyImage
                       src={post.featured_image_url}
                       alt={post.title}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                      className="w-full h-full group-hover:scale-105 transition-transform duration-500"
                     />
                   ) : (
                     <div className="w-full h-full bg-gradient-to-br from-primary/20 via-accent/10 to-gold/20" />
@@ -237,10 +238,10 @@ const BlogPage = () => {
                   >
                     <div className="h-48 relative overflow-hidden">
                       {post.featured_image_url ? (
-                        <img
+                        <LazyImage
                           src={post.featured_image_url}
                           alt={post.title}
-                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                          className="w-full h-full group-hover:scale-105 transition-transform duration-500"
                         />
                       ) : (
                         <div className="w-full h-full bg-gradient-to-br from-primary/20 via-accent/10 to-gold/20 flex items-center justify-center">

@@ -7,6 +7,7 @@ import {
   AlertCircle, CheckCircle, X, SlidersHorizontal, Grid, List,
   DollarSign, CalendarDays, Check
 } from "lucide-react";
+import { LazyImage } from "@/components/common/LazyImage";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
@@ -587,7 +588,7 @@ export default function SearchPage() {
                       {/* Clinic Image */}
                       <div className="h-40 bg-slate-100 relative overflow-hidden">
                         {clinic.cover_image_url ? (
-                          <img src={clinic.cover_image_url} alt={clinic.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform" />
+                          <LazyImage src={clinic.cover_image_url} alt={clinic.name} className="w-full h-full group-hover:scale-105 transition-transform" />
                         ) : (
                           <div className="w-full h-full flex items-center justify-center">
                             <Shield className="h-12 w-12 text-slate-300" />
@@ -633,7 +634,7 @@ export default function SearchPage() {
                       {/* Clinic Image */}
                       <div className="w-24 h-24 rounded-lg bg-slate-100 overflow-hidden shrink-0">
                         {clinic.cover_image_url ? (
-                          <img src={clinic.cover_image_url} alt={clinic.name} className="w-full h-full object-cover" />
+                          <LazyImage src={clinic.cover_image_url} alt={clinic.name} className="w-full h-full" />
                         ) : (
                           <div className="w-full h-full flex items-center justify-center">
                             <Shield className="h-8 w-8 text-slate-300" />

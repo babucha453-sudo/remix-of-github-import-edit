@@ -14,7 +14,7 @@ interface ReminderResult {
   error?: string;
 }
 
-async function triggerReminder(
+async function triggerSmsReminder(
   appointmentId: string,
   reminderType: '24h' | '1h'
 ): Promise<{ success: boolean; error?: string }> {
@@ -45,6 +45,35 @@ async function triggerReminder(
   }
 }
 
+async function triggerEmailReminder(
+  appointmentId: string
+): Promise<{ success: boolean; error?: string }> {
+  const functionUrl = Deno.env.get('SUPABASE_functions_URL') + '/send-email-reminder';
+  const serviceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
+
+  try {
+    const response = await fetch(functionUrl, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${serviceKey}`,
+      },
+      body: JSON.stringify({
+        appointmentId,
+      }),
+    });
+
+    if (response.ok) {
+      return { success: true };
+    } else {
+      const error = await response.text();
+      return { success: false, error };
+    }
+  } catch (error) {
+    return { success: false, error: error instanceof Error ? error.message : 'Unknown error' };
+  }
+}
+
 Deno.serve(async (req) => {
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
@@ -58,9 +87,9 @@ Deno.serve(async (req) => {
     const now = new Date();
     console.log(`Appointment reminder trigger running at ${now.toISOString()}`);
 
-    const results: ReminderResult[] = {
-      h24: [],
-      h1: [],
+    const results: { sms: ReminderResult[]; email: ReminderResult[] } = {
+      sms: [],
+      email: [],
     };
 
     // Process 24-hour reminders
@@ -96,39 +125,49 @@ Deno.serve(async (req) => {
       console.log(`Found ${day24Appointments.length} appointments for 24h reminder window`);
 
       for (const appt of day24Appointments) {
-        // Check if 24h reminder already sent
-        const { data: existingReminder } = await supabase
+        const reminderType = '24h';
+
+        // Check if SMS reminder already sent
+        const { data: existingSms } = await supabase
           .from('appointment_reminders')
           .select('id')
           .eq('appointment_id', appt.id)
-          .eq('reminder_type', '24h')
+          .eq('reminder_type', reminderType)
           .eq('status', 'sent')
           .single();
 
-        if (existingReminder) {
-          console.log(`24h reminder already sent for appointment ${appt.id}`);
-          continue;
+        if (!existingSms) {
+          const smsResult = await triggerSmsReminder(appt.id, reminderType);
+          results.sms.push({
+            appointmentId: appt.id,
+            patientName: appt.patient_name,
+            clinicName: appt.clinic?.name || 'Unknown',
+            reminderType,
+            success: smsResult.success,
+            error: smsResult.error,
+          });
+          console.log(`SMS ${reminderType} reminder ${smsResult.success ? 'sent' : 'failed'} for appointment ${appt.id}`);
+        } else {
+          console.log(`SMS ${reminderType} reminder already sent for appointment ${appt.id}`);
         }
 
-        const triggerResult = await triggerReminder(appt.id, '24h');
-        
-        results.h24.push({
+        // Always send email reminder (dedup handled inside send-email-reminder)
+        const emailResult = await triggerEmailReminder(appt.id);
+        results.email.push({
           appointmentId: appt.id,
           patientName: appt.patient_name,
           clinicName: appt.clinic?.name || 'Unknown',
-          reminderType: '24h',
-          success: triggerResult.success,
-          error: triggerResult.error,
+          reminderType,
+          success: emailResult.success,
+          error: emailResult.error,
         });
-
-        console.log(`24h reminder ${triggerResult.success ? 'sent' : 'failed'} for appointment ${appt.id}`);
+        console.log(`Email ${reminderType} reminder ${emailResult.success ? 'sent' : 'failed'} for appointment ${appt.id}`);
       }
     } else {
       console.log('No appointments found for 24h reminder window');
     }
 
     // Process 1-hour reminders
-    // Find appointments starting in 30-90 minutes
     const oneHourStart = new Date(now);
     oneHourStart.setMinutes(oneHourStart.getMinutes() + 30);
 
@@ -157,51 +196,53 @@ Deno.serve(async (req) => {
       console.log(`Found ${hour1Appointments.length} appointments for 1h reminder window`);
 
       for (const appt of hour1Appointments) {
-        // Check if 1h reminder already sent
-        const { data: existingReminder } = await supabase
+        const reminderType = '1h';
+
+        const { data: existingSms } = await supabase
           .from('appointment_reminders')
           .select('id')
           .eq('appointment_id', appt.id)
-          .eq('reminder_type', '1h')
+          .eq('reminder_type', reminderType)
           .eq('status', 'sent')
           .single();
 
-        if (existingReminder) {
-          console.log(`1h reminder already sent for appointment ${appt.id}`);
-          continue;
+        if (!existingSms) {
+          const smsResult = await triggerSmsReminder(appt.id, reminderType);
+          results.sms.push({
+            appointmentId: appt.id,
+            patientName: appt.patient_name,
+            clinicName: appt.clinic?.name || 'Unknown',
+            reminderType,
+            success: smsResult.success,
+            error: smsResult.error,
+          });
+          console.log(`SMS ${reminderType} reminder ${smsResult.success ? 'sent' : 'failed'} for appointment ${appt.id}`);
+        } else {
+          console.log(`SMS ${reminderType} reminder already sent for appointment ${appt.id}`);
         }
 
-        const triggerResult = await triggerReminder(appt.id, '1h');
-        
-        results.h1.push({
+        const emailResult = await triggerEmailReminder(appt.id);
+        results.email.push({
           appointmentId: appt.id,
           patientName: appt.patient_name,
           clinicName: appt.clinic?.name || 'Unknown',
-          reminderType: '1h',
-          success: triggerResult.success,
-          error: triggerResult.error,
+          reminderType,
+          success: emailResult.success,
+          error: emailResult.error,
         });
-
-        console.log(`1h reminder ${triggerResult.success ? 'sent' : 'failed'} for appointment ${appt.id}`);
+        console.log(`Email ${reminderType} reminder ${emailResult.success ? 'sent' : 'failed'} for appointment ${appt.id}`);
       }
     } else {
       console.log('No appointments found for 1h reminder window');
     }
 
-    const total24h = results.h24.length;
-    const success24h = results.h24.filter(r => r.success).length;
-    const total1h = results.h1.length;
-    const success1h = results.h1.filter(r => r.success).length;
-
-    console.log(`Summary: 24h: ${success24h}/${total24h} sent, 1h: ${success1h}/${total1h} sent`);
+    const smsSent = results.sms.filter(r => r.success).length;
+    const emailSent = results.email.filter(r => r.success).length;
+    console.log(`Summary: SMS: ${smsSent}/${results.sms.length} sent, Email: ${emailSent}/${results.email.length} sent`);
 
     return new Response(
       JSON.stringify({
         success: true,
-        processed: {
-          h24: { total: total24h, sent: success24h },
-          h1: { total: total1h, sent: success1h },
-        },
         results,
       }),
       { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }

@@ -5,6 +5,7 @@ import { PageLayout } from "@/components/layout/PageLayout";
 import { Section } from "@/components/layout/Section";
 import { Button } from "@/components/ui/button";
 import { SEOHead } from "@/components/seo/SEOHead";
+import { LazyImage } from "@/components/common/LazyImage";
 import { useSeoPageContent } from "@/hooks/useSeoPageContent";
 import { buildInsuranceUrl } from "@/lib/url/buildProfileUrl";
 import { 
@@ -148,10 +149,10 @@ const InsurancePage = () => {
                 <div className="flex items-center gap-3 mb-2">
                   <div className="h-10 w-10 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
                     {insurance.logo_url ? (
-                      <img 
+                      <LazyImage 
                         src={insurance.logo_url} 
                         alt={insurance.name}
-                        className="h-7 w-7 object-contain"
+                        className="h-7 w-7"
                       />
                     ) : (
                       <Shield className="h-5 w-5 text-primary" />

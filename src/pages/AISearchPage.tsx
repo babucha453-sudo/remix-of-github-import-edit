@@ -4,6 +4,7 @@ import {
   Search, Sparkles, MapPin, DollarSign, Star, Shield, Clock, 
   ArrowRight, Loader2, Building2, CheckCircle, Navigation, MessageCircle, Send
 } from "lucide-react";
+import { LazyImage } from "@/components/common/LazyImage";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
@@ -475,7 +476,7 @@ function ResultCard({ result, index }: { result: SearchResult; index: number }) 
         {/* Image - Smaller on mobile */}
         <div className="w-16 h-16 md:w-20 md:h-20 rounded-lg md:rounded-xl overflow-hidden bg-white/10 flex-shrink-0">
           {result.cover_image_url ? (
-            <img src={result.cover_image_url} alt={result.name} className="w-full h-full object-cover" />
+            <LazyImage src={result.cover_image_url} alt={result.name} className="w-full h-full" />
           ) : (
             <div className="w-full h-full flex items-center justify-center">
               <Building2 className="h-6 w-6 md:h-8 md:w-8 text-white/30" />

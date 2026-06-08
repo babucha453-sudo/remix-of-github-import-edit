@@ -1,6 +1,7 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { getBranding, wrapEmailContent, getFromAddress } from "../_shared/branding.ts";
+import { sendEmail, logEmail } from "../_shared/email.ts";
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
@@ -243,11 +244,12 @@ serve(async (req) => {
       })
       .eq("id", leadId);
 
-    // 11. Send email with login credentials
+    // 11. Send email with login credentials (no plaintext password)
     if (resendApiKey && email) {
       try {
         const branding = await getBranding(supabaseAdmin);
         const siteUrl = branding.siteUrl;
+        const resetUrl = `${siteUrl}/auth/reset-password`;
         
         const bodyContent = `
           <h2 style="color: #1e293b; margin: 0 0 16px 0; font-size: 22px; font-weight: 600;">
@@ -265,10 +267,9 @@ serve(async (req) => {
           <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background-color: #f0fdf4; border: 2px solid #86efac; border-radius: 12px; margin-bottom: 24px;">
             <tr>
               <td style="padding: 24px;">
-                <h3 style="margin: 0 0 16px; color: #166534; font-size: 18px;">Your Login Credentials</h3>
+                <h3 style="margin: 0 0 16px; color: #166534; font-size: 18px;">Your Account</h3>
                 <p style="margin: 0 0 8px; color: #374151;"><strong>Email:</strong> ${email}</p>
-                <p style="margin: 0 0 8px; color: #374151;"><strong>Temporary Password:</strong> ${tempPassword}</p>
-                <p style="margin: 0; color: #dc2626; font-size: 14px;">⚠️ Please change your password after logging in.</p>
+                <p style="margin: 0; color: #64748b; font-size: 14px;">Use the button below to sign in. If you need to set a password, use the reset link.</p>
               </td>
             </tr>
           </table>
@@ -283,6 +284,10 @@ serve(async (req) => {
             </tr>
           </table>
           
+          <p style="color: #475569; font-size: 14px; margin: 0 0 24px; text-align: center;">
+            <a href="${resetUrl}" style="color: #059669;">Set or reset your password</a>
+          </p>
+          
           <h3 style="color: #1e293b; margin: 0 0 16px; font-size: 18px;">Next Steps:</h3>
           <ol style="margin: 0 0 24px; padding-left: 20px; color: #374151; font-size: 14px; line-height: 1.8;">
             <li>Complete your profile with photos and additional details</li>
@@ -296,19 +301,16 @@ serve(async (req) => {
         `;
 
         const emailHtml = wrapEmailContent(branding, '🎉 Your Practice Has Been Approved!', '🎉', bodyContent);
+        const subject = `Your Practice Listing Has Been Approved! 🎉 - ${branding.siteName}`;
         
-        await fetch("https://api.resend.com/emails", {
-          method: "POST",
-          headers: {
-            "Authorization": `Bearer ${resendApiKey}`,
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            from: getFromAddress(branding),
-            to: email,
-            subject: `Your Practice Listing Has Been Approved! 🎉 - ${branding.siteName}`,
-            html: emailHtml,
-          }),
+        await sendEmail(resendApiKey, email, subject, emailHtml, { from: getFromAddress(branding) });
+        await logEmail(supabaseAdmin, {
+          recipient: email,
+          subject,
+          type: 'listing_approved',
+          status: 'sent',
+          clinic_id: clinicId || newClinicId,
+          user_id: newUserId,
         });
       } catch (emailError) {
         console.error("Failed to send email:", emailError);
@@ -334,7 +336,7 @@ serve(async (req) => {
           body: new URLSearchParams({
             To: formattedPhone,
             From: twilioPhone,
-            Body: `Welcome to AppointPanda! Your practice "${clinicName}" has been approved. Log in at www.appointpanda.com/auth with your email and temp password sent to your inbox.`,
+            Body: `Welcome to AppointPanda! Your practice "${clinicName}" has been approved. Log in at www.appointpanda.com/auth to get started.`,
           }),
         });
       } catch (smsError) {

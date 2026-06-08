@@ -6,6 +6,7 @@ import { PageLayout } from "@/components/layout/PageLayout";
 import { Section } from "@/components/layout/Section";
 import { Button } from "@/components/ui/button";
 import { SEOHead } from "@/components/seo/SEOHead";
+import { LazyImage } from "@/components/common/LazyImage";
 import { 
   useInsuranceClinics, 
   useInsuranceFilterOptions 
@@ -218,10 +219,10 @@ const InsuranceDetailPage = ({ insuranceSlug: insuranceSlugProp }: InsuranceDeta
             {/* Logo */}
             <div className="shrink-0 h-20 w-20 rounded-2xl bg-card border border-border flex items-center justify-center">
               {insurance.logo_url ? (
-                <img 
+                <LazyImage 
                   src={insurance.logo_url} 
                   alt={insurance.name}
-                  className="h-14 w-14 object-contain"
+                  className="h-14 w-14"
                 />
               ) : (
                 <Shield className="h-10 w-10 text-primary" />

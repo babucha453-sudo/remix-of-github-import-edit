@@ -8,6 +8,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { LazyImage } from "@/components/common/LazyImage";
 import { toast } from 'sonner';
 import { z } from 'zod';
 import { Loader2 } from 'lucide-react';
@@ -25,9 +26,62 @@ export default function Auth() {
   // Login form
   const [loginEmail, setLoginEmail] = useState('');
   const [loginPassword, setLoginPassword] = useState('');
+  const [showResetForm, setShowResetForm] = useState(false);
+  const [resetEmail, setResetEmail] = useState('');
+  const [isResetting, setIsResetting] = useState(false);
+
+  // Recovery form — use sessionStorage to persist recovery mode across URL changes
+  const [newPassword, setNewPassword] = useState('');
+  const [confirmNewPassword, setConfirmNewPassword] = useState('');
+  const [isUpdatingPassword, setIsUpdatingPassword] = useState(false);
+
+  // Check URL at initial mount AND sessionStorage (Survives Supabase JS clearing URL params)
+  const [isRecoveryMode, setIsRecoveryMode] = useState(false);
 
   useEffect(() => {
-    if (isLoading || !user) return;
+    const hasRecoveryParam = typeof window !== 'undefined' &&
+      new URLSearchParams(window.location.search).get('type') === 'recovery';
+    const storedRecovery = typeof sessionStorage !== 'undefined' &&
+      sessionStorage.getItem('ap_recovery_mode') === 'true';
+    if (hasRecoveryParam) {
+      sessionStorage.setItem('ap_recovery_mode', 'true');
+    }
+    setIsRecoveryMode(hasRecoveryParam || storedRecovery);
+  }, []);
+
+  const handleUpdatePassword = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (newPassword !== confirmNewPassword) {
+      toast.error('Passwords do not match');
+      return;
+    }
+    try {
+      passwordSchema.parse(newPassword);
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        toast.error(error.errors[0].message);
+        return;
+      }
+    }
+    setIsUpdatingPassword(true);
+    const { error } = await supabase.auth.updateUser({ password: newPassword });
+    setIsUpdatingPassword(false);
+    if (error) {
+      toast.error(error.message);
+    } else {
+      sessionStorage.removeItem('ap_recovery_mode');
+      toast.success('Password updated successfully');
+      setNewPassword('');
+      setConfirmNewPassword('');
+      navigate('/', { replace: true });
+    }
+  };
+
+  useEffect(() => {
+    if (isLoading) return;
+    if (isRecoveryMode) return;
+
+    if (!user) return;
 
     const isGmbFlow = localStorage.getItem('gmb_listing_flow') === 'true' ||
                       localStorage.getItem('gmb_relink_flow') === 'true' ||
@@ -88,6 +142,30 @@ export default function Auth() {
           navigate('/onboarding?new=true', { replace: true });
         }
       }, 1500);
+    }
+  };
+
+  const handleResetPassword = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      emailSchema.parse(resetEmail);
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        toast.error(error.errors[0].message);
+        return;
+      }
+    }
+    setIsResetting(true);
+    const { error } = await supabase.auth.resetPasswordForEmail(resetEmail, {
+      redirectTo: `${process.env.NEXT_PUBLIC_BASE_URL || window.location.origin}/auth?type=recovery`,
+    });
+    setIsResetting(false);
+    if (error) {
+      toast.error(error.message);
+    } else {
+      toast.success('Check your email for the password reset link');
+      setShowResetForm(false);
+      setResetEmail('');
     }
   };
 
@@ -161,121 +239,190 @@ export default function Auth() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          {/* Google Sign In Button */}
-          <Button
-            variant="outline"
-            className="w-full mb-6 h-12"
-            onClick={handleGoogleSignIn}
-            disabled={isGoogleLoading}
-          >
-            {isGoogleLoading ? (
-              <Loader2 className="mr-2 h-5 w-5 animate-spin" />
-            ) : (
-              <img 
-                src="https://www.gstatic.com/images/branding/product/2x/googleg_48dp.png" 
-                alt="Google" 
-                className="h-5 w-5 mr-2"
-              />
-            )}
-            Continue with Google
-          </Button>
-
-          <div className="relative mb-6">
-            <div className="absolute inset-0 flex items-center">
-              <span className="w-full border-t" />
-            </div>
-            <div className="relative flex justify-center text-xs uppercase">
-              <span className="bg-card px-3 text-muted-foreground">Or continue with email</span>
-            </div>
-          </div>
-
-          <Tabs defaultValue="login" className="w-full">
-            <TabsList className="grid w-full grid-cols-2">
-              <TabsTrigger value="login">Sign In</TabsTrigger>
-              <TabsTrigger value="signup">Sign Up</TabsTrigger>
-            </TabsList>
-            
-            <TabsContent value="login">
-              <form onSubmit={handleLogin} className="space-y-4">
-                <div className="space-y-2">
-                  <Label htmlFor="login-email">Email</Label>
-                  <Input
-                    id="login-email"
-                    type="email"
-                    placeholder="you@example.com"
-                    value={loginEmail}
-                    onChange={(e) => setLoginEmail(e.target.value)}
-                    required
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="login-password">Password</Label>
-                  <Input
-                    id="login-password"
-                    type="password"
-                    placeholder="••••••••"
-                    value={loginPassword}
-                    onChange={(e) => setLoginPassword(e.target.value)}
-                    required
-                  />
-                </div>
-                <Button type="submit" className="w-full" disabled={isSubmitting}>
-                  {isSubmitting ? 'Signing in...' : 'Sign In'}
-                </Button>
-              </form>
-            </TabsContent>
-            
-            <TabsContent value="signup">
-              <div className="space-y-4">
-                <div className="bg-gradient-to-br from-primary/10 to-teal/10 border border-primary/20 rounded-xl p-5 text-center">
-                  <div className="w-12 h-12 bg-primary/20 rounded-full flex items-center justify-center mx-auto mb-3">
-                    <svg className="w-6 h-6 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 3v4M3 5h4a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1H3m12 0v4m3-4h4a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1h-4m-6 0a1 1 0 0 1 0 2H8m6 0H8m6 0v8m-3-4v4m0 0h4" />
-                    </svg>
-                  </div>
-                  <h3 className="font-bold text-base mb-1">Are you a Dentist?</h3>
-                  <p className="text-sm text-muted-foreground mb-4">
-                    Use our dedicated signup page for the best onboarding experience. It takes less than 2 minutes.
-                  </p>
-                  <Link to="/signup/dentist">
-                    <Button className="w-full font-bold shadow-glow">
-                      Sign Up as a Dentist
-                      <svg className="ml-2 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-                      </svg>
-                    </Button>
-                  </Link>
-                </div>
-
-                <div className="relative mb-2">
-                  <div className="absolute inset-0 flex items-center">
-                    <span className="w-full border-t" />
-                  </div>
-                  <div className="relative flex justify-center text-xs uppercase">
-                    <span className="bg-card px-3 text-muted-foreground">or</span>
-                  </div>
-                </div>
-
-                <Button
-                  variant="outline"
-                  className="w-full"
-                  onClick={handleGoogleSignIn}
-                  disabled={isGoogleLoading}
-                >
-                  {isGoogleLoading ? (
-                    <Loader2 className="mr-2 h-5 w-5 animate-spin" />
-                  ) : (
-                    <img
-                      src="https://www.gstatic.com/images/branding/product/2x/googleg_48dp.png"
-                      alt="Google"
-                      className="h-5 w-5 mr-2"
-                    />
-                  )}
-                  Continue with Google
-                </Button>
+          {isRecoveryMode ? (
+            <form onSubmit={handleUpdatePassword} className="space-y-4">
+              <p className="text-sm text-muted-foreground text-center mb-4">
+                Enter your new password below.
+              </p>
+              <div className="space-y-2">
+                <Label htmlFor="new-password">New Password</Label>
+                <Input
+                  id="new-password"
+                  type="password"
+                  placeholder="••••••••"
+                  value={newPassword}
+                  onChange={(e) => setNewPassword(e.target.value)}
+                  required
+                />
               </div>
-            </TabsContent>
-          </Tabs>
+              <div className="space-y-2">
+                <Label htmlFor="confirm-password">Confirm New Password</Label>
+                <Input
+                  id="confirm-password"
+                  type="password"
+                  placeholder="••••••••"
+                  value={confirmNewPassword}
+                  onChange={(e) => setConfirmNewPassword(e.target.value)}
+                  required
+                />
+              </div>
+              <Button type="submit" className="w-full" disabled={isUpdatingPassword}>
+                {isUpdatingPassword ? 'Updating...' : 'Update Password'}
+              </Button>
+            </form>
+          ) : (
+            <>
+              <Button
+                variant="outline"
+                className="w-full mb-6 h-12"
+                onClick={handleGoogleSignIn}
+                disabled={isGoogleLoading}
+              >
+                {isGoogleLoading ? (
+                  <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                ) : (
+                  <LazyImage 
+                    src="https://www.gstatic.com/images/branding/product/2x/googleg_48dp.png" 
+                    alt="Google" 
+                    className="h-5 w-5 mr-2"
+                  />
+                )}
+                Continue with Google
+              </Button>
+
+              <div className="relative mb-6">
+                <div className="absolute inset-0 flex items-center">
+                  <span className="w-full border-t" />
+                </div>
+                <div className="relative flex justify-center text-xs uppercase">
+                  <span className="bg-card px-3 text-muted-foreground">Or continue with email</span>
+                </div>
+              </div>
+
+              <Tabs defaultValue="login" className="w-full">
+                <TabsList className="grid w-full grid-cols-2">
+                  <TabsTrigger value="login">Sign In</TabsTrigger>
+                  <TabsTrigger value="signup">Sign Up</TabsTrigger>
+                </TabsList>
+                
+                <TabsContent value="login">
+                  {showResetForm ? (
+                    <form onSubmit={handleResetPassword} className="space-y-4">
+                      <div className="space-y-2">
+                        <Label htmlFor="reset-email">Email</Label>
+                        <Input
+                          id="reset-email"
+                          type="email"
+                          placeholder="you@example.com"
+                          value={resetEmail}
+                          onChange={(e) => setResetEmail(e.target.value)}
+                          required
+                        />
+                      </div>
+                      <Button type="submit" className="w-full" disabled={isResetting}>
+                        {isResetting ? 'Sending...' : 'Send Reset Link'}
+                      </Button>
+                      <button
+                        type="button"
+                        onClick={() => setShowResetForm(false)}
+                        className="w-full text-sm text-muted-foreground hover:text-primary transition-colors"
+                      >
+                        Back to Sign In
+                      </button>
+                    </form>
+                  ) : (
+                    <form onSubmit={handleLogin} className="space-y-4">
+                      <div className="space-y-2">
+                        <Label htmlFor="login-email">Email</Label>
+                        <Input
+                          id="login-email"
+                          type="email"
+                          placeholder="you@example.com"
+                          value={loginEmail}
+                          onChange={(e) => setLoginEmail(e.target.value)}
+                          required
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <div className="flex items-center justify-between">
+                          <Label htmlFor="login-password">Password</Label>
+                          <button
+                            type="button"
+                            onClick={() => setShowResetForm(true)}
+                            className="text-sm text-primary hover:text-primary/80 transition-colors"
+                          >
+                            Forgot password?
+                          </button>
+                        </div>
+                        <Input
+                          id="login-password"
+                          type="password"
+                          placeholder="••••••••"
+                          value={loginPassword}
+                          onChange={(e) => setLoginPassword(e.target.value)}
+                          required
+                        />
+                      </div>
+                      <Button type="submit" className="w-full" disabled={isSubmitting}>
+                        {isSubmitting ? 'Signing in...' : 'Sign In'}
+                      </Button>
+                    </form>
+                  )}
+                </TabsContent>
+                
+                <TabsContent value="signup">
+                  <div className="space-y-4">
+                    <div className="bg-gradient-to-br from-primary/10 to-teal/10 border border-primary/20 rounded-xl p-5 text-center">
+                      <div className="w-12 h-12 bg-primary/20 rounded-full flex items-center justify-center mx-auto mb-3">
+                        <svg className="w-6 h-6 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 3v4M3 5h4a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1H3m12 0v4m3-4h4a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1h-4m-6 0a1 1 0 0 1 0 2H8m6 0H8m6 0v8m-3-4v4m0 0h4" />
+                        </svg>
+                      </div>
+                      <h3 className="font-bold text-base mb-1">Are you a Dentist?</h3>
+                      <p className="text-sm text-muted-foreground mb-4">
+                        Use our dedicated signup page for the best onboarding experience. It takes less than 2 minutes.
+                      </p>
+                      <Link to="/signup/dentist">
+                        <Button className="w-full font-bold shadow-glow">
+                          Sign Up as a Dentist
+                          <svg className="ml-2 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                          </svg>
+                        </Button>
+                      </Link>
+                    </div>
+
+                    <div className="relative mb-2">
+                      <div className="absolute inset-0 flex items-center">
+                        <span className="w-full border-t" />
+                      </div>
+                      <div className="relative flex justify-center text-xs uppercase">
+                        <span className="bg-card px-3 text-muted-foreground">or</span>
+                      </div>
+                    </div>
+
+                    <Button
+                      variant="outline"
+                      className="w-full"
+                      onClick={handleGoogleSignIn}
+                      disabled={isGoogleLoading}
+                    >
+                      {isGoogleLoading ? (
+                        <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                      ) : (
+                        <LazyImage
+                          src="https://www.gstatic.com/images/branding/product/2x/googleg_48dp.png"
+                          alt="Google"
+                          className="h-5 w-5 mr-2"
+                        />
+                      )}
+                      Continue with Google
+                    </Button>
+                  </div>
+                </TabsContent>
+              </Tabs>
+            </>
+          )}
         </CardContent>
       </Card>
     </div>

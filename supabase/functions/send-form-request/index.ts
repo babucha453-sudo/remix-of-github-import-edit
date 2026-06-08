@@ -1,5 +1,5 @@
-import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { sendEmail, logEmail, getEmailSettings } from "../_shared/email.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -15,81 +15,6 @@ interface SendFormRequest {
   patientName?: string;
   customMessage?: string;
   clinicName: string;
-}
-
-interface EmailSettings {
-  from_email: string;
-  from_name: string;
-}
-
-async function getEmailSettings(supabase: any): Promise<EmailSettings> {
-  const { data } = await supabase
-    .from('global_settings')
-    .select('value')
-    .eq('key', 'email')
-    .single();
-  
-  if (data?.value) {
-    return data.value as EmailSettings;
-  }
-  
-  return {
-    from_email: 'no-reply@appointpanda.com',
-    from_name: 'AppointPanda'
-  };
-}
-
-function minifyHtml(html: string): string {
-  return html
-    .replace(/<!--[\s\S]*?-->/g, '')
-    .replace(/\r\n/g, '')
-    .replace(/\r/g, '')
-    .replace(/\n/g, '')
-    .replace(/\s{2,}/g, ' ')
-    .replace(/>\s+</g, '><')
-    .trim();
-}
-
-async function sendEmailViaResend(
-  resendApiKey: string,
-  settings: EmailSettings,
-  to: string,
-  subject: string,
-  html: string
-): Promise<{ success: boolean; error?: string }> {
-  try {
-    const cleanHtml = minifyHtml(html);
-    
-    const response = await fetch("https://api.resend.com/emails", {
-      method: "POST",
-      headers: {
-        "Authorization": `Bearer ${resendApiKey}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        from: `${settings.from_name} <${settings.from_email}>`,
-        to: [to],
-        subject: subject,
-        html: cleanHtml,
-      }),
-    });
-
-    if (!response.ok) {
-      const errorData = await response.text();
-      console.error('Resend API error:', response.status, errorData);
-      return { success: false, error: `Resend API error: ${response.status}` };
-    }
-
-    const result = await response.json();
-    console.log('Form request email sent successfully via Resend:', result);
-    return { success: true };
-  } catch (error) {
-    console.error('Resend send error:', error);
-    return {
-      success: false,
-      error: error instanceof Error ? error.message : 'Resend send failed',
-    };
-  }
 }
 
 function generateFormEmailHTML(
@@ -114,7 +39,7 @@ function generateFormEmailHTML(
           <tr>
             <td style="background: linear-gradient(135deg, #0EA5E9 0%, #0284C7 100%); border-radius: 16px 16px 0 0; padding: 40px 32px; text-align: center;">
               <h1 style="color: #ffffff; margin: 0 0 8px 0; font-size: 28px; font-weight: 700;">${clinicName}</h1>
-              <div style="color: rgba(255,255,255,0.9); font-size: 16px;">📋 Form Request</div>
+              <div style="color: rgba(255,255,255,0.9); font-size: 16px;">Form Request</div>
             </td>
           </tr>
           <tr>
@@ -128,7 +53,7 @@ function generateFormEmailHTML(
               <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background-color: #f0f9ff; border: 2px solid #bae6fd; border-radius: 12px; margin-bottom: 24px;">
                 <tr>
                   <td style="padding: 24px;">
-                    <p style="color: #0284C7; font-size: 18px; font-weight: 600; margin: 0;">📄 ${templateName}</p>
+                    <p style="color: #0284C7; font-size: 18px; font-weight: 600; margin: 0;">${templateName}</p>
                   </td>
                 </tr>
               </table>
@@ -168,7 +93,7 @@ function generateFormEmailHTML(
 </html>`;
 }
 
-serve(async (req) => {
+Deno.serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
   }
@@ -177,13 +102,12 @@ serve(async (req) => {
     const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
     const supabaseKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
     const resendApiKey = Deno.env.get("RESEND_API_KEY");
-    
+
     const supabase = createClient(supabaseUrl, supabaseKey);
 
     const body: SendFormRequest = await req.json();
     const { submissionId, templateName, deliveryMethod, patientEmail, patientPhone, patientName, customMessage, clinicName } = body;
 
-    // Generate the form URL
     const baseUrl = `https://www.appointpanda.com/form/${submissionId}`;
     const { data: submissionRow } = await supabase
       .from('patient_form_submissions')
@@ -196,7 +120,6 @@ serve(async (req) => {
 
     if (deliveryMethod === "email" && patientEmail) {
       if (!resendApiKey) {
-        console.error("RESEND_API_KEY not configured");
         return new Response(
           JSON.stringify({ error: "Email service not configured (RESEND_API_KEY missing)", formUrl }),
           { headers: { ...corsHeaders, "Content-Type": "application/json" }, status: 500 }
@@ -205,27 +128,27 @@ serve(async (req) => {
 
       const emailSettings = await getEmailSettings(supabase);
       const emailHtml = generateFormEmailHTML(clinicName, templateName, patientName, customMessage, formUrl);
+      const subject = `Please Complete: ${templateName} - ${clinicName}`;
+      const from = `${emailSettings.from_name} <${emailSettings.from_email}>`;
+      const result = await sendEmail(resendApiKey, patientEmail, subject, emailHtml, { from });
 
-      const result = await sendEmailViaResend(
-        resendApiKey,
-        emailSettings,
-        patientEmail,
-        `Please Complete: ${templateName} - ${clinicName}`,
-        emailHtml
-      );
+      await logEmail(supabase, {
+        recipient: patientEmail,
+        subject,
+        type: 'form_request',
+        status: result.success ? 'sent' : 'failed',
+        error_message: result.error,
+        resend_id: result.id,
+      });
 
       if (!result.success) {
-        console.error("Failed to send email:", result.error);
         return new Response(
           JSON.stringify({ error: result.error, formUrl }),
-          { headers: { ...corsHeaders, "Content-Type": "application/json" }, status: 500 }
+          { headers: { ...corsHeaders, "Content-Type": "application/json" }, status: 200 }
         );
       }
-
-      console.log("Form request email sent successfully to:", patientEmail);
     } else if (deliveryMethod === "sms" && patientPhone) {
-      console.log("SMS would be sent to:", patientPhone);
-      console.log("Form URL:", formUrl);
+      console.log("SMS would be sent to:", patientPhone, "Form URL:", formUrl);
     }
 
     await supabase
@@ -238,7 +161,6 @@ serve(async (req) => {
       { headers: { ...corsHeaders, "Content-Type": "application/json" }, status: 200 }
     );
   } catch (error: unknown) {
-    console.error("Error sending form request:", error);
     const errorMessage = error instanceof Error ? error.message : "Unknown error";
     return new Response(
       JSON.stringify({ error: errorMessage }),

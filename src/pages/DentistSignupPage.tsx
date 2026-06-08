@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { LazyImage } from "@/components/common/LazyImage";
 import { toast } from 'sonner';
 import { z } from 'zod';
 import { Loader2 } from 'lucide-react';
@@ -259,7 +260,7 @@ export default function DentistSignupPage() {
             {isGoogleLoading ? (
               <Loader2 className="mr-2 h-5 w-5 animate-spin" />
             ) : (
-              <img
+              <LazyImage
                 src="https://www.gstatic.com/images/branding/product/2x/googleg_48dp.png"
                 alt="Google"
                 className="h-5 w-5 mr-2"

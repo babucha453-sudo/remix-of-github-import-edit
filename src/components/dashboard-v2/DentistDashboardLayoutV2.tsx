@@ -27,6 +27,9 @@ const PAGE_TITLES: Record<string, { title: string; description?: string }> = {
   'my-templates': { title: 'Templates', description: 'Message templates' },
   'my-settings': { title: 'Settings', description: 'Account preferences' },
   'my-support': { title: 'Support', description: 'Get help and support' },
+  'my-analytics': { title: 'Analytics', description: 'Practice performance and insights' },
+  'my-marketing': { title: 'Marketing', description: 'Growth and promotion tools' },
+  'my-seo': { title: 'SEO', description: 'Search engine visibility' },
 };
 
 interface DentistDashboardLayoutV2Props {
@@ -71,6 +74,8 @@ export default function DentistDashboardLayoutV2({
     if (tabId === 'my-reputation') return 'Reputation';
     if (tabId === 'my-templates') return 'Communication';
     if (settingsTabs.includes(tabId)) return 'Settings';
+    const growthTabs = ['my-analytics', 'my-marketing', 'my-seo'];
+    if (growthTabs.includes(tabId)) return 'Growth';
     return null;
   };
 

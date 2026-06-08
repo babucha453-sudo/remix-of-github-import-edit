@@ -5,6 +5,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import { PageLayout } from "@/components/layout/PageLayout";
 import { Section } from "@/components/layout/Section";
+import { LazyImage } from "@/components/common/LazyImage";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -374,7 +375,7 @@ const ListYourPracticePage = () => {
                             {isConnectingGoogle ? (
                               <Loader2 className="h-8 w-8 animate-spin text-primary" />
                             ) : (
-                              <img 
+                              <LazyImage 
                                 src="https://www.gstatic.com/images/branding/product/2x/googleg_48dp.png" 
                                 alt="Google" 
                                 className="h-8 w-8"

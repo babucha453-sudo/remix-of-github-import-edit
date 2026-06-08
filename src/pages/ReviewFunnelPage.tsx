@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { LazyImage } from "@/components/common/LazyImage";
 import { Star, CheckCircle, Building2, Sparkles, Heart, Shield } from 'lucide-react';
 import { toast } from 'sonner';
 
@@ -311,7 +312,7 @@ export default function ReviewFunnelPage() {
       <header className="w-full py-4 px-4 flex justify-center">
         <div className="flex items-center gap-3">
           {clinicLogo ? (
-            <img src={clinicLogo} alt={clinic.name} className="h-10 w-10 rounded-xl object-cover shadow-md" />
+            <LazyImage src={clinicLogo} alt={clinic.name} className="h-10 w-10 rounded-xl shadow-md" />
           ) : (
             <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-primary to-teal flex items-center justify-center shadow-md">
               <Building2 className="h-5 w-5 text-white" />

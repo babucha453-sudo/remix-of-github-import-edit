@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { LazyImage } from "@/components/common/LazyImage";
 import { PageLayout } from "@/components/layout/PageLayout";
 import { Section } from "@/components/layout/Section";
 import { SectionHeader } from "@/components/layout/SectionHeader";
@@ -137,10 +138,10 @@ const AboutPage = () => {
           </div>
           <div className="relative">
             <div className="aspect-square rounded-3xl overflow-hidden shadow-elevated">
-              <img
+              <LazyImage
                 src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=800"
                 alt="Professional team connecting patients with dental care"
-                className="w-full h-full object-cover"
+                className="w-full h-full"
               />
             </div>
             <div className="absolute -bottom-6 -left-6 w-48 h-48 bg-primary/10 rounded-3xl blur-2xl" />

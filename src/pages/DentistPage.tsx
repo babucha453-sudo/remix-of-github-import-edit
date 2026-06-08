@@ -9,6 +9,7 @@ import { Section } from "@/components/layout/Section";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
+import { LazyImage } from "@/components/common/LazyImage";
 import { SEOHead } from "@/components/seo/SEOHead";
 import { StructuredData } from "@/components/seo/StructuredData";
 import { SyncStructuredData } from "@/components/seo/SyncStructuredData";
@@ -295,10 +296,10 @@ const DentistPage = () => {
               <div className="flex-shrink-0">
                 <div className="w-32 h-32 md:w-40 md:h-40 rounded-2xl overflow-hidden border-4 border-background shadow-elevated">
                   {dentist.image_url ? (
-                    <img
+                    <LazyImage
                       src={dentist.image_url}
                       alt={dentist.name}
-                      className="w-full h-full object-cover"
+                      className="w-full h-full"
                     />
                   ) : (
                     <div className="w-full h-full bg-gradient-to-br from-primary/20 to-purple/20 flex items-center justify-center">

@@ -14,6 +14,7 @@ import { usePrerenderReady } from "@/hooks/usePrerenderReady";
 import { BlogDentistList } from "@/components/blog/BlogDentistList";
 import { BlogFAQList } from "@/components/blog/BlogFAQList";
 import { EmailCapture } from "@/components/EmailCapture";
+import { LazyImage } from "@/components/common/LazyImage";
 import { 
   Calendar, User, Clock, ArrowLeft, Share2, Facebook, Twitter, Linkedin,
   MapPin, Search, Phone, Star, Shield, ArrowRight, RefreshCw
@@ -267,12 +268,11 @@ const BlogPostPage = ({ initialPost, initialRelatedPosts }: BlogPostPageProps) =
           const imgMatch = line.match(/^!\[(.*?)\]\((.*?)\)$/);
           if (imgMatch) {
             return (
-              <figure key={i} className="my-6">
-                <img 
+              <figure key={i} className="my-6 relative min-h-[200px]">
+                <LazyImage 
                   src={imgMatch[2]} 
                   alt={imgMatch[1]} 
                   className="w-full rounded-xl"
-                  loading="lazy"
                 />
                 {imgMatch[1] && (
                   <figcaption className="text-sm text-muted-foreground text-center mt-2">
@@ -367,12 +367,11 @@ const BlogPostPage = ({ initialPost, initialRelatedPosts }: BlogPostPageProps) =
 
       if (b.type === "image" && b.imageUrl) {
         return (
-          <figure key={b.id || `img-${i}`} className="my-6 not-prose">
-            <img
+          <figure key={b.id || `img-${i}`} className="my-6 not-prose relative min-h-[200px]">
+            <LazyImage
               src={b.imageUrl}
               alt={b.imageAlt || "Blog image"}
               className="w-full rounded-xl"
-              loading="lazy"
             />
             {b.imageAlt && (
               <figcaption className="text-sm text-muted-foreground text-center mt-2">
@@ -508,10 +507,10 @@ const BlogPostPage = ({ initialPost, initialRelatedPosts }: BlogPostPageProps) =
             {post.featured_image_url && (
               <div className="card-modern overflow-hidden mb-6">
                 <div className="relative aspect-video">
-                  <img
+                  <LazyImage
                     src={post.featured_image_url}
                     alt={post.title}
-                    className="w-full h-full object-cover"
+                    className="w-full h-full"
                   />
                 </div>
                 <div className="p-3 bg-muted/30 border-t border-border">
@@ -772,10 +771,10 @@ const BlogPostPage = ({ initialPost, initialRelatedPosts }: BlogPostPageProps) =
                 >
                   <div className="h-40 relative overflow-hidden">
                     {relatedPost.featured_image_url ? (
-                      <img
+                      <LazyImage
                         src={relatedPost.featured_image_url}
                         alt={relatedPost.title}
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                        className="w-full h-full group-hover:scale-105 transition-transform duration-500"
                       />
                     ) : (
                       <div className="w-full h-full bg-gradient-to-br from-primary/20 to-accent/20" />

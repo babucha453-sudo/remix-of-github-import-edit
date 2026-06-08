@@ -1,6 +1,7 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.57.2";
 import { getBranding, wrapEmailContent, getFromAddress } from "../_shared/branding.ts";
+import { logEmail } from "../_shared/email.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -174,6 +175,15 @@ serve(async (req) => {
       action: 'SEND_PASSWORD_RESET',
       entity_type: 'user',
       new_values: { email, resend_id: emailResponse.data?.id },
+    });
+
+    await logEmail(supabaseAdmin, {
+      recipient: email,
+      subject: `Reset Your Password - ${branding.siteName}`,
+      type: "password_reset",
+      status: emailResponse.error ? "failed" : "sent",
+      error_message: emailResponse.error?.message,
+      resend_id: emailResponse.data?.id,
     });
 
     console.log("Password reset email sent successfully to:", email, "Resend ID:", emailResponse.data?.id);
