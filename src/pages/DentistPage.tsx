@@ -381,6 +381,7 @@ const DentistPage = () => {
                     size="icon" 
                     className="rounded-xl"
                     onClick={handleShare}
+                    aria-label={shareSuccess ? "Link copied" : "Share profile"}
                   >
                     {shareSuccess ? <Check className="h-4 w-4 text-teal" /> : <Share2 className="h-4 w-4" />}
                   </Button>
@@ -389,6 +390,7 @@ const DentistPage = () => {
                     size="icon" 
                     className={`rounded-xl ${isLiked ? 'bg-coral/10 border-coral/30' : ''}`}
                     onClick={handleLike}
+                    aria-label={isLiked ? "Remove from favorites" : "Add to favorites"}
                   >
                     <Heart className={`h-4 w-4 ${isLiked ? 'fill-coral text-coral' : ''}`} />
                   </Button>

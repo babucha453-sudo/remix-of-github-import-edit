@@ -237,7 +237,7 @@ export default function CrmNumbersTab() {
                 <Input
                   value={form.phone_number}
                   onChange={(e) => setForm({ ...form, phone_number: e.target.value })}
-                  placeholder="+971 4 XXX XXXX"
+                  placeholder="(555) 123-4567"
                 />
               </div>
 

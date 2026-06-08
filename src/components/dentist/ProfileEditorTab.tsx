@@ -782,7 +782,7 @@ export default function ProfileEditorTab() {
                   className="pl-10"
                   value={formData.phone || ''}
                   onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                  placeholder="+971 4 XXX XXXX"
+                  placeholder="(555) 123-4567"
                 />
               </div>
             </div>

@@ -6,9 +6,9 @@ export const EnhancedHeroBackground = () => {
       {/* Dark gradient base */}
       <div className="absolute inset-0 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950" />
       
-      {/* Large animated orbs */}
+      {/* Large animated orbs - hidden on mobile for performance */}
       <motion.div 
-        className="absolute -top-32 -right-32 w-[700px] h-[700px] bg-gradient-to-br from-primary/30 via-teal/15 to-transparent rounded-full blur-3xl"
+        className="absolute -top-32 -right-32 w-[700px] h-[700px] bg-gradient-to-br from-primary/30 via-teal/15 to-transparent rounded-full blur-3xl max-md:hidden"
         animate={{ 
           scale: [1, 1.2, 1],
           opacity: [0.3, 0.5, 0.3],
@@ -19,7 +19,7 @@ export const EnhancedHeroBackground = () => {
       />
       
       <motion.div 
-        className="absolute -bottom-40 -left-40 w-[600px] h-[600px] bg-gradient-to-tr from-primary/25 via-emerald/15 to-transparent rounded-full blur-3xl"
+        className="absolute -bottom-40 -left-40 w-[600px] h-[600px] bg-gradient-to-tr from-primary/25 via-emerald/15 to-transparent rounded-full blur-3xl max-md:hidden"
         animate={{ 
           scale: [1, 1.15, 1],
           opacity: [0.25, 0.45, 0.25],
@@ -30,7 +30,7 @@ export const EnhancedHeroBackground = () => {
       />
       
       <motion.div 
-        className="absolute top-1/3 left-1/2 -translate-x-1/2 w-[900px] h-[900px] bg-gradient-radial from-gold/10 via-gold/5 to-transparent rounded-full"
+        className="absolute top-1/3 left-1/2 -translate-x-1/2 w-[900px] h-[900px] bg-gradient-radial from-gold/10 via-gold/5 to-transparent rounded-full max-md:hidden"
         animate={{ 
           scale: [1, 1.1, 1],
           opacity: [0.15, 0.25, 0.15],
@@ -38,9 +38,9 @@ export const EnhancedHeroBackground = () => {
         transition={{ duration: 14, repeat: Infinity, ease: "easeInOut" }}
       />
       
-      {/* Center spotlight glow */}
+      {/* Center spotlight glow - hidden on mobile */}
       <motion.div 
-        className="absolute top-[20%] left-1/2 -translate-x-1/2 w-[500px] h-[400px] bg-gradient-radial from-primary/20 via-transparent to-transparent rounded-full blur-2xl"
+        className="absolute top-[20%] left-1/2 -translate-x-1/2 w-[500px] h-[400px] bg-gradient-radial from-primary/20 via-transparent to-transparent rounded-full blur-2xl max-md:hidden"
         animate={{ 
           opacity: [0.2, 0.4, 0.2],
           scale: [1, 1.05, 1],

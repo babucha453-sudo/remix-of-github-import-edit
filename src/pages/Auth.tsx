@@ -184,8 +184,6 @@ export default function Auth() {
       const currentOrigin = window.location.origin;
       const redirectTo = `${currentOrigin}/auth/callback`;
       
-      console.log('[Auth] Starting Google OAuth, redirect:', redirectTo);
-      
       const { error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {

@@ -1,10 +1,12 @@
-import { useParams, Navigate } from 'react-router-dom';
+import { useParams, useNavigate, Navigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { LazyImage } from "@/components/common/LazyImage";
 import { CalendarBookingForm } from '@/components/booking/CalendarBookingForm';
 import { Skeleton } from '@/components/ui/skeleton';
+import { Button } from '@/components/ui/button';
 import { SEOHead } from '@/components/seo/SEOHead';
+import { MapPin } from 'lucide-react';
 
 /**
  * BookDirectPage - Direct booking page for GMB integration
@@ -17,6 +19,7 @@ import { SEOHead } from '@/components/seo/SEOHead';
  */
 export default function BookDirectPage() {
   const { clinicId } = useParams<{ clinicId: string }>();
+  const navigate = useNavigate();
 
   const { data: clinic, isLoading, error } = useQuery({
     queryKey: ['clinic-booking', clinicId],
@@ -79,8 +82,22 @@ export default function BookDirectPage() {
   }
 
   if (error || !clinic) {
-    // Redirect to home if clinic not found
-    return <Navigate to="/" replace />;
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-background to-muted/20 flex items-center justify-center p-4">
+        <div className="text-center space-y-4">
+          <div className="w-16 h-16 rounded-full bg-muted flex items-center justify-center mx-auto">
+            <MapPin className="h-8 w-8 text-muted-foreground" />
+          </div>
+          <h1 className="text-xl font-bold">Clinic Not Found</h1>
+          <p className="text-muted-foreground max-w-md">
+            We couldn't find the clinic you're looking for. It may have been removed or the link may be incorrect.
+          </p>
+          <Button onClick={() => navigate('/')}>
+            Go to Home
+          </Button>
+        </div>
+      </div>
+    );
   }
 
   const locationDisplay = [

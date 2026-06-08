@@ -306,7 +306,7 @@ export default function ClinicsTab() {
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <Label>Phone</Label>
-                    <Input value={clinicForm.phone} onChange={(e) => setClinicForm({ ...clinicForm, phone: e.target.value })} placeholder="+971 4 XXX XXXX" />
+                    <Input value={clinicForm.phone} onChange={(e) => setClinicForm({ ...clinicForm, phone: e.target.value })} placeholder="(555) 123-4567" />
                   </div>
                   <div className="space-y-2">
                     <Label>Email</Label>

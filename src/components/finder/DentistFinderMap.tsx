@@ -28,7 +28,7 @@ interface DentistFinderMapProps {
   className?: string;
 }
 
-const UAE_CENTER = { lat: 39.8283, lng: -98.5795 }; // US center
+const US_CENTER = { lat: 39.8283, lng: -98.5795 }; // Geographic center of US
 
 export function DentistFinderMap({
   markers,
@@ -49,7 +49,7 @@ export function DentistFinderMap({
 
   const getMapCenter = useCallback(() => {
     const validMarkers = markers.filter(m => m.latitude != null && m.longitude != null);
-    if (validMarkers.length === 0) return UAE_CENTER;
+    if (validMarkers.length === 0) return US_CENTER;
     
     const lats = validMarkers.map(m => Number(m.latitude));
     const lngs = validMarkers.map(m => Number(m.longitude));

@@ -422,7 +422,7 @@ export default function MessagesTab() {
                   <Phone className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                   <Input
                     className="pl-10"
-                    placeholder="+971 50 XXX XXXX"
+                    placeholder="(555) 123-4567"
                     value={recipientPhone}
                     onChange={(e) => setRecipientPhone(e.target.value)}
                   />

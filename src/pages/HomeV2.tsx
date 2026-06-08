@@ -337,13 +337,13 @@ const HomeV2 = () => {
         {/* Dynamic Background */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
           <motion.div 
-            className="absolute top-[-10%] left-[-5%] w-[500px] h-[500px] rounded-full"
+            className="absolute top-[-10%] left-[-5%] w-[500px] h-[500px] rounded-full max-md:hidden"
             style={{ background: 'radial-gradient(circle, rgba(16, 185, 129, 0.3) 0%, transparent 70%)' }}
             animate={{ scale: [1, 1.2, 1], x: [0, 50, 0] }}
             transition={{ duration: 8, repeat: Infinity }}
           />
           <motion.div 
-            className="absolute bottom-[-10%] right-[-5%] w-[400px] h-[400px] rounded-full"
+            className="absolute bottom-[-10%] right-[-5%] w-[400px] h-[400px] rounded-full max-md:hidden"
             style={{ background: 'radial-gradient(circle, rgba(6, 95, 70, 0.4) 0%, transparent 70%)' }}
             animate={{ scale: [1.2, 1, 1.2], y: [0, 30, 0] }}
             transition={{ duration: 10, repeat: Infinity, delay: 1 }}
@@ -856,7 +856,7 @@ const HomeV2 = () => {
       {/* BESPOKE GARMENTS */}
       <section className="py-16 md:py-24 bg-slate-900 text-white relative overflow-hidden">
         <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-emerald-500/10 rounded-full blur-3xl" />
+          <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-emerald-500/10 rounded-full blur-3xl max-md:hidden" />
         </div>
         <div className="container mx-auto px-4 relative z-10">
           <div className="max-w-5xl mx-auto">
@@ -912,7 +912,7 @@ const HomeV2 = () => {
       {/* FINAL CTA */}
       <section className="py-16 md:py-24 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 relative overflow-hidden">
         <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-emerald-500/10 rounded-full blur-3xl" />
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-emerald-500/10 rounded-full blur-3xl max-md:hidden" />
         </div>
         
         <div className="container mx-auto px-4 relative z-10">

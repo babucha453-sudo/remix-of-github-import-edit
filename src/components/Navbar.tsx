@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Menu, X, ChevronDown, Search, User, BookOpen, HelpCircle, Phone, DollarSign, Wrench, Calculator, Shield, Zap, MapPin, Shirt } from "lucide-react";
+import { Menu, X, ChevronDown, Search, User, BookOpen, HelpCircle, Phone, DollarSign, Wrench, Calculator, Shield, Zap, MapPin } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -108,10 +108,6 @@ export function Navbar() {
             <Link to="/faq" className="flex items-center gap-1.5 text-slate-300 hover:text-emerald-400 transition-colors">
               <HelpCircle className="h-3.5 w-3.5" />
               <span>FAQ</span>
-            </Link>
-            <Link to="/garments" className="flex items-center gap-1.5 text-slate-300 hover:text-emerald-400 transition-colors">
-              <Shirt className="h-3.5 w-3.5" />
-              <span>Garments</span>
             </Link>
             <Link to="/pricing" className="flex items-center gap-1.5 text-slate-300 hover:text-emerald-400 transition-colors">
               <DollarSign className="h-3.5 w-3.5" />
@@ -275,12 +271,6 @@ export function Navbar() {
                 Pricing
               </Link>
 
-              <Link 
-                to="/garments" 
-                className="px-4 py-2 text-sm font-semibold text-slate-600 hover:text-emerald transition-colors rounded-lg hover:bg-emerald/5"
-              >
-                Garments
-              </Link>
             </div>
 
             {/* Desktop Actions */}
@@ -304,6 +294,8 @@ export function Navbar() {
             <button
               className="lg:hidden p-2 rounded-xl hover:bg-slate-100 transition-colors text-slate-700"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
+              aria-expanded={mobileMenuOpen}
             >
               {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
             </button>
@@ -346,7 +338,6 @@ export function Navbar() {
                 <Link to="/pricing" className="block px-4 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-100 rounded-xl" onClick={() => setMobileMenuOpen(false)}>Pricing</Link>
                 <Link to="/blog" className="block px-4 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-100 rounded-xl" onClick={() => setMobileMenuOpen(false)}>Blog</Link>
                 <Link to="/faq" className="block px-4 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-100 rounded-xl" onClick={() => setMobileMenuOpen(false)}>FAQ</Link>
-                <Link to="/garments" className="block px-4 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-100 rounded-xl" onClick={() => setMobileMenuOpen(false)}>Garments</Link>
                 <Link to="/contact" className="block px-4 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-100 rounded-xl" onClick={() => setMobileMenuOpen(false)}>Contact</Link>
               </div>
               

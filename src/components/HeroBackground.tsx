@@ -4,17 +4,17 @@ export function HeroBackground() {
       {/* Dark gradient base */}
       <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900" />
       
-      {/* Animated gradient orbs */}
+      {/* Animated gradient orbs - hidden on mobile for performance */}
       <div 
-        className="absolute -top-32 -right-32 w-[600px] h-[600px] bg-gradient-to-br from-primary/30 via-teal/20 to-transparent rounded-full blur-3xl"
+        className="absolute -top-32 -right-32 w-[600px] h-[600px] bg-gradient-to-br from-primary/30 via-teal/20 to-transparent rounded-full blur-3xl max-md:hidden"
         style={{ animation: 'pulse 6s ease-in-out infinite' }}
       />
       <div 
-        className="absolute -bottom-40 -left-40 w-[500px] h-[500px] bg-gradient-to-tr from-primary/20 via-emerald/15 to-transparent rounded-full blur-3xl"
+        className="absolute -bottom-40 -left-40 w-[500px] h-[500px] bg-gradient-to-tr from-primary/20 via-emerald/15 to-transparent rounded-full blur-3xl max-md:hidden"
         style={{ animation: 'pulse 8s ease-in-out infinite', animationDelay: '2s' }}
       />
       <div 
-        className="absolute top-1/3 left-1/2 -translate-x-1/2 w-[800px] h-[800px] bg-gradient-radial from-primary/10 via-transparent to-transparent rounded-full"
+        className="absolute top-1/3 left-1/2 -translate-x-1/2 w-[800px] h-[800px] bg-gradient-radial from-primary/10 via-transparent to-transparent rounded-full max-md:hidden"
         style={{ animation: 'pulse 10s ease-in-out infinite', animationDelay: '1s' }}
       />
       

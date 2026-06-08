@@ -139,7 +139,6 @@ const ClaimProfilePage = () => {
       // Check if clinic is already claimed
       if (selectedClinic.claim_status !== "claimed") {
         // User with Google can proceed to claim directly
-        console.log("Google user detected, user can proceed with claim flow");
       }
     }
   }, [user, googleChecked, selectedClinic, step]);
@@ -151,7 +150,6 @@ const ClaimProfilePage = () => {
   // Auto-search when clinic is prefilled from URL
   useEffect(() => {
     if (prefilledClinic && prefilledClinic.length >= 2) {
-      console.log('🔍 Auto-searching for prefilled clinic:', prefilledClinic);
       setSearchQuery(prefilledClinic);
     }
   }, [prefilledClinic]);
@@ -193,7 +191,6 @@ const ClaimProfilePage = () => {
   useEffect(() => {
     if (searchResults && searchResults.length === 1 && searchQuery === prefilledClinic) {
       const clinic = searchResults[0];
-      console.log('🔍 Auto-selecting clinic:', clinic.name);
       handleSelectClinic(clinic);
     }
   }, [searchResults, searchQuery, prefilledClinic]);

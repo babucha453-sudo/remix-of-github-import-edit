@@ -1,13 +1,13 @@
 /**
  * AppointPanda Dashboard Theme
- * Brand colors matching homepage: Emerald & Teal
+ * Brand colors matching homepage: Teal (primary) & Emerald (accent)
  */
 
 export const dashboardTheme = {
   colors: {
     // Primary brand colors (match homepage)
     primary: {
-      DEFAULT: '#10b981', // emerald-500
+      DEFAULT: '#0d9488', // teal-600 (matches CSS --primary)
       50: '#ecfdf5',
       100: '#d1fae5',
       200: '#a7f3d0',

@@ -144,7 +144,9 @@ export const Footer = forwardRef<HTMLElement, React.HTMLAttributes<HTMLElement>>
                 </div>
               </div>
               <form className="flex w-full md:w-auto gap-2" onSubmit={(e) => e.preventDefault()}>
+                <label htmlFor="newsletter-email" className="sr-only">Email for newsletter</label>
                 <input
+                  id="newsletter-email"
                   type="email"
                   placeholder="Enter your email"
                   className="w-full md:w-64 px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder:text-slate-400 focus:outline-none focus:border-emerald-500"

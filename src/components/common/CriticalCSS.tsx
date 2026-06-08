@@ -31,7 +31,7 @@ export const CriticalCSS = () => (
           margin: 0;
           line-height: inherit;
           font-family: 'Nunito', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-          font-weight: 600;
+          font-weight: 400;
           -webkit-font-smoothing: antialiased;
           -moz-osx-font-smoothing: grayscale;
           background-color: hsl(220 25% 97%);

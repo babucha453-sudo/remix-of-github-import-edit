@@ -238,7 +238,7 @@ export function TeamMemberFormDialog({
               <Input
                 value={formData.phone}
                 onChange={(e) => handleFieldChange('phone', e.target.value)}
-                placeholder="+971 50 XXX XXXX"
+                placeholder="(555) 123-4567"
               />
             </div>
           </div>

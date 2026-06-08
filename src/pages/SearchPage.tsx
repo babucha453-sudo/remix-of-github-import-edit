@@ -67,6 +67,7 @@ export default function SearchPage() {
   const [minRating, setMinRating] = useState<number>(0);
   const [showFilters, setShowFilters] = useState(true);
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
+  const [showAllTreatments, setShowAllTreatments] = useState(false);
   
   // Pagination - Show 100 dentists at a time
   const [displayCount, setDisplayCount] = useState(100);
@@ -93,7 +94,6 @@ export default function SearchPage() {
           .eq('is_active', true)
           .eq('is_duplicate', false);
         
-        console.log("Total clinics count:", totalCount);
         setTotalClinicCount(totalCount || 0);
         
         // Fetch only 100 clinics initially - much faster
@@ -109,7 +109,6 @@ export default function SearchPage() {
           .order('review_count', { ascending: false })
           .limit(100);
         
-        console.log("Initial clinics loaded:", clinicsData?.length);
         setAllClinics((clinicsData || []) as any);
         
         // Fetch all cities (small dataset - ~500)
@@ -180,8 +179,6 @@ export default function SearchPage() {
   const totalCount = filteredClinics.length;
   const totalAllClinics = allClinics.length;
   
-  // Debug log
-  console.log("allClinics length:", allClinics.length, "filteredClinics length:", filteredClinics.length, "totalClinicCount:", totalClinicCount);
   
   // Reset display count when filters change
   useEffect(() => {
@@ -486,7 +483,7 @@ export default function SearchPage() {
                 <div className="mb-5">
                   <Label className="text-sm font-semibold text-slate-700 mb-2 block">Treatments</Label>
                   <div className="space-y-2 max-h-48 overflow-y-auto">
-                    {treatments?.slice(0, 15).map(treatment => (
+                    {(treatments?.length > 15 && !showAllTreatments ? treatments.slice(0, 15) : treatments)?.map(treatment => (
                       <label key={treatment.id} className="flex items-center gap-2 cursor-pointer">
                         <Checkbox 
                           checked={selectedTreatments.includes(treatment.slug)}
@@ -496,6 +493,15 @@ export default function SearchPage() {
                       </label>
                     ))}
                   </div>
+                  {treatments && treatments.length > 15 && (
+                    <button
+                      type="button"
+                      onClick={() => setShowAllTreatments(!showAllTreatments)}
+                      className="text-sm text-primary hover:text-primary/80 font-medium mt-2"
+                    >
+                      {showAllTreatments ? 'Show less' : `Show all ${treatments.length} treatments`}
+                    </button>
+                  )}
                 </div>
                 
                 {/* Results Count */}

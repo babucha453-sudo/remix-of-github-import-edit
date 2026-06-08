@@ -118,7 +118,7 @@ export default function SearchResultsPage({ initialService, initialLocation }: S
       <SyncStructuredData data={structuredData} />
       
       <DentistFinderLayout
-        title={service ? `${service} in ${location || 'UAE'}` : `Dentists in ${location || 'UAE'}`}
+        title={service ? `${service} in ${location || 'the United States'}` : `Dentists in ${location || 'the United States'}`}
         description={service ? `Find the best ${service} specialists` : `Find dentists and dental clinics near you`}
         initialLocation={location}
         initialCityId={cityData?.id}
