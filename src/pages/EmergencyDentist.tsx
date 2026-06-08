@@ -129,8 +129,8 @@ export default function EmergencyDentistFinder() {
           <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-destructive/10 mb-4">
             <Zap className="h-8 w-8 text-destructive" />
           </div>
-          <h1 className="text-4xl font-bold mb-4">Emergency Dentist Finder</h1>
-          <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-4">Emergency Dentist Finder</h1>
+          <p className="text-base md:text-lg lg:text-xl text-muted-foreground max-w-2xl mx-auto">
             Find dentists open now for urgent dental care. Select your state and city to see available offices.
           </p>
           <div className="flex items-center justify-center gap-4 mt-4">
