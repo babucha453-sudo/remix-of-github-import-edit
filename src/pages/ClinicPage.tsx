@@ -345,8 +345,8 @@ const ClinicPage = () => {
           />
         ) : (
           <div className="absolute inset-0">
-            <div className="absolute top-0 left-[-10%] w-[300px] h-[300px] rounded-full bg-emerald-200/30 blur-[80px]" />
-            <div className="absolute bottom-0 right-[-10%] w-[250px] h-[250px] rounded-full bg-teal-200/30 blur-[60px]" />
+            <div className="absolute top-0 left-[-10%] w-[300px] h-[300px] rounded-full bg-emerald-200/30 blur-[80px] max-md:hidden" />
+            <div className="absolute bottom-0 right-[-10%] w-[250px] h-[250px] rounded-full bg-teal-200/30 blur-[60px] max-md:hidden" />
             <div className="absolute inset-0 opacity-5" style={{ 
               backgroundImage: 'radial-gradient(circle, #10b981 1px, transparent 1px)',
               backgroundSize: '30px 30px' 

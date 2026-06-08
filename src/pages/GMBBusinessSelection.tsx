@@ -345,7 +345,7 @@ export default function GMBBusinessSelection() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted flex items-center justify-center p-4">
+      <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted flex items-center justify-center p-4 overflow-y-auto">
         <Card className="w-full max-w-2xl">
           <CardHeader className="text-center">
             <CardTitle className="text-2xl">Finding Your Businesses...</CardTitle>
@@ -367,7 +367,7 @@ export default function GMBBusinessSelection() {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted flex items-center justify-center p-4">
+      <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted flex items-center justify-center p-4 overflow-y-auto">
         <Card className="w-full max-w-md">
           <CardHeader className="text-center">
             <div className="h-16 w-16 rounded-full bg-coral/10 flex items-center justify-center mx-auto mb-4">
@@ -399,7 +399,7 @@ export default function GMBBusinessSelection() {
 
   if (businesses.length === 0) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted flex items-center justify-center p-4">
+      <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted flex items-center justify-center p-4 overflow-y-auto">
         <Card className="w-full max-w-md">
           <CardHeader className="text-center">
             <div className="h-16 w-16 rounded-full bg-gold/10 flex items-center justify-center mx-auto mb-4">

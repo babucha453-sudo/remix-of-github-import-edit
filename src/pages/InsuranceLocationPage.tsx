@@ -320,13 +320,13 @@ const InsuranceLocationPage = ({ initialState, initialCity }: InsuranceLocationP
       <section className="relative overflow-hidden bg-gradient-to-br from-emerald-950 via-slate-900 to-slate-950 min-h-[50vh] flex items-center">
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
           <motion.div 
-            className="absolute top-[-10%] left-[-5%] w-[500px] h-[500px] rounded-full"
+            className="absolute top-[-10%] left-[-5%] w-[500px] h-[500px] rounded-full max-md:hidden"
             style={{ background: 'radial-gradient(circle, rgba(16, 185, 129, 0.3) 0%, transparent 70%)' }}
             animate={{ scale: [1, 1.2, 1], x: [0, 50, 0] }}
             transition={{ duration: 8, repeat: Infinity }}
           />
           <motion.div 
-            className="absolute bottom-[-10%] right-[-5%] w-[400px] h-[400px] rounded-full"
+            className="absolute bottom-[-10%] right-[-5%] w-[400px] h-[400px] rounded-full max-md:hidden"
             style={{ background: 'radial-gradient(circle, rgba(6, 95, 70, 0.4) 0%, transparent 70%)' }}
             animate={{ scale: [1.2, 1, 1.2], y: [0, 30, 0] }}
             transition={{ duration: 10, repeat: Infinity, delay: 1 }}

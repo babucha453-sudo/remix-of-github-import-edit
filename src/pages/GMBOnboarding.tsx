@@ -344,7 +344,7 @@ export default function GMBOnboarding() {
                   </div>
                   <Progress value={completeness.percentage} className="h-2" />
 
-                  <div className="grid grid-cols-2 gap-2 text-sm">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm">
                     <div className="flex items-center gap-2">
                       {completeness.hasName ? (
                         <CheckCircle className="h-4 w-4 text-teal" />
@@ -484,7 +484,7 @@ export default function GMBOnboarding() {
               </div>
 
               {/* Benefits */}
-              <div className="grid grid-cols-2 gap-3 pt-4 border-t">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-4 border-t">
                 <div className="flex items-start gap-2">
                   <Shield className="h-4 w-4 text-primary mt-0.5" />
                   <div>

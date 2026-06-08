@@ -326,14 +326,14 @@ export const Footer = forwardRef<HTMLElement, React.HTMLAttributes<HTMLElement>>
                       target="_blank"
                       rel="noopener noreferrer"
                       aria-label={social.label}
-                      className="h-9 w-9 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center hover:bg-emerald/20 hover:border-emerald/50 hover:text-emerald transition-all"
+                      className="h-11 w-11 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center hover:bg-emerald/20 hover:border-emerald/50 hover:text-emerald transition-all"
                     >
                       <social.icon className="h-4 w-4" />
                     </a>
                   ))
                 ) : (
                   [Facebook, Instagram, Twitter, Linkedin].map((Icon, i) => (
-                    <span key={i} className="h-9 w-9 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center opacity-30">
+                    <span key={i} className="h-11 w-11 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center opacity-30">
                       <Icon className="h-4 w-4" />
                     </span>
                   ))

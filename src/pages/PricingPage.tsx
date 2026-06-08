@@ -515,7 +515,7 @@ export default function PricingPage() {
                 <p className="text-muted-foreground">No hidden upsells — here's exactly what's free and what's not.</p>
               </div>
 
-              <div className="max-w-2xl mx-auto bg-background rounded-2xl shadow-sm border overflow-hidden">
+              <div className="max-w-2xl mx-auto bg-background rounded-2xl shadow-sm border overflow-x-auto">
                 <table className="w-full">
                   <thead>
                     <tr className="border-b bg-slate-50 dark:bg-slate-800/50">

@@ -267,7 +267,7 @@ export default function ReviewRequestPage() {
   const displayName = request.patient_name || request.recipient_name;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-primary/5 via-background to-teal/5 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-gradient-to-br from-primary/5 via-background to-teal/5 flex items-center justify-center p-4 overflow-y-auto">
       <div className="w-full max-w-lg">
         {/* Decorative elements */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
@@ -345,7 +345,7 @@ export default function ReviewRequestPage() {
                     </button>
                   </div>
 
-                  <p className="text-xs text-muted-foreground mt-8">
+                  <p className="text-sm text-muted-foreground mt-8">
                     Your response is tracked and helps us improve
                   </p>
                 </div>
@@ -483,7 +483,7 @@ export default function ReviewRequestPage() {
 
           {/* Footer */}
           <div className="text-center mt-6">
-            <p className="text-xs text-muted-foreground">
+            <p className="text-sm text-muted-foreground">
               Request ID: {request.short_code || request.id.slice(0, 8)} • Powered by <span className="font-semibold text-primary">AppointPanda</span>
             </p>
           </div>

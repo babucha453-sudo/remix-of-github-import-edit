@@ -249,7 +249,7 @@ export default function DentalCostCalculator() {
                   <div className="space-y-2">
                     <Label>Estimated Coverage: {insuranceCoverage}%</Label>
                     <Slider value={[insuranceCoverage]} onValueChange={(v) => setInsuranceCoverage(v[0])} min={0} max={100} step={10} />
-                    <p className="text-xs text-muted-foreground">
+                    <p className="text-sm text-muted-foreground">
                       Major procedures typically 50%, preventive care 80-100%
                     </p>
                   </div>
@@ -286,7 +286,7 @@ export default function DentalCostCalculator() {
                     <p className="text-sm text-muted-foreground mt-1">
                       Range: ${costEstimate.minPrice.toLocaleString()} – ${costEstimate.maxPrice.toLocaleString()}
                     </p>
-                    <p className="text-xs text-muted-foreground mt-2">
+                    <p className="text-sm text-muted-foreground mt-2">
                       Based on {costEstimate.count} dentist{costEstimate.count !== 1 ? 's' : ''}
                     </p>
                   </div>
@@ -318,7 +318,7 @@ export default function DentalCostCalculator() {
                     <p className="text-3xl font-bold text-primary">
                       ${Math.min(...budgetRanges.map((b: any) => b.price_min)).toLocaleString()} – ${Math.max(...budgetRanges.map((b: any) => b.price_max)).toLocaleString()}
                     </p>
-                    <p className="text-xs text-muted-foreground mt-2">
+                    <p className="text-sm text-muted-foreground mt-2">
                       Based on platform budget ranges
                     </p>
                   </div>

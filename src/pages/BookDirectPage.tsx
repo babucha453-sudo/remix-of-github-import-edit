@@ -71,7 +71,7 @@ export default function BookDirectPage() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-background to-muted/20 flex items-center justify-center p-4">
+      <div className="min-h-screen bg-gradient-to-b from-background to-muted/20 flex items-center justify-center p-4 overflow-y-auto">
         <div className="w-full max-w-lg space-y-4">
           <Skeleton className="h-8 w-3/4 mx-auto" />
           <Skeleton className="h-64 w-full rounded-2xl" />
@@ -83,7 +83,7 @@ export default function BookDirectPage() {
 
   if (error || !clinic) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-background to-muted/20 flex items-center justify-center p-4">
+      <div className="min-h-screen bg-gradient-to-b from-background to-muted/20 flex items-center justify-center p-4 overflow-y-auto">
         <div className="text-center space-y-4">
           <div className="w-16 h-16 rounded-full bg-muted flex items-center justify-center mx-auto">
             <MapPin className="h-8 w-8 text-muted-foreground" />

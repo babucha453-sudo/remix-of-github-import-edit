@@ -606,7 +606,7 @@ const Index = () => {
             </p>
 
             {/* Stats row */}
-            <div className="flex flex-wrap justify-center gap-8 mb-12">
+            <div className="flex flex-wrap justify-center gap-6 md:gap-8 mb-12">
               <div className="text-center">
                 <div className="text-3xl font-bold text-primary mb-1">{realCounts?.clinics?.toLocaleString() || '0'}+</div>
                 <div className="text-sm text-white/50 font-semibold">Verified Practices</div>

@@ -235,7 +235,7 @@ export default function DentistSignupPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted flex items-center justify-center p-4">
+    <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted flex items-center justify-center p-4 overflow-y-auto">
       <SEOHead
         title="Sign Up as a Dentist | AppointPanda"
         description="Create your free AppointPanda account and start managing your dental practice online."

@@ -431,7 +431,7 @@ const ListYourPracticePage = () => {
                       </CardContent>
                     </Card>
 
-                    <p className="text-xs text-center text-muted-foreground">
+                    <p className="text-sm text-center text-muted-foreground">
                       By continuing, you agree to our <Link to="/terms" className="text-primary hover:underline">Terms</Link> and <Link to="/privacy" className="text-primary hover:underline">Privacy Policy</Link>
                     </p>
                   </div>
@@ -629,7 +629,7 @@ const ListYourPracticePage = () => {
                                 <Stethoscope className="h-4 w-4" />
                                 Select Your Services
                               </Label>
-                              <div className="grid grid-cols-2 gap-2 max-h-64 overflow-y-auto p-1">
+                              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 max-h-64 overflow-y-auto p-1">
                                 {treatments.map((treatment: any) => (
                                   <label
                                     key={treatment.id}
@@ -715,7 +715,7 @@ const ListYourPracticePage = () => {
                     </div>
                     <div>
                       <h3 className="font-bold text-sm">{benefit.title}</h3>
-                      <p className="text-xs text-muted-foreground">{benefit.description}</p>
+                      <p className="text-sm text-muted-foreground">{benefit.description}</p>
                     </div>
                   </div>
                 ))}
@@ -723,7 +723,7 @@ const ListYourPracticePage = () => {
 
               <div className="mt-6 p-4 rounded-xl bg-muted/50">
                 <h3 className="font-bold text-sm mb-2">Already have a profile?</h3>
-                <p className="text-xs text-muted-foreground mb-3">
+                <p className="text-sm text-muted-foreground mb-3">
                   If your clinic is already listed, claim and verify it instead.
                 </p>
                 <Button asChild variant="outline" size="sm" className="rounded-xl font-bold w-full">

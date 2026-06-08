@@ -374,7 +374,7 @@ const Search = () => {
                 <Calculator className="h-6 w-6 text-primary" />
               </div>
               <h3 className="font-bold text-foreground group-hover:text-primary transition-colors mb-1">Dental Cost Calculator</h3>
-              <p className="text-xs text-muted-foreground">Compare real prices from verified dentists</p>
+              <p className="text-sm text-muted-foreground">Compare real prices from verified dentists</p>
             </Link>
             
             <Link
@@ -385,7 +385,7 @@ const Search = () => {
                 <Shield className="h-6 w-6 text-primary" />
               </div>
               <h3 className="font-bold text-foreground group-hover:text-primary transition-colors mb-1">Insurance Checker</h3>
-              <p className="text-xs text-muted-foreground">Find dentists who accept your plan</p>
+              <p className="text-sm text-muted-foreground">Find dentists who accept your plan</p>
             </Link>
             
             <Link
@@ -396,7 +396,7 @@ const Search = () => {
                 <Zap className="h-6 w-6 text-destructive" />
               </div>
               <h3 className="font-bold text-foreground group-hover:text-primary transition-colors mb-1">Emergency Dentist</h3>
-              <p className="text-xs text-muted-foreground">Find dentists open now near you</p>
+              <p className="text-sm text-muted-foreground">Find dentists open now near you</p>
             </Link>
           </div>
         </div>

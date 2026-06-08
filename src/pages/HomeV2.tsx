@@ -832,7 +832,7 @@ const HomeV2 = () => {
                 </Link>
               </motion.div>
 
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 {dentistBenefits.map((item, i) => (
                   <motion.div
                     key={i}
@@ -844,7 +844,7 @@ const HomeV2 = () => {
                   >
                     <item.icon className="h-6 w-6 text-emerald-500 mb-2" />
                     <div className="font-bold text-gray-900 text-sm">{item.title}</div>
-                    <div className="text-xs text-gray-500">{item.desc}</div>
+                    <div className="text-sm text-gray-500">{item.desc}</div>
                   </motion.div>
                 ))}
               </div>
@@ -883,7 +883,7 @@ const HomeV2 = () => {
                   </Button>
                 </Link>
               </motion.div>
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 {[
                   { icon: Stethoscope, title: "Dental & Medical", desc: "Lab coats & scrubs" },
                   { icon: Baby, title: "Nursery & Childcare", desc: "Durable, easy-care attire" },
@@ -900,7 +900,7 @@ const HomeV2 = () => {
                   >
                     <item.icon className="h-6 w-6 text-emerald-400 mb-2" />
                     <div className="font-bold text-white text-sm">{item.title}</div>
-                    <div className="text-xs text-slate-400">{item.desc}</div>
+                    <div className="text-sm text-slate-400">{item.desc}</div>
                   </motion.div>
                 ))}
               </div>

@@ -877,7 +877,7 @@ const ClaimProfilePage = () => {
                           </div>
                         </div>
                         {fullBusinessEmail && (
-                          <p className="text-xs text-muted-foreground mt-2">
+                          <p className="text-sm text-muted-foreground mt-2">
                             Code will be sent to: <span className="text-foreground font-medium">{fullBusinessEmail}</span>
                           </p>
                         )}
@@ -1130,7 +1130,7 @@ const ClaimProfilePage = () => {
                     </div>
                     <div>
                       <h3 className="font-bold text-sm">{benefit.title}</h3>
-                      <p className="text-xs text-muted-foreground">{benefit.description}</p>
+                      <p className="text-sm text-muted-foreground">{benefit.description}</p>
                     </div>
                   </div>
                 ))}

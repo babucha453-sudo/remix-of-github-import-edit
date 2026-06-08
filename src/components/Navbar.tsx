@@ -303,7 +303,7 @@ export function Navbar() {
 
           {/* Mobile Menu */}
           {mobileMenuOpen && (
-            <div className="lg:hidden py-6 border-t border-slate-200 animate-fade-in-up bg-white">
+            <div className="lg:hidden py-6 border-t border-slate-200 animate-fade-in-up bg-white overflow-y-auto max-h-[80vh]">
               <div className="space-y-1">
                 <Link to="/search" className="flex items-center gap-2 px-4 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-100 rounded-xl" onClick={() => setMobileMenuOpen(false)}>
                   <Search className="h-4 w-4" /> Search

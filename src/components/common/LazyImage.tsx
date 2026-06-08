@@ -35,7 +35,7 @@ export function LazyImage({
     : src;
 
   return (
-    <div className={cn('relative overflow-hidden w-full h-full flex items-center justify-center', className)}>
+    <div className={cn('relative overflow-hidden w-full h-full flex items-center justify-center', className)} style={{ aspectRatio: width && height ? `${width}/${height}` : undefined }}>
       <Image
         src={optimizedSrc}
         alt={alt}

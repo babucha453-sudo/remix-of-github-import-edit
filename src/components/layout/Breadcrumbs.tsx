@@ -17,7 +17,7 @@ export const Breadcrumbs = ({ items, className }: BreadcrumbsProps) => {
   return (
     <nav 
       aria-label="Breadcrumb" 
-      className={cn("flex items-center gap-2 text-sm text-muted-foreground", className)}
+      className={cn("flex items-center gap-2 text-sm text-muted-foreground overflow-x-auto", className)}
     >
       <Link 
         to="/" 

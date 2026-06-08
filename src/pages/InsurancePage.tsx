@@ -112,7 +112,7 @@ const InsurancePage = () => {
                   </div>
                   <div className="min-w-0">
                     <p className="font-bold text-sm truncate">{benefit.title}</p>
-                    <p className="text-xs text-muted-foreground truncate">{benefit.description}</p>
+                    <p className="text-sm text-muted-foreground truncate">{benefit.description}</p>
                   </div>
                 </div>
               ))}

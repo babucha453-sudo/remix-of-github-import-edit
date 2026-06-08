@@ -413,13 +413,13 @@ const CityPage = ({ initialState, initialCity }: CityPageProps) => {
         {/* Dynamic Background */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
           <motion.div 
-            className="absolute top-[-10%] left-[-5%] w-[500px] h-[500px] rounded-full"
+            className="absolute top-[-10%] left-[-5%] w-[500px] h-[500px] rounded-full max-md:hidden"
             style={{ background: 'radial-gradient(circle, rgba(16, 185, 129, 0.3) 0%, transparent 70%)' }}
             animate={{ scale: [1, 1.2, 1], x: [0, 50, 0] }}
             transition={{ duration: 8, repeat: Infinity }}
           />
           <motion.div 
-            className="absolute bottom-[-10%] right-[-5%] w-[400px] h-[400px] rounded-full"
+            className="absolute bottom-[-10%] right-[-5%] w-[400px] h-[400px] rounded-full max-md:hidden"
             style={{ background: 'radial-gradient(circle, rgba(6, 95, 70, 0.4) 0%, transparent 70%)' }}
             animate={{ scale: [1.2, 1, 1.2], y: [0, 30, 0] }}
             transition={{ duration: 10, repeat: Infinity, delay: 1 }}
@@ -676,7 +676,7 @@ const CityPage = ({ initialState, initialCity }: CityPageProps) => {
                     </a>
                   </div>
                 </div>
-                <p className="text-xs text-slate-400 mt-3">
+                <p className="text-sm text-slate-400 mt-3">
                   💡 Prices are estimates. Use our dental cost calculator for personalized quotes.
                 </p>
               </div>
@@ -783,7 +783,7 @@ const CityPage = ({ initialState, initialCity }: CityPageProps) => {
                     <div className="flex flex-col lg:flex-row">
                       <div className="lg:flex-[2]">
                         <DentistFinderMap
-                          className="h-[400px] lg:h-[550px]"
+                          className="h-[300px] md:h-[400px] lg:h-[550px]"
                           markers={profiles
                             .filter((p: any) => p.latitude != null && p.longitude != null)
                             .map((p: any) => ({

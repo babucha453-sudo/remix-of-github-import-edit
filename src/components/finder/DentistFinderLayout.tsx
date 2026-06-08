@@ -7,6 +7,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { Loader2, AlertCircle, MapPin, List, Grid3X3, ChevronRight, SlidersHorizontal } from "lucide-react";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
@@ -299,21 +300,34 @@ export function DentistFinderLayout({
 
               {/* Filter Button (mobile) */}
               {showFilters && (
-                <Button
-                  variant="outline"
-                  className="lg:hidden gap-2 border-slate-200"
-                  onClick={() => {
-                    // This would open a sheet in mobile
-                  }}
-                >
-                  <SlidersHorizontal className="h-4 w-4" />
-                  Filters
-                  {activeFilterCount() > 0 && (
-                    <span className="bg-emerald-600 text-white text-xs px-1.5 py-0.5 rounded-full">
-                      {activeFilterCount()}
-                    </span>
-                  )}
-                </Button>
+                <Sheet>
+                  <SheetTrigger asChild>
+                    <Button
+                      variant="outline"
+                      className="lg:hidden gap-2 border-slate-200"
+                    >
+                      <SlidersHorizontal className="h-4 w-4" />
+                      Filters
+                      {activeFilterCount() > 0 && (
+                        <span className="bg-emerald-600 text-white text-xs px-1.5 py-0.5 rounded-full">
+                          {activeFilterCount()}
+                        </span>
+                      )}
+                    </Button>
+                  </SheetTrigger>
+                  <SheetContent className="w-full sm:max-w-md overflow-y-auto">
+                    <SheetHeader>
+                      <SheetTitle>Filter Results</SheetTitle>
+                    </SheetHeader>
+                    <div className="mt-6">
+                      <DentistFinderFilters
+                        filters={filters}
+                        onFiltersChange={updateFilters}
+                        variant="sidebar"
+                      />
+                    </div>
+                  </SheetContent>
+                </Sheet>
               )}
 
               {/* View Mode Toggle (desktop) */}
@@ -436,7 +450,7 @@ export function DentistFinderLayout({
               {!isLoading && !error && displayedProfiles.length > 0 && (
                 <div className={cn(
                   "space-y-4",
-                  viewMode === 'map' ? "hidden lg:grid lg:grid-cols-2 lg:gap-4" : ""
+                  viewMode === 'map' ? "lg:grid lg:grid-cols-2 lg:gap-4" : ""
                 )}>
                   {displayedProfiles.map((profile) => (
                     <div key={profile.id} id={`profile-${profile.id}`}>

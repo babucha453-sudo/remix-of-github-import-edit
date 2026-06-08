@@ -245,7 +245,7 @@ export default function ReviewFunnelPage() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 to-slate-100">
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 to-slate-100 overflow-y-auto">
         <div className="text-center">
           <div className="relative w-16 h-16 mx-auto mb-4">
             <div className="absolute inset-0 rounded-full border-4 border-primary/20" />
@@ -259,7 +259,7 @@ export default function ReviewFunnelPage() {
 
   if (!clinic) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 to-slate-100 p-4">
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 to-slate-100 p-4 overflow-y-auto">
         <div className="max-w-sm w-full text-center p-8 bg-white rounded-3xl shadow-xl">
           <div className="h-16 w-16 rounded-2xl bg-destructive/10 flex items-center justify-center mx-auto mb-4">
             <Building2 className="h-8 w-8 text-destructive" />

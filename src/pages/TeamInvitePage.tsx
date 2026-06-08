@@ -105,7 +105,7 @@ export default function TeamInvitePage() {
 
   if (authLoading || status === 'loading') {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-teal/5 to-primary/5">
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-teal/5 to-primary/5 overflow-y-auto">
         <div className="text-center space-y-4">
           <Loader2 className="h-12 w-12 animate-spin text-primary mx-auto" />
           <p className="text-muted-foreground">Validating your invitation...</p>
@@ -115,7 +115,7 @@ export default function TeamInvitePage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-teal/5 to-primary/5 p-4">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-teal/5 to-primary/5 p-4 overflow-y-auto">
       <Card className="max-w-md w-full shadow-2xl border-0">
         <CardHeader className="text-center pb-2">
           <div className="h-16 w-16 rounded-2xl bg-gradient-to-br from-primary to-teal flex items-center justify-center mx-auto mb-4 shadow-lg">
