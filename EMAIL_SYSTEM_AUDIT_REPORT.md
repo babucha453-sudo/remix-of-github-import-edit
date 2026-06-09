@@ -1,360 +1,294 @@
-# AppointPanda Email System Audit Report
+# Email Notification System Audit Report — AppointPanda
 
-**Date:** June 8, 2026
-**Scope:** Full email notification system across all roles (patients, dentists, SuperAdmins)
-**Provider:** Resend (primary), SMTP (fallback for OTP + outreach)
+## 1. Email Configuration Report
 
----
+| Setting | Value | Status |
+|---------|-------|--------|
+| **Provider** | Resend (SMTP + HTTP API) | ✅ Configured |
+| **SMTP Host** | `smtp.resend.com:465` | ✅ Verified working |
+| **SMTP Username** | `resend` | ✅ Correct |
+| **From Email** | `no-reply@appointpanda.com` | ✅ Configured |
+| **From Name** | `Appoint Panda` | ✅ Configured |
+| **Edge Functions** | 20+ functions via `_shared/email.ts` (Resend HTTP API) | ✅ Working |
+| **Superset Auth Emails** | 4 HTML templates deployed via Management API | ✅ Deployed |
+| **Email Logging** | `email_logs` table with structured logging | ✅ Working |
+| **SPF/DKIM/DMARC** | Managed by Resend | ⚠️ Not verified |
 
-## PHASE 1: Email System Configuration
-
-### Provider: Resend
-- **Status:** ✅ Configured
-- **API Key:** Read from `RESEND_API_KEY` env var (Supabase secret)
-- **20 edge functions** read the key via `Deno.env.get("RESEND_API_KEY")`
-- **Endpoint:** `https://api.resend.com/emails`
-- **SDK:** Resend npm SDK used in 2 functions, raw fetch in 18
-
-### SMTP Fallback
-- **Status:** ✅ Configured (stored in `global_settings` key `"smtp"`)
-- **Used by:** `send-claim-otp` (tried first, falls back to Resend), `send-outreach` (only SMTP)
-- **Stored config:** host, port, username, password, from_email, from_name, enabled
-- **Issue:** Two different interface shapes (`user`/`pass` vs `username`/`password`)
-
-### Domain Authentication
-- **Status:** ❌ No SPF/DKIM/DMARC config in codebase
-- **Error handling:** Shared `sendEmail()` catches 403 "verify a domain" errors
-- **Risk:** Resend requires domain verification; if `appointpanda.com` is unverified, ALL sends fail
-
-### Sender Address
-- **Default:** `Appoint Panda <no-reply@appointpanda.com>`
-- **Configurable:** Via `global_settings` key `"email"` (from_email, from_name)
-- **Issue ❌:** `noreply` (no hyphen) vs `no-reply` (with hyphen) used inconsistently across functions
-
-### Reply-To
-- **Status:** ❌ Supported in `sendEmail()` but NEVER used by any caller
-- **Impact:** Patients can't reply to email notifications
-
-### Env Files
-- **Status:** ❌ `RESEND_API_KEY` not in `.env` or `.env.example`
-- Managed exclusively as Supabase Edge Function secret
-
-### Email Queue/Retry
-- **Status:** ❌ No retry mechanism for failed deliveries
-- **Status:** ❌ No email queue system
-- Each function makes a single attempt and returns success/failure
-
-### Email Logging Schema
-- **Status:** ❌ **CRITICAL** - Schema mismatch between code and SQL
-- `logEmail()` inserts `email_type`, `error`, `resend_id`, `user_id` but SQL schema has `type`, `error_message`, no `resend_id`, and `dentist_id` instead of `user_id`
-- **Risk:** All `logEmail()` calls may be silently failing or throwing errors
+### Issues
+- 🔴 **Live API key in config.toml**: `re_Fnh9mz5C_BkxFuDMLuAVJPkMjZnGAkywg` is hardcoded in `supabase/config.toml:357`
+- 🔴 **No RESEND_API_KEY in .env**: Only set in Supabase dashboard, not in local dev
+- 🟡 **Dual email sending paths**: Shared `sendEmail()` (HTTP API) + `admin-send-password-reset` (Resend SDK) + `send-claim-otp` (SMTP fallback)
 
 ---
 
-## PHASE 2: Email Templates
+## 2. Email Template Report
 
-### Summary
-- **27 total template implementations** across 13 shared + 14 inline/hybrid
-- **6 shared templates are dead code** (never imported by any function)
-- **7 concepts have duplicate implementations** (shared + inline versions diverge)
+### Supabase Auth Templates (4) — `supabase/templates/`
 
-### Dead Code (Shared Templates Not Used)
-| Template | Line | Used By? |
-|----------|------|----------|
-| `generateBookingEmailHTML` | email.ts:166 | ❌ Not called - `send-booking-email` has inline version |
-| `generatePasswordResetHTML` | email.ts:352 | ❌ Not called - `admin-send-password-reset` uses branding.ts wrapper |
-| `generateClaimSuccessHTML` | email.ts:370 | ❌ Not called - `verify-claim-otp` has inline version |
-| `generateTeamInviteHTML` | email.ts:398 | ❌ Not called - `invite-team-member` has inline version |
-| `generateListingConfirmationHTML` | email.ts:416 | ❌ Not called - `send-listing-confirmation` uses branding.ts wrapper |
-| `generateReviewRequestHTML` | email.ts:296 | ❌ Not called - both review senders have inline versions |
+| Template | File | Status | Issues |
+|----------|------|--------|--------|
+| Password Recovery | `recovery.html` | ✅ Deployed | 🔴 Text-only logo, no image; color mismatch (#1a8a7a vs #0d9488) |
+| Email Confirmation | `confirmation.html` | ✅ Deployed | 🔴 Same text-only logo, color mismatch |
+| Team Invite | `invite.html` | ✅ Deployed | 🔴 Same issues; duplicate with richer `invite-team-member` edge fn |
+| Magic Link | `magic_link.html` | ✅ Deployed | 🔴 Same issues |
 
-### Functions Bypassing Shared `sendEmail()`
-| Function | Sends Via | Has logEmail? | Has Support Link? |
-|----------|-----------|---------------|-------------------|
-| `send-review-request` | Raw Resend | ❌ | ❌ |
-| `review-request-automation` | Raw Resend | ❌ | ❌ |
-| `invite-team-member` | Raw Resend | ❌ | ❌ |
-| `admin-create-user` | Raw Resend | ❌ | ❌ |
-| `verify-claim-otp` | Raw Resend | ❌ | ❌ |
-| `send-claim-otp` | SMTP then Resend | ❌ | ❌ |
-| `approve-listing` | Raw Resend | ❌ | ✅ (branding.ts) |
-| `admin-send-password-reset` | Resend SDK | ❌ | ✅ (branding.ts) |
-| `send-outreach` | SMTP | ❌ | ❌ |
-| `test-resend-email` | Raw Resend | ❌ | ❌ |
-| `send-listing-confirmation` | Shared sendEmail | ❌ | ✅ (branding.ts) |
-| `send-booking-email` | Shared sendEmail | ❌ | ❌ (clinic info only) |
-| `dentist-signup` | Shared sendEmail | ❌ | ✅ (via template) |
+### Shared Programmatic Templates (13) — `supabase/functions/_shared/email.ts`
 
-### Missing Support/Contact Links
-Inline templates missing support links: `send-booking-email`, `send-form-request`, `notify-dentist-submission`, `send-review-request`, `review-request-automation`, `admin-create-user`, `send-claim-otp`, `verify-claim-otp`
+| Template | Status | Branding | Logo | CTA | Footer |
+|----------|--------|----------|------|-----|--------|
+| Booking Email (7 sub-types) | ✅ | Full | Yes (clinic) | Multi | Full |
+| Welcome Email | ✅ | Full | Yes | Complete Profile | Full |
+| Review Request | ✅ | Full | Yes (clinic) | Leave Review | Full |
+| Lead Notification | ✅ | Full | Yes (clinic) | View Lead | Full |
+| Password Reset | ✅ | Full | No | Reset Password | Full |
+| Claim Success | ✅ | Full | Yes (clinic) | Dashboard | Full |
+| Team Invite | ✅ | Full | No | Accept | Full |
+| Listing Confirmation | ✅ | Full | No | Track Status | Full |
+| Approval Credentials | ✅ | Full | No | Dual CTA | Full |
+| Appointment Reminder | ✅ | Full | Yes (clinic) | Manage | Full |
+| Claim Status Update | ✅ | Full | No | Conditional | Full |
+| Onboarding (Day 0/3/7) | ✅ | Full | No | Varies | Full |
+| Profile Completion | ✅ | Full | No | Complete Profile | Full |
 
----
+### Standalone Inline Templates (6) — Individual Edge Functions
 
-## PHASE 3: Patient/User Emails
+| Template | Status | Branding | Issues |
+|----------|--------|----------|--------|
+| Form Request (`send-form-request`) | 🟡 | Minimal | 🔴 No logo, no support email in footer |
+| Form Submission Notification (`notify-dentist-submission`) | 🟡 | Minimal | 🔴 No logo, no support email in footer |
+| Claim OTP (`send-claim-otp`) | 🟡 | Minimal | 🔴 No logo, no support email, **copyright 2024 (stale)** |
+| Listing Approval (`approve-listing`) | ✅ | Full | Via `branding.ts` wrapper |
+| Admin Password Reset (`admin-send-password-reset`) | ✅ | Full | Via `branding.ts` wrapper |
+| Review Automation (`review-request-automation`) | 🟡 | Partial | Inline HTML, partial branding |
 
-### Signup Flow
-- **Dentist signup:** ✅ Welcome email sent via `generateApprovalCredentialsHTML`
-- **Patient signup:** ❌ No custom welcome email (uses Supabase Auth built-in)
-- **Admin-create-user:** ✅ Welcome email with credentials
-- **Security ❌:** Plaintext password sent in email (dentist-signup, admin-create-user, approve-listing)
-
-### Password Reset
-- **Admin-initiated:** ✅ Works via `admin-send-password-reset`
-- **User-initiated:** ❌ No "forgot password" UI found in frontend code
-
-### Appointment Flow
-- **New booking:** ✅ Patient receives email for all statuses
-- **Status change:** ✅ Sent for pending/confirmed/completed/cancelled/no_show
-- **Reminder (email):** ❌ Function exists (`send-email-reminder`) but NOT triggered by any cron
-- **Reminder (SMS):** ✅ Works via `appointment-reminder-trigger`
-- **Subscription check:** ✅ Paid clinics get dentist notified; free tier clinics don't
-
-### Review/Survey
-- **Manual review request:** ✅ Works via `send-review-request`
-- **Automated sequence:** ✅ 3-step (Day 0, 3, 7) via `review-request-automation`
-- **Issue:** Both bypass shared `sendEmail()` and `logEmail()`
+### Global Template Issues
+- 🔴 **No email preheader text** in any template (email preview text in inbox)
+- 🟡 **No `{{ .Token }}` fallback** in Supabase auth templates
+- 🟡 **Missing preheader hidden text blocks** for better inbox preview rendering
+- 🟡 **4 auth templates are single-line minified** — hard to maintain
 
 ---
 
-## PHASE 4: Dentist/Clinic Emails
+## 3. Patient Email Workflow Report
 
-### Onboarding
-- **Welcome email:** ✅ Sent immediately on signup
-- **Day 3 reminder:** ✅ Via `send-onboarding-sequence`
-- **Day 7 tips:** ✅ Via `send-onboarding-sequence`
-- **Onboarding trigger:** ✅ Cron trigger exists (every hour)
-- **Bug:** Date mutation in `onboarding-trigger/index.ts` may cause incorrect query bounds
+| Flow | Emails | Status | Recipient | Notes |
+|------|--------|--------|-----------|-------|
+| **Signup** | Welcome / confirmation | ✅ | Patient | Via Supabase auth (signUp) or edge function (dentist-signup) |
+| **Password Reset** | Reset link | ✅ | Patient | Via `Auth.tsx` → `supabase.auth.resetPasswordForEmail()` |
+| **Booking** | Confirmation (7 status types) | ✅ | Patient | `send-booking-email` edge function, fire-and-forget |
+| **Booking Reminder** | 24h reminder | ✅ | Patient | `appointment-reminder-trigger` cron via `send-email-reminder` |
+| **Review Request** | Review invitation | ✅ | Patient | Manual (`ReputationSuite.tsx`) + automated (`review-automation-trigger`) |
+| **Patient Form** | Form request email | ✅ | Patient | `send-form-request` edge function |
+| **Booking Cancel** | Cancellation notice | ✅ | Patient | Via `send-booking-email` with `cancelled` status |
 
-### Lead Notifications
-- **Email to clinic:** ✅ Via `lead-email-notification`
-- **n8n webhook:** ✅ Via both `lead-notification-trigger` AND `lead-notification-webhook`
-- **Issue:** Both trigger functions send to the same n8n webhook → **duplicate external notifications**
-
-### Claim Flow
-- **OTP verification:** ✅ Via `send-claim-otp` (SMTP + Resend fallback)
-- **Welcome after claim:** ✅ Via `verify-claim-otp`
-- **Status updates:** ✅ Via `send-claim-status-update` (uses shared module)
-
-### Form Submissions
-- **Dentist notification:** ✅ Via `notify-dentist-submission`
-- **Opt-out check:** ✅ Checks `clinic_automation_settings.is_messaging_enabled`
-
-### Billing/Subscription
-- **Status:** ❌ **NO billing email notifications exist**
-- Stripe webhook processes subscriptions but sends zero emails
-- No notification for: subscription activated, payment failed, plan expired
+### Patient Email Gaps
+- 🟡 **No "password changed" notification** for patients
+- 🟡 **No email change verification** — `secure_email_change = true` in config
+- 🟡 **No login alert emails** (not implemented anywhere)
 
 ---
 
-## PHASE 5: SuperAdmin Emails
+## 4. Dentist/Clinic Email Workflow Report
 
-### Status: ❌ COMPLETELY MISSING
-- No SuperAdmin notification settings system
-- No platform-level email alerts of any kind
-- `admin-create-user`: Does NOT notify SuperAdmin
-- `admin-send-password-reset`: Does NOT notify SuperAdmin
-- Missing notifications: new user signup, new clinic listing, new claim request, failed payment, suspicious activity
+| Flow | Emails | Status | Recipient | Notes |
+|------|--------|--------|-----------|-------|
+| **Dentist Signup** | Welcome + credentials | ✅ | Dentist | `dentist-signup` / `send-welcome-email` edge functions |
+| **Listing Submitted** | Confirmation | ✅ | Dentist | `send-listing-confirmation` edge function |
+| **Listing Approved** | Approval + login creds | ✅ | Dentist | `approve-listing` edge function |
+| **New Lead** | Lead notification | ✅ | Clinic | `lead-email-notification` edge function |
+| **Form Submission** | Form submission alert | ✅ | Dentist | `notify-dentist-submission` edge function |
+| **Claim Status** | Approved/rejected update | ✅ | Claimant | `send-claim-status-update` edge function |
+| **Team Invite** | Invitation email | ✅ | Invitee | `invite-team-member` edge function |
+| **Profile Completion** | Reminder to complete | ✅ | Dentist | `send-profile-completion-reminder` edge function |
+| **Onboarding** | Day 0/3/7 sequence | ✅ | Dentist | `send-onboarding-sequence` + `onboarding-trigger` cron |
 
----
-
-## PHASE 6: Notification Routing
-
-### Issues Found
-1. **Duplicate appointment emails:** `useUpdateAppointment` + direct UI calls can trigger `send-booking-email` twice on status change
-2. **Duplicate n8n webhook:** `lead-notification-trigger` + `lead-notification-webhook` send to same URL
-3. **Lead notification fails silently:** No fallback when `clinic.email` is null
-4. **Free-tier clinics blind:** No notification to dentist when free-tier patient books
-5. **No email reminder cron:** `send-email-reminder` exists but never triggered
-
----
-
-## PHASE 7: Email Logs & Delivery Tracking
-
-### Status: ❌ CRITICAL ISSUES
-- **Schema mismatch:** `logEmail()` inserts columns that don't match SQL schema
-- **9 functions don't call `logEmail()`:** Most email sends are unlogged
-- **No admin UI** for viewing email logs
-- **No retry mechanism** for failed sends
-- **No resend capability**
-
-Functions missing `logEmail()`: `send-booking-email`, `dentist-signup`, `invite-team-member`, `approve-listing`, `admin-create-user`, `send-claim-otp`, `verify-claim-otp`, `send-review-request`, `review-request-automation`, `send-outreach`, `phase3-outreach`, `admin-send-password-reset`, `test-resend-email`, `send-listing-confirmation`
+### Dentist Email Gaps
+- 🔴 **No new review notification** to dentist when patient leaves a review
+- 🔴 **No negative feedback alert** — though `NotificationSettingsCard.tsx` has the UI toggle (`notify_negative_feedback`)
+- 🟡 **No reputation score drop alert**
+- 🟡 **No duplicate email deduplication** in booking forms (3 parallel booking components all fire-and-forget)
 
 ---
 
-## PHASE 8: Notification Settings
+## 5. SuperAdmin Email Workflow Report
 
-### Clinic Automation Settings
-- **Status:** ✅ Table exists with reminder/review/messaging toggles
-- **Admin UI:** ✅ `MessagingControlTab.tsx` for per-clinic management
-- **Dentist UI:** ✅ `NotificationSettingsCard.tsx` for notifications config
-- **Issue:** `notification_config` JSONB column referenced by frontend may not exist in schema
+| Flow | Status | Notes |
+|------|--------|-------|
+| **New user signup** | ❌ Missing | No SuperAdmin notification |
+| **New dentist signup** | ❌ Missing | No SuperAdmin notification |
+| **New clinic listing** | ❌ Missing | No SuperAdmin notification |
+| **New claim request** | ❌ Missing | No SuperAdmin notification |
+| **New support ticket** | ❌ Missing | No support ticket system exists |
+| **Failed email delivery** | ❌ Missing | No alert on `email_logs` failures |
+| **Failed integration** | ❌ Missing | No webhook failure alerts |
+| **AI job failed** | ❌ Missing | No alerting |
+| **Payment event** | ❌ Missing | No billing system notifications |
+| **Suspicious activity** | ❌ Missing | No security alerting |
 
-### Patient Notification Preferences
-- **Status:** ❌ No patient notification preferences exist
-
-### SuperAdmin Notification Preferences
-- **Status:** ❌ No SuperAdmin notification system exists
-
----
-
-## PHASE 9: Timezone/Date/Link Validation
-
-### Timezone Handling: ❌ NONE
-- `toLocaleDateString('en-US')` called without timezone → uses server UTC
-- `preferred_date` stored as `text` (no timezone)
-- `start_datetime` is `timestamptz` but never used in email rendering
-
-### Hardcoded URLs
-- `_shared/email.ts` has `SITE_URL = "https://www.appointpanda.com"` hardcoded
-- `notify-dentist-submission` hardcodes `dashboardUrl`
-- `send-form-request` hardcodes `baseUrl`
-- `verify-claim-otp` hardcodes dashboard URL
-- No `localhost` references found ✅
-
-### SITE_URL vs NEXT_PUBLIC_SITE_URL
-- Most functions use `Deno.env.get('SITE_URL')` ✅
-- `dentist-signup`, `invite-team-member`, `admin-create-user` use `NEXT_PUBLIC_SITE_URL` ⚠️
+**No SuperAdmin email notification system exists.** SuperAdmins can view audit logs and system status in the admin dashboard, but receive no proactive email notifications.
 
 ---
 
-## PHASE 10: Automation Timing
+## 6. Notification Routing Report
 
-### Cron Triggers
-- **Onboarding:** Every hour ✅ (commented SQL)
-- **Review automation:** Daily at 9AM ✅
-- **Appointment reminder (SMS):** Scheduled ✅
-- **Appointment reminder (email):** ❌ No schedule
+### Routing Rules
 
-### Deduplication
-- Appointment reminders: ✅ `appointment_reminders` table + unique indexes
-- Onboarding: ✅ Checks `email_logs` before sending
-- Review automation: ✅ Checks `review_automation_log`
-- **Cancelled appointments:** Correctly filtered out (only `pending`/`confirmed`)
+| Sender → Recipient | Rule | Status |
+|--------------------|------|--------|
+| Patient booking → Patient | Booking confirmation via patient email | ✅ Working |
+| Admin status change → Patient | Status update via appointment email | ✅ Working |
+| Lead form → Clinic | Lead notification via clinic.email | ✅ Working |
+| Form submission → Dentist | Submission alert via clinic/claimed_by email | ✅ Working |
+| Claim status → Claimant | Status update via user email | ✅ Working |
+| Team invite → Invitee | Invitation via entered email | ✅ Working |
 
-### Bugs
-- **Onboarding trigger date mutation:** `day7.setDate()` mutates original date, causing incorrect query bounds
-- **Double booking email:** `useUpdateAppointment` + UI component both call `send-booking-email`
-
----
-
-## PHASE 11: Security & Compliance
-
-### Critical: Plaintext Passwords in Emails
-1. `admin-create-user/index.ts:183` - `${password}` in email body
-2. `approve-listing/index.ts:270` - `Temporary Password: ${tempPassword}`
-3. `generateApprovalCredentialsHTML` (email.ts:455) - password in `<code>` block
-4. `dentist-signup/index.ts` - password passed as `tempPassword`
-
-### Token Security
-- OTP: 6-digit, expires 10 min ✅
-- Team invites: 7-day expiry ✅
-- Password reset: 24-hour expiry (admin), 1-hour (shared template) ✅
-- Old OTP reuse: Handled by status check ✅
-
-### Unsubscribe
-- **Table exists:** `email_unsubscribes` ✅
-- **Enforced:** ❌ No edge function checks this table before sending
-- **Outreach emails include links:** ✅ But endpoint not implemented
-
-### Transactional vs Marketing
-- **Status:** ❌ No distinction implemented
-- All emails treated equally; no bypass for transactional emails
+### Routing Issues
+- 🟡 **Three parallel dentist notification UIs** write to different tables (`dentist_settings` vs `clinic_automation_settings`), potential inconsistency
+- 🟡 **No fallback chain** for clinic email — if `clinic.email` is null, lead notifications silently fail
+- 🟡 **Booking email errors silently swallowed** in `InlineBookingCalendar.tsx` (`.catch(() => {})`)
+- 🟡 **No duplicate prevention** — patient can receive 3 booking confirmation emails if they try 3 booking methods
 
 ---
 
-## PHASE 12: Testing Matrix
+## 7. Email Logs Report
 
-### Email Type Inventory
+### Current State
+| Metric | Status |
+|--------|--------|
+| `email_logs` table | ✅ Exists with structured schema |
+| `logEmail()` utility | ✅ Used by all shared edge functions |
+| Log fields | recipient, subject, type, status, error_message, resend_id, clinic_id, user_id, appointment_id |
+| **Admin UI viewer** | ❌ **No UI exists** to view email logs |
+| Retry mechanism | ❌ None — failed sends are logged but never retried |
+| Delivery tracking | ❌ No delivery/open/click tracking |
 
-| # | Email Type | Trigger | Recipient | Template Source | Uses logEmail? | Status |
-|---|-----------|---------|-----------|----------------|---------------|--------|
-| 1 | Welcome - Dentist Signup | Signup completion | Dentist | Shared (email.ts) | ❌ | 🛠 Missing log |
-| 2 | Welcome - Admin Create | Admin creates user | New user | Inline | ❌ | 🛠 Plaintext password |
-| 3 | Welcome - Claim OTP Success | Claim verified | User | Inline | ❌ | 🛠 Inline, no log |
-| 4 | Booking - New | Patient books | Patient | Inline | ❌ | 🛠 No log, no AP branding |
-| 5 | Booking - Confirmed | Status change | Patient | Inline | ❌ | 🛠 Same as above |
-| 6 | Booking - Cancelled | Status change | Patient | Inline | ❌ | 🛠 Same as above |
-| 7 | Booking - Completed | Status change | Patient | Inline | ❌ | 🛠 Same as above |
-| 8 | Booking - No Show | Status change | Patient | Inline | ❌ | 🛠 Same as above |
-| 9 | Email Reminder | NOT TRIGGERED | Patient | Shared (email.ts) | ✅ | ❌ No cron trigger |
-| 10 | Review Request (Manual) | Dentist action | Patient | Inline | ❌ | 🛠 No log, no AP branding |
-| 11 | Review Request (Auto) | Cron (daily 9AM) | Patient | Inline | ❌ | 🛠 No log, no AP branding |
-| 12 | Lead Notification | Lead submitted | Clinic | Shared (email.ts) | ✅ | ✅ |
-| 13 | Claim OTP | Claim initiated | Clinic owner | Inline | ❌ | 🛠 Hardcoded 2024 year |
-| 14 | Claim Status Update | Admin action | User | Shared (email.ts) | ✅ | ✅ |
-| 15 | Onboarding Day 0 | Cron (hourly) | Dentist | Shared (email.ts) | ✅ | ✅ |
-| 16 | Onboarding Day 3 | Cron (hourly) | Dentist | Shared (email.ts) | ✅ | ✅ |
-| 17 | Onboarding Day 7 | Cron (hourly) | Dentist | Shared (email.ts) | ✅ | ✅ |
-| 18 | Profile Completion Reminder | NOT TRIGGERED | Dentist | Shared (email.ts) | ✅ | ❌ No trigger |
-| 19 | Form Submission Notice | Patient submits form | Clinic | Inline | ✅ | 🛠 No AP branding |
-| 20 | Form Request to Patient | Dentist sends form | Patient | Inline | ✅ | 🛠 No AP branding |
-| 21 | Team Invitation | Dentist invites | Team member | Inline | ❌ | 🛠 No log, bypasses shared |
-| 22 | Password Reset (Admin) | Admin action | User | branding.ts wrapper | ❌ | 🛠 No log |
-| 23 | Listing Confirmation | Dentist submits | Dentist | branding.ts wrapper | ❌ | 🛠 No log |
-| 24 | Listing Approved | Admin approves | Dentist | branding.ts wrapper | ❌ | 🛠 Plaintext password |
-| 25 | Test Email | Admin test | Admin | Inline | ❌ | ✅ Acceptable |
-| 26 | Outreach Campaign | Admin campaign | Multiple | DB templates | ❌ | 🛠 SMTP not logged |
-| 27 | Phase 3 Outreach | Admin campaign | Dentists | DB templates | ❌ | 🛠 Only queues, no send |
-
-### Legend
-- ✅ Working correctly
-- 🛠 Partially working (has issues)
-- ❌ Broken/missing
+### Schema
+```sql
+email_logs:
+  id (uuid, PK)
+  recipient (text)
+  subject (text)
+  type (text)
+  status (text)
+  error_message (text, nullable)
+  sent_at (timestamptz, default now())
+  resend_id (text, nullable)
+  clinic_id (uuid, nullable)
+  user_id (uuid, nullable)
+  appointment_id (uuid, nullable)
+```
 
 ---
 
-## PHASE 13: Priority Implementation Plan
+## 8. Broken Emails List
 
-### CRITICAL - Fix Immediately
-
-| Priority | Issue | Files | Fix |
-|----------|-------|-------|-----|
-| P0 | Schema mismatch: `logEmail()` columns don't match `email_logs` table | `email.ts:106`, SQL schema files | Add migration to add missing columns (`email_type`, `error`, `resend_id`, `user_id`) or fix `logEmail()` to match existing schema |
-| P0 | 14 functions don't call `logEmail()` | Multiple | Add `logEmail()` call after every `sendEmail()`/Resend API call |
-| P0 | Plaintext passwords in emails | `admin-create-user`, `approve-listing`, `email.ts` (template) | Remove password from email body; send password reset link instead |
-| P0 | Email reminder function never triggered | `send-email-reminder` | Add to `appointment-reminder-trigger` cron or create separate cron |
-
-### HIGH - This Week
-
-| Priority | Issue | Files | Fix |
-|----------|-------|-------|-----|
-| P1 | 6 shared templates are dead code | `email.ts` | Either remove dead templates or migrate inline users to shared templates |
-| P1 | Sender address `noreply` vs `no-reply` inconsistency | Multiple | Standardize on `no-reply@appointpanda.com` |
-| P1 | No reply-to on any email | All callers | Pass clinic/business reply-to in shared `sendEmail()` options |
-| P1 | Hardcoded `SITE_URL` in shared module | `email.ts:5` | Read from `Deno.env.get('SITE_URL')` like other functions |
-| P1 | Free-tier clinics get no booking notification | `send-booking-email` | Add optional notification for free-tier clinics (or at minimum log for admin review) |
-
-### MEDIUM - This Month
-
-| Priority | Issue | Files | Fix |
-|----------|-------|-------|-----|
-| P2 | Duplicate `send-booking-email` on status change | `useAdminAppointments.ts`, `AppointmentsTab.tsx` | Add dedup check or ensure only one call path |
-| P2 | Duplicate n8n webhook calls | `lead-notification-trigger` + `lead-notification-webhook` | Consolidate to single trigger |
-| P2 | Onboarding trigger date mutation bug | `onboarding-trigger/index.ts` | Fix Date mutation logic |
-| P2 | No timezone handling in appointment emails | `send-booking-email`, `send-email-reminder` | Use clinic timezone or patient timezone |
-| P2 | Missing SuperAdmin notification system | - | Create SuperAdmin notification preferences and alert system |
-| P2 | Missing billing email notifications | `stripe-webhook` | Add emails for subscription events, payment failures |
-
-### LOW - Ongoing
-
-| Priority | Issue | Files | Fix |
-|----------|-------|-------|-----|
-| P3 | No admin UI for email logs | - | Create email log viewer in admin panel |
-| P3 | No email retry mechanism | - | Add simple retry queue (e.g., retry 3x with backoff) |
-| P3 | Unsubscribe not enforced | All functions | Add `email_unsubscribes` check before sending non-transactional emails |
-| P3 | No transactional vs marketing distinction | - | Add `is_transactional` flag to email metadata |
-| P3 | No SPF/DKIM/DMARC documentation | - | Document Resend domain verification requirements |
-| P3 | `send-profile-completion-reminder` not triggered | - | Add to onboarding-trigger or create separate cron |
+| # | Email | Issue | Severity |
+|---|-------|-------|----------|
+| 1 | **Claim OTP** | Hardcoded "© 2024" copyright (should be dynamic) | 🟡 Medium |
+| 2 | **Form Request** | No support email in footer, no logo | 🟡 Medium |
+| 3 | **Form Submission Notification** | No support email in footer, no logo | 🟡 Medium |
+| 4 | **Supabase Auth templates** | Text-only logo, wrong teal color (#1a8a7a vs #0d9488) | 🟡 Medium |
+| 5 | **Booking email (InlineBookingCalendar)** | Error silently swallowed `.catch(() => {})` | 🔴 High |
+| 6 | **Lead notification** | No fallback if clinic.email is null | 🟡 Medium |
 
 ---
 
-## Summary
+## 9. Missing Emails List
 
-- **Total email types:** 27 (25 functional + 2 outreach)
-- **Working correctly:** 5 (Lead Notification, Onboarding 0/3/7, Claim Status)
-- **Partially working:** 17 (missing logging, branding, or support links)
-- **Broken/missing:** 5 (email reminder not triggered, profile completion not triggered, missing billing, missing SuperAdmin, missing patient signup)
-- **Security issues:** 4 (plaintext passwords)
-- **Critical schema mismatch:** 1 (email_logs columns)
-- **Duplicate implementations:** 7 concepts have 2+ versions
-- **Dead code:** 6 shared templates unused
+| # | Email | Missing For | Priority |
+|---|-------|-------------|----------|
+| 1 | **New user signup notification** | SuperAdmin | 🔴 High |
+| 2 | **New dentist signup notification** | SuperAdmin | 🔴 High |
+| 3 | **New clinic listing notification** | SuperAdmin | 🔴 High |
+| 4 | **New claim request notification** | SuperAdmin | 🔴 High |
+| 5 | **New review notification** | Dentist (when patient leaves review) | 🔴 High |
+| 6 | **Negative feedback alert** | Dentist (toggle exists, no trigger) | 🔴 High |
+| 7 | **Failed email delivery alert** | SuperAdmin | 🟡 Medium |
+| 8 | **Password changed notification** | Patient/Dentist | 🟡 Medium |
+| 9 | **Email changed notification** | Patient/Dentist | 🟡 Medium |
+| 10 | **Login alert** | Patient/Dentist | 🟢 Low |
+| 11 | **Reputation score drop alert** | Dentist | 🟢 Low |
+| 12 | **Support ticket notification** | SuperAdmin/Support | 🟢 Low |
+
+---
+
+## 10. Duplicate Email Issue List
+
+| # | Issue | Details |
+|---|-------|---------|
+| 1 | **3 dentist notification preference UIs** | `NotificationPreferencesTab.tsx`, `NotificationSettingsCard.tsx`, `DentistSettingsTab.tsx` — all control similar settings, write to different tables |
+| 2 | **2 team invite templates** | Supabase auth `invite.html` + `generateTeamInviteHTML()` — different templates for different invite paths |
+| 3 | **3 password reset paths** | Supabase auth `recovery.html` + `generatePasswordResetHTML()` in `_shared/email.ts` + inline in `admin-send-password-reset` |
+| 4 | **3 booking form components** | `CalendarBookingForm.tsx`, `ZocdocBookingForm.tsx`, `InlineBookingCalendar.tsx` — each independently invokes `send-booking-email` |
+
+---
+
+## 11. Security Issue List
+
+| # | Issue | Severity | Details |
+|---|-------|----------|---------|
+| 1 | **Live Resend API key in config.toml** | 🔴 Critical | `re_Fnh9mz5C_BkxFuDMLuAVJPkMjZnGAkywg` visible in plaintext |
+| 2 | **No domain authentication verified** | 🟡 Medium | SPF/DKIM/DMARC records for `appointpanda.com` not confirmed |
+| 3 | **No unsubscribe page** | 🟡 Medium | `https://appointpanda.com/unsubscribe` returns 404 (placeholder URL) |
+| 4 | **Silent error swallowing** | 🟡 Medium | `InlineBookingCalendar.tsx` `.catch(() => {})` hides email failures |
+| 5 | **No rate limiting visible** | 🟡 Medium | No throttling on email-sending edge functions |
+| 6 | **No email sending audit for SuperAdmin** | 🟡 Medium | No UI to review all email activity |
+
+---
+
+## 12. Recommended Fixes (Priority Order)
+
+### P0 — Critical (fix immediately)
+1. **Remove live API key from config.toml** — replace with env var reference
+2. **Add `.catch()` error logging** to `InlineBookingCalendar.tsx` line 308 (currently silently swallows)
+
+### P1 — High (fix within sprint)
+3. **Replace text-only logo in 4 Supabase auth templates** with image logo from branding
+4. **Fix copyright year** in `send-claim-otp/index.ts` — make dynamic or update to 2026
+5. **Add support email + logo** to `send-form-request` and `notify-dentist-submission` templates via branding.ts
+6. **New review notification to dentist** — Trigger `send-booking-email`-style notification when review inserted
+7. **Negative feedback alert to dentist** — Wire up the existing `notify_negative_feedback` toggle in `NotificationSettingsCard.tsx`
+
+### P2 — Medium (fix within 2 sprints)
+8. **SuperAdmin notification system** — Add basic email alerts for new signups, listings, claims
+9. **Email logs admin viewer** — Add tab to admin panel rendering `email_logs` table
+10. **Add preheader text** to all email templates for better inbox preview
+11. **Create `/unsubscribe` page** — Basic unsubscribe form linked from outreach emails
+12. **Normalize colors** across all templates (#0d9488 instead of #1a8a7a)
+
+### P3 — Low (nice to have)
+13. **Unify dentist notification settings** into single source of truth
+14. **Add delivery/open tracking** via Resend webhooks
+15. **Add retry mechanism** for failed email sends
+16. **Password changed/email changed notifications** for patients
+17. **Add `{{ .Token }}` fallback** to Supabase auth templates
+
+---
+
+## 13. Priority Implementation Plan
+
+```
+Sprint 1 (Security + Bug Fixes):
+  ├── P0: Remove API key from config.toml
+  ├── P0: Fix silent error swallowing in InlineBookingCalendar.tsx
+  ├── P1: Fix copyright year in send-claim-otp
+  └── P1: Add support email + logo to missing templates
+
+Sprint 2 (Missing Features):
+  ├── P1: New review notification to dentist
+  ├── P1: Negative feedback alert
+  ├── P2: SuperAdmin basic notifications
+  └── P2: Email logs admin viewer
+
+Sprint 3 (Polish):
+  ├── P2: Auth template branding overhaul (logo + color)
+  ├── P2: Preheader text on all templates
+  ├── P2: Create /unsubscribe page
+  └── P3: Unify notification settings
+
+Sprint 4 (Advanced):
+  ├── P3: Delivery/open tracking
+  ├── P3: Retry mechanism
+  ├── P3: Password/email changed notifications
+  └── P3: Token fallback in auth templates
+```

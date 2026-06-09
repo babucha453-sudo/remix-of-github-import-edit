@@ -21,7 +21,8 @@ function generateNotificationEmailHTML(
   patientName: string | undefined,
   patientEmail: string | undefined,
   patientPhone: string | undefined,
-  dashboardUrl: string
+  dashboardUrl: string,
+  supportEmail: string
 ): string {
   return `<!DOCTYPE html>
 <html lang="en">
@@ -82,6 +83,7 @@ function generateNotificationEmailHTML(
           <tr>
             <td style="background-color: #1e293b; border-radius: 0 0 16px 16px; padding: 28px 32px; text-align: center;">
               <p style="color: #94a3b8; font-size: 13px; margin: 0 0 8px 0;">This is an automated notification from AppointPanda</p>
+              <p style="color: #94a3b8; font-size: 12px; margin: 0 0 8px 0;">Need help? <a href="mailto:${supportEmail}" style="color: #14b8a6; text-decoration: none;">${supportEmail}</a></p>
               <p style="color: #64748b; font-size: 12px; margin: 0;">&copy; ${new Date().getFullYear()} AppointPanda. All rights reserved</p>
             </td>
           </tr>
@@ -159,7 +161,7 @@ Deno.serve(async (req) => {
     const emailSettings = await getEmailSettings(supabase);
     const dashboardUrl = 'https://www.appointpanda.com/dashboard?tab=my-intake-forms';
 
-    const emailHtml = generateNotificationEmailHTML(clinic.name, formName, patientName, patientEmail, patientPhone, dashboardUrl);
+    const emailHtml = generateNotificationEmailHTML(clinic.name, formName, patientName, patientEmail, patientPhone, dashboardUrl, emailSettings.support_email);
     const subject = `New Form Submission: ${formName} - ${patientName || 'Patient'}`;
     const from = `${emailSettings.from_name} <${emailSettings.from_email}>`;
     const result = await sendEmail(resendApiKey, notificationEmail, subject, emailHtml, { from });

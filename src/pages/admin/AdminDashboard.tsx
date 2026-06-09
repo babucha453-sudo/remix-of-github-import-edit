@@ -174,6 +174,7 @@ const MigrationControlTab = lazyRetry(() => import('@/components/admin/tabs/Migr
 const DataRecoveryTab = lazyRetry(() => import('@/components/admin/tabs/DataRecoveryTab'));
 const AdminRevertTab = lazyRetry(() => import('@/components/admin/tabs/AdminRevertTab'));
 const ListingsQueueTab = lazyRetry(() => import('@/components/admin/tabs/ListingsQueueTab'));
+const EmailLogsTab = lazyRetry(() => import('@/components/admin/tabs/EmailLogsTab'));
 
 import NotificationCenter from '@/components/admin/NotificationCenter';
 import { useNotificationSubscription } from '@/hooks/useNotifications';
@@ -327,6 +328,7 @@ const adminTabGroups = [
       { id: 'tools-management', label: 'Tools', icon: Zap },
       { id: 'support-admin', label: 'Support', icon: Shield },
       { id: 'audit', label: 'Logs', icon: ClipboardList },
+      { id: 'email-logs', label: 'Email Logs', icon: Mail },
     ],
   },
   {
@@ -649,6 +651,7 @@ export default function AdminDashboard() {
       case 'plans': return <PlansTab />;
       case 'roles': return <RolesTab />;
       case 'subscriptions': return <SubscriptionsTab />;
+      case 'email-logs': return <EmailLogsTab />;
       case 'audit': return <AuditLogsTab />;
       case 'system-audit': return <SystemAuditTab />;
       case 'feature-flags': return <FeatureFlagsTab />;

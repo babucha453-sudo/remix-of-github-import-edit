@@ -22,7 +22,8 @@ function generateFormEmailHTML(
   templateName: string,
   patientName: string | undefined,
   customMessage: string | undefined,
-  formUrl: string
+  formUrl: string,
+  supportEmail: string
 ): string {
   return `<!DOCTYPE html>
 <html lang="en">
@@ -82,7 +83,8 @@ function generateFormEmailHTML(
           <tr>
             <td style="background-color: #1e293b; border-radius: 0 0 16px 16px; padding: 28px 32px; text-align: center;">
               <p style="color: #94a3b8; font-size: 13px; margin: 0 0 8px 0;">This is an automated message from ${clinicName}</p>
-              <p style="color: #64748b; font-size: 12px; margin: 0;">&copy; ${new Date().getFullYear()} All rights reserved</p>
+              <p style="color: #94a3b8; font-size: 12px; margin: 0 0 8px 0;">Need help? <a href="mailto:${supportEmail}" style="color: #14b8a6; text-decoration: none;">${supportEmail}</a></p>
+              <p style="color: #64748b; font-size: 12px; margin: 0;">&copy; ${new Date().getFullYear()} AppointPanda. All rights reserved</p>
             </td>
           </tr>
         </table>
@@ -127,7 +129,7 @@ Deno.serve(async (req) => {
       }
 
       const emailSettings = await getEmailSettings(supabase);
-      const emailHtml = generateFormEmailHTML(clinicName, templateName, patientName, customMessage, formUrl);
+      const emailHtml = generateFormEmailHTML(clinicName, templateName, patientName, customMessage, formUrl, emailSettings.support_email);
       const subject = `Please Complete: ${templateName} - ${clinicName}`;
       const from = `${emailSettings.from_name} <${emailSettings.from_email}>`;
       const result = await sendEmail(resendApiKey, patientEmail, subject, emailHtml, { from });

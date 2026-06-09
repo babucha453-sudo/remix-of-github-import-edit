@@ -132,14 +132,20 @@ export default function ReviewFunnelPage() {
       if (error) throw error;
 
       if (event.event_type === 'thumbs_down' && event.rating) {
-        await supabase.from('internal_reviews').insert({
+        const { data: newReview } = await supabase.from('internal_reviews').insert({
           clinic_id: clinic.id,
           patient_name: patientName || 'Anonymous',
-          visitor_email: patientEmail || null,
-          visitor_phone: patientPhone || null,
+          patient_email: patientEmail || null,
+          patient_phone: patientPhone || null,
           rating: event.rating,
           comment: event.comment || null,
-        } as any);
+        }).select('id').single() as any;
+
+        if (newReview?.id) {
+          supabase.functions.invoke('notify-dentist-review', {
+            body: { reviewId: newReview.id, reviewType: 'internal' }
+          }).catch((err) => console.error('Failed to send negative feedback alert:', err));
+        }
       }
     },
   });

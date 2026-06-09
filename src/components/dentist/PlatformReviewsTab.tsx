@@ -102,21 +102,27 @@ export default function PlatformReviewsTab() {
       if (!clinic?.id || !patientName || !rating) {
         throw new Error('Patient name and rating are required');
       }
-      const { error } = await supabase.from('platform_reviews').insert({
+      const { data, error } = await supabase.from('platform_reviews').insert({
         clinic_id: clinic.id,
         patient_name: patientName,
         rating,
         review_text: reviewText || null,
         is_verified: true,
         is_public: isPublic,
-      });
+      }).select('id').single();
       if (error) throw error;
+      return data;
     },
-    onSuccess: () => {
+    onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ['platform-reviews'] });
       setIsAddingReview(false);
       resetForm();
       toast.success('Review added successfully');
+      if (data?.id) {
+        supabase.functions.invoke('notify-dentist-review', {
+          body: { reviewId: data.id, reviewType: 'platform' }
+        }).catch((err) => console.error('Failed to send new review notification:', err));
+      }
     },
     onError: (error: any) => {
       toast.error(error.message || 'Failed to add review');

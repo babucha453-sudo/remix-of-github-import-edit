@@ -1,3 +1,4 @@
+import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
 import { sendEmail, logEmail, getEmailSettings, generateApprovalCredentialsHTML } from "../_shared/email.ts";
@@ -140,6 +141,28 @@ serve(async (req) => {
       }
     } else {
       console.warn("RESEND_API_KEY not configured, skipping welcome email");
+    }
+
+    // Notify SuperAdmin about new dentist signup
+    try {
+      await fetch(`${Deno.env.get("SUPABASE_URL")}/functions/v1/notify-super-admin`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")}`,
+        },
+        body: JSON.stringify({
+          title: "New Dentist Signup",
+          message: `${fullName} (${email}) has signed up as a dentist.`,
+          category: "system",
+          severity: "info",
+          actionUrl: `${Deno.env.get("SITE_URL") || "https://www.appointpanda.com"}/admin?tab=users`,
+          entityType: "user",
+          entityId: newUser.user.id,
+        }),
+      });
+    } catch (notifyError) {
+      console.error("Failed to notify SuperAdmin:", notifyError);
     }
 
     return new Response(

@@ -311,7 +311,7 @@ export function InlineBookingCalendar({
             type: 'new_booking',
             newStatus: 'pending'
           }
-        }).catch(() => {});
+        }).catch((err) => console.error("Failed to send booking email:", err));
       }
 
       setIsSuccess(true);

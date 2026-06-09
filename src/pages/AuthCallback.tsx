@@ -317,7 +317,7 @@ export default function AuthCallback() {
             isListingFlow,
             restoredOriginalUser,
           },
-        }).catch(() => { });
+        }).catch((err) => console.error("Failed to create audit log:", err));
 
         // Read current roles
         let roles = await readRoles(session.user.id);

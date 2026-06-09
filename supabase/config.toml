@@ -353,7 +353,7 @@ secure_email_change = true
 host = "smtp.resend.com"
 port = 465
 user = "resend"
-pass = "re_Fnh9mz5C_BkxFuDMLuAVJPkMjZnGAkywg"
+pass = "env(RESEND_API_KEY)"
 admin_email = "no-reply@appointpanda.com"
 sender_name = "Appoint Panda"
 

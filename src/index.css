@@ -1382,7 +1382,7 @@
 }
 
 .animate-marquee {
-  animation: scroll-left 30s linear infinite;
+  animation: scroll-left 70s linear infinite;
 }
 
 .animate-marquee:hover,

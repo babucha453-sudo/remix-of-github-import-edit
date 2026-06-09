@@ -126,8 +126,11 @@ export function wrapEmail(branding: SiteBranding, title: string, bodyContent: st
   return `<!DOCTYPE html>
 <html lang="en">
 <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>${title}</title></head>
+<title>${title}</title>
+<!--[if !mso]><!--><style>.preheader{display:none!important;mso-hide:all;max-height:0;overflow:hidden;line-height:0}</style><!--<![endif]-->
+</head>
 <body style="margin:0;padding:0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;background-color:#f4f4f5;-webkit-font-smoothing:antialiased;">
+<div style="display:none!important;mso-hide:all;max-height:0;overflow:hidden;line-height:0;color:transparent;font-size:0;">${title.replace(/<[^>]*>/g, '').replace(/['"]/g, '').trim()}</div>
 <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background-color:#f4f4f5;">
 <tr><td style="padding:40px 20px;">
 <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="600" style="margin:0 auto;max-width:600px;">

@@ -113,6 +113,7 @@ export function generateEmailFooter(branding: SiteBranding): string {
  * Generates the full email wrapper with consistent styling
  */
 export function wrapEmailContent(branding: SiteBranding, headerTitle: string, headerEmoji: string, bodyContent: string): string {
+  const cleanTitle = headerTitle.replace(/<[^>]*>/g, '').replace(/['"]/g, '').trim();
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -120,8 +121,12 @@ export function wrapEmailContent(branding: SiteBranding, headerTitle: string, he
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   <title>${headerTitle}</title>
+  <!--[if !mso]><!-->
+  <style>.preheader{display:none!important;mso-hide:all;max-height:0;overflow:hidden;line-height:0}</style>
+  <!--<![endif]-->
 </head>
 <body style="margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; background-color: #f4f4f5; -webkit-font-smoothing: antialiased;">
+  <div class="preheader" style="display:none!important;mso-hide:all;max-height:0;overflow:hidden;line-height:0;color:transparent;font-size:0;">${cleanTitle}</div>
   <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background-color: #f4f4f5;">
     <tr>
       <td style="padding: 40px 20px;">

@@ -94,15 +94,27 @@ export default function NotificationSettingsCard({ clinicId }: NotificationSetti
   // Save mutation
   const saveMutation = useMutation({
     mutationFn: async (newSettings: NotificationSettings) => {
-      const updateData = {
+      const notificationConfig = {
+        notification_email: newSettings.notification_email,
+        email_enabled: newSettings.email_enabled,
+        sms_enabled: newSettings.sms_enabled,
+        whatsapp_enabled: newSettings.whatsapp_enabled,
+        notify_new_appointment: newSettings.notify_new_appointment,
+        notify_appointment_reminder: newSettings.notify_appointment_reminder,
+        notify_form_submission: newSettings.notify_form_submission,
+        notify_new_review: newSettings.notify_new_review,
+        notify_negative_feedback: newSettings.notify_negative_feedback,
+      };
+
+      const updateData: Record<string, any> = {
         clinic_id: clinicId,
         reminder_1_day: newSettings.reminder_1_day,
         reminder_3_hours: newSettings.reminder_3_hours,
         is_messaging_enabled: newSettings.email_enabled || newSettings.sms_enabled || newSettings.whatsapp_enabled,
         reminder_channel: newSettings.whatsapp_enabled ? 'whatsapp' : newSettings.sms_enabled ? 'sms' : 'email',
+        notification_config: notificationConfig,
       };
 
-      // Check if record exists
       if (automationSettings) {
         const { error } = await supabase
           .from('clinic_automation_settings')

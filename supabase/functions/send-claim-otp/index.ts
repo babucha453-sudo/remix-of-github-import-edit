@@ -233,7 +233,7 @@ const handler = async (req: Request): Promise<Response> => {
           <tr>
             <td style="padding: 30px 40px; background-color: #f4f4f5; text-align: center;">
               <p style="margin: 0; color: #6b7280; font-size: 12px;">
-                © 2024 Appoint Panda. All rights reserved.
+                © ${new Date().getFullYear()} Appoint Panda. All rights reserved.
               </p>
             </td>
           </tr>
